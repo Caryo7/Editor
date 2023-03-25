@@ -1,0 +1,220 @@
+Documentation de la version 17 :
+--------------------------------
+
+
+Partie 0 - Sommaire :
+
+1. Les différents fichiers
+2. La fenêtre
+3. Les options
+4. La langue
+5. Le niveau de sécurité
+5.1. Connexion
+5.2. Le cryptage
+6. Le système de contrôle minitel
+
+
+
+Partie 1 - Les différents fichiers :
+
+ - __init__.py      Fichier vide
+ - archives.py      Fichier de gestion de l'archiage ZIP
+ - autocolor.py     Fichier de gestion de la coloration syntaxique pour la programmation
+ - clkright.py      Fichier de gestion du clique droit de l'éditeur
+ - config.ini       Fichier de configuration
+ - config.py        Fichier contenant l'inserface de configuration
+ - confr.py         Fichier de récupération des configurations
+ - content.py       Fichier contenant le code de la zone de texte
+ - couter.py        Fichier contant les lignes de code du programme
+ - crypt.py         Fichier de cryptage du texte
+ - E.ULLA           Ecran pour minitel
+ - errors.py        Fichier d'affichage des erreurs
+ - export.py        Fichier d'export (Format Word .docx et PDF .pdf)
+ - extension.py     Fichier de hierarchie pour les extensions
+ - help.hlp         Fichier en cour de lecture
+ - help.py          Fichier contenant les action du menu "Help" (About et documentation)
+ - installer.py     Fichier d'installation du logiciel sur l'ordinateur. Il execute une analyse de sécurité avant installation.
+ - iofile.py        Fichier de gestion des interractions homme machine (boîte de dialogues pour la demande de sauvagarde des fichiers)
+ - main.py          Fichier principal (Executant tout le reste du code)
+ - menubar.py       Fichier contenant le code de la barre de menu
+ - minitel.py       Fichier de protocol entre l'ordinateur et le minitel (Ou Arduino pour blindage suppérieur)
+ - printer.py       Fichier de gestion du protocol d'impression
+ - recentfile.py    Fichier de gestion de la liste des fichiers utilisés
+ - search.py        Fichier de gestion des boîtes de dialogue du menu edit (Search, replace, goto line, ...)
+ - security.py      Fichier contenant le système de connexion au logiciel
+ - style.py         Fichier de gestion des styles
+ - tasksviewer.py   Fichier d'affichage des tache de fond en cour
+ - ulla.py          Fichier d'apparence pour la page minitel ULLA
+ - update           Fichier de recherche et d'installation des mise à jours (Uniquqment dans la version > 0.0.4)
+ - win.py           Fichier de création de la fenêtre principale ainsi que ses protocoles.
+
+
+
+Partie 2 - La fenêtre :
+
+Elle est composée de différentes parties :
+ - La fenêtre
+ - La zone de texte
+ - Les numéro de ligne
+ - La barre de menu
+
+La fenêtre :
+Elle ne peut peut pas s'agrandir ni se rétrécir. Lors de la fermeture, elle demande si l'utilisateur souhaite enregistrer son travail (uniquement si il n'est pas sauvegardé)
+
+La Zone De Texte :
+Elle peut être de deux couleurs différentes : noire ou blanche. En fin de ligne, le mot n'est pas coupé, il y a un renvoie automatique du mot à la ligne suivante.
+La barre de défilement s'adapte 
+
+Les numéros de ligne :
+Ils sont affichable ou masquable depuis le menu option. Ils se mettent à jour lorsque vous pressez l'une des touches suivante : Enter, Back, Button-Wheel.
+
+La barre de menu :
+Nous nommerons dorénavent la barre de menu "menubar".
+Le menubar est entièrement configurable : Les menu peuvent être affiché ou masqué, comme les numéros de ligne, depuis le menu options.
+Voici la liste de tous les menu et de leur options :
+
+ - Fichier                                      Menu de la gestion des fichiers
+    - Nouveau                                   Créé un nouveau nom et supprime le contenu de la fenetre
+    - Ouvrir                                    Ouvre un fichier déjà existant
+    - Fichier Récent                            Affiche la liste des fichiers récents. Ne peut pas les ouvrir automatiquement
+    - Enregistrer                               Enregistre le fichier, si pas déjà enregistrer sous, il appel la méthode enregistrer sous. Crypte le fichier si demandé
+    - Enregistrer sous                          Affiche une boite de dialogue pour demander le dossier du fichier. Crypte le fichier si demandé
+    - Enregistrer une copie sous                Enregistre une copie non cryptée du fichier dans le dossier choisi par l'utilisateur
+    - Imprimer                                  Imrime le fichier (NON IMPLEMENTE)
+    - Quitter                                   Ferme le logiciel
+ - Edition                                      Menu de l'utilisation du logiciel
+    - Annuler                                   Annule la dernière action
+    - Rétablir                                  Rétablit la dernière action annulée
+    - Copier                                    Copie le texte séléctionné
+    - Coller                                    Colle le texte copié à l'endroit du curseur
+    - Couper                                    Copie le texte séléctionné et le détruit
+    - Aller a la ligne                          Met le curseur à la ligne demandé
+    - Recherche                                 Recherche une occurence dans le fichier
+    - Remplacer                                 Remplace une occurence recherché dans le fichier
+ - Styles                                       Menu de gestion de l'apparence du texte
+    - Puces                                     Met en place les puces
+    - Nouveau                                   Créé un style (couleur de fond, de police, police, taille, ...)
+    - Choix                                     Affiche une boite de dialogue du choix d'un style déjà existant (PROBLEME)
+    - Style                                     Affiche la liste des styles complète
+       - ...                                    Menu d'affichage des styles
+ - Format                                       Menu INDISPONBLE en mode utilisation personnel
+    - Mettre en commentaire                     
+    - Enlever le commentaire                    
+ - Execution                                    Menu INDISPONIBLE en mode utilisation personnel
+    - Compiler                                  
+    - Executer                                  
+    - Checker                                   
+    - Résoudre                                  
+ - Export                                       Menu d'export du texte
+    - Exporter en Word                          Exporte sous un fichier word .docx, compatible (perte des styles !)
+ - Cryptage                                     Menu du cryptage
+    - Générer une nouvelle cléf                 Créé une nouvelle cléf (Voir ATTENTION)
+ - Archive                                      Menu de gestion de l'archivage
+    - Créer                                     Créé une archive du fichier
+    - Ajouter                                   Ajoute le contenu du texte actuel à cette archive (pas besoin d'enregistrement)
+    - Comparer                                  Compare les versions de l'archive
+ - Minitel                                      Menu du minitel
+    - Envoyer                                   Envoie le contenu du texte vers le minitel
+    - Effacer                                   Efface l'écran du minitel
+    - Bip                                       Fait un bip sur le minitel
+    - Ulla                                      Affiche la page 3615 Ulla du minitel
+ - Mise à jour                                  Menu des mise à jours
+    - Installer une nouvelle version            Installe une nouvelle version depuis un dossier sur un lecteur
+    - Installer depuis internet                 Installe une nouvelle version depuis le site internet automatiquement
+ - Extension                                    Menu des extensions (EXPERIMENTAL)
+    - ...                                       Liste des extensions et leur menu respectif
+    - Ajouter une nouvelle extension            Ajout d'une extension (NON IMPLEMENTE)
+ - Options                                      Menu des options
+    - Options                                   Options générales sauvegardées
+    - Line de code                              Affiche/Masque les lignes de code
+    - Mode sombre                               Bascule en mode sombre/clair
+    - Taches                                    Affiche toutes les taches de fond en cours. Double clique sur un élements pour afficher plus d'informations (tache des extension invisibles)
+ - Aide                                         Menu d'aide
+    - A propos                                  Affiche la version du logiciel
+    - Documentation                             Affiche ce fichier
+    - Exemple                                   INDISPONIBLE en mode utilisation personnel
+       - ...                                    
+
+
+Partie 3 - Les options :
+
+Les options qui vont être dites sont entièrement configurables depuis différents menu. Cependant, quelque soit le paramètre, ils sont tous accessible et configurable dans le fihier config.ini (pouvant être ouvert avec un bloc note).
+Le mode sombre et les numéros de lignes peuvent être modifié depuis le menubar, tandis que la liste des menus apparents peuvent se configurer dans l'interface de configuration.
+La clef de cryptage peut se modifier depuis le fichier config.ini, depuis l'interface de configuration et depuis le bouton dans le menu bar Crypt. 
+La disposition du minitel ne peut être changé depuis les options apparentes : l'interface de configuration et le menubar. Cependant, il reste possible de la modifier depuis le fichier config.ini
+Enfin, pour les version entre 0 et 2, le mot de passe n'est pas encore hashé. Il est stocké sous sa forme brutte dans le fichier config.ini
+
+
+
+Partie 4 - La langue :
+
+Jusqu'a la version 2, le programme n'est disponible qu'en anglais. A partir de la version 3, plusieurs langues seront proposées pour l'utilisateur. (Anglais, Espagol, Italien et Mandarin).
+
+
+
+Partie 5 - Le niveau de sécurité :
+
+5.1 Le système de connexion :
+Le système de connexion se compose d'une fenêtre qui apparaît au démarrage du logiciel. Cette dernière étant plein écran, toujours au premier plan. Il est naturellement impossible de la fermé pour tenter d'accéder au logiciel en dessous.
+Le mot de passe est stocké dans le fichier config.ini, par défaut :
+username = "test"
+password = "test"
+(La présence de guillemets dans le fichier config.ini n'est pas nécéssaire (et interdite)).
+
+5.2 Le système de cryptage :
+Le sysème de cryptage est d'une simplicité enfantine. Des évolutions viendrons dans les version suppérieur à la 4. Il se compse d'une simple multiplication avec la clef :
+1ère étape : remplacement du caractère par son code UTF-8
+2ème étape : multiplication du résultat avec la clef.
+3ème étape : ajout d'un certains nombre de zéros tels que le nombre total de chiffres du résultats soit égale à 2 nombres de plus que la longueur de la clef.
+
+######################################################################
+# AVERTISSEMENT :                                                    #
+######################################################################
+# LORSQUE VOUS CHANGE LA CLÉF :                                      #
+# TOUS LES FICHIERS CRYPTÉS PAR L'ANCIENNE CLÉF SERONT INACCESSIBLE. #
+# VOUS NE POURREZ PLUS EN LOCURENCE Y ACCÉDÉ !                       #
+######################################################################
+
+
+
+Partie 6 - Le système de contrôle du minitel :
+
+Le logiciel est dans la capacité de contrôler un minitel 1B au minimum. 
+Nous détaillerons les branchements des cables et le programme.
+
+Pour plus de sécurité, nous utilisons une carte arduino de type Uno, Nano, Mega, ...
+Cette carte arduino contient le programme suivant :
+
+void setup() {
+  Serial.begin(4800);
+}
+void loop(){
+}
+
+Note : si vous possédez un minitel 2 ou plus, vous pouvez remplacer la vitesse "4800" par "9600". Cette vitesse étant le nombre d'octés passant par seconde.
+
+La carte arduino ne sert à rien, si ce n'est à protégé vos prises USB et le minitel.
+
+Pour ce qui est du branchement :
+
+Vous devez vous munir d'un connecteur DIN avec 5 contacts (Prise type midi) mal.
+voici un petit schéma de la prise à l'arrière du minitel :
+(Excusez nous pour la qualité du dessin en ASCII-art)
+
+/---------\
+|    .GND |
+|  . O .  |
+|  .Tx .Rx|
+\---------/
+
+Ainsi, branchez le pin Tx du minitel sur le pin Rx0 de la carte arduino et mettez le pin Rx sur Tx de l'arduino.
+IMPORTANT : Pour votre information : vous devez branchez les câbles en croisé : il est donc tout à fait normal que Tx soit sur Rx et non pas sur Tx. Cepedant, si vous faites une erreur lors du câblage, la carte arduino ne craint rien de part un blindage sur évolué.
+
+Du côté du programme du logiciel, nous utilisons une version de Pynitel-master, disponible du github (contenu du fichier minitel.py (Seulement la première class))
+
+
+
+En vous souhaitant une bonne utilisation, 
+L'équipe de développement
+
+P.S. : Pour tout problèmes, vous trouverez nos coordonnées sur la page About du menu help
