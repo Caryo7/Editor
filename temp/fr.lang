@@ -247,3 +247,4 @@ pswd_nomatch = Les mots de passe ne coïncident pas !
 time_autosave = Interval de temps entre deux enregistrements (minutes)
 infos = Infos
 int_line = Interligne (cm)
+piedtete = Entête et Pieds de page

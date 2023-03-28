@@ -40,6 +40,34 @@ class AskMargins:
     pdf_strength = 40
     pdf_password = None
 
+    def askpiedtete(self):
+        self.pt = Toplevel()
+        self.pt.transient(self.am)
+        self.pt.title(lg('piedtete'))
+        self.pt.resizable(False, False)
+        c1 = ttk.Checkbutton(self.pt, text = 'Entêtes'      , onvalue = 1, offvalue = 0, variable = self.entetes).place(x = 10, y = 10) ###############################################
+        r1 = ttk.Radiobutton(self.pt, text = 'Numéros de page', value = 'h', variable = self.nb_pages).place(x = 200, y = 10)###################################################
+        txt_ent = ttk.Entry(self.pt, textvariable = self.text_entete, font = ('courier', 10, 'italic'), width = 45).place(x = 20, y = 40)
+
+        c2 = ttk.Checkbutton(self.pt, text = 'Pieds de page', onvalue = 1, offvalue = 0, variable = self.pieds).place(x = 10, y = 80) #####
+        r1 = ttk.Radiobutton(self.pt, text = 'Numéros de page', value = 'b', variable = self.nb_pages).place(x = 200, y = 80)###################################################
+        txt_pied = ttk.Entry(self.pt, textvariable = self.text_pieds, font = ('courier', 10, 'italic'), width = 45).place(x = 20, y = 110)
+
+        def validate(self):
+            self.pt.destroy()
+
+        def cancel(self):
+            self.entetes.set(0)
+            self.text_entete.set('')
+            self.pieds.set(1)
+            self.text_pieds.set('')
+            self.nb_pages.set('b')
+            validate(self)
+
+        Button(self.pt, text = lg('OK'), command = lambda : validate(self)).place(x = 50, y = 150)
+        Button(self.pt, text = lg('cancel'), command = lambda : cancel(self)).place(x = 200, y = 150)
+        self.pt.geometry('400x200')
+
     def protect_pdf(self):
         self.pp = Toplevel()
         self.pp.transient(self.am)
@@ -108,9 +136,10 @@ class AskMargins:
         self.inter_lines.place(x = 175, y = 340)
         self.inter_lines.set(int((self.inter_ligne / cm) * (10**self.decimals)) / (10**self.decimals))
 
-        Button(self.am, text = lg('security'), command = self.protect_pdf, stat = 'normal' if not self.mode_print else 'disabled').place(x = 150, y = 370)
+        Button(self.am, text = lg('security'), command = self.protect_pdf, stat = 'normal' if not self.mode_print else 'disabled').place(x = 100, y = 370)
+        Button(self.am, text = lg('piedtete'), command = self.askpiedtete).place(x = 190, y = 370)####################################################################################
         
-        Button(self.am, text = lg('OK'), command = self.lunch_export_pdf).place(x = 50, y = 370)
+        Button(self.am, text = lg('OK'), command = self.lunch_export_pdf).place(x = 10, y = 370)
         self.am.geometry('350x410')
         self.am.resizable(False, False)
 
@@ -167,6 +196,12 @@ class Export(AskMargins):
                 self.pdf_can_annotate = IntVar()
                 self.keep_styles = IntVar()
                 self.orient_paper = StringVar()
+                self.text_entete = StringVar()
+                self.text_pieds = StringVar()
+                self.nb_pages = StringVar()
+                self.entetes = IntVar()
+                self.pieds = IntVar()
+
                 self.pdf_can_print.set(1)
                 self.pdf_can_modify.set(1)
                 self.pdf_can_copy.set(1)
@@ -174,6 +209,9 @@ class Export(AskMargins):
                 self.keep_styles.set(1)
                 self.orient_paper.set('p')
                 self.password_for_pdf = False
+                self.nb_pages.set('b')
+                self.pieds.set(1)
+                self.entetes.set(0)
                 self.ask_margins(name)
 
     def begin_export_pdf(self, name):
@@ -199,7 +237,11 @@ class Export(AskMargins):
         size = int(get_font_size())
         size_w = int(get_font_size()) - 2
         wrap = 'char'
-        interligne = self.inter_lines
+        interligne = self.inter_ligne
+
+        entete = self.text_entete.get()
+        pieds = self.text_pieds.get()
+        pospage = self.nb_pages.get()
     
         fc = 'black'
         bc = 'white'
@@ -217,23 +259,47 @@ class Export(AskMargins):
         len_line = [len(ln) for ln in text.split('\n')]
         list_styles = self.lst_tags.copy()
         list_styles.insert(0, ('normal', bc, fc, '0.0', '0.0'))
+        line_text = 0
+        column_text = 0
         for char in text:
             if column > maxi_larg:
                 line += 1
                 column = 0
-
-            elif column > len_line[line]:
-                line += 1
-                column = 0
                 len_line.insert(line, 999)
 
+            #elif column > len_line[line]:
+                #line += 1
+                #line_text += 1
+                #column = 0
+                #column_text = 0
+
             if line > maxi_high:
+                if self.pieds.get():
+                    n = 0
+                    for i in pieds:
+                        chars.append((self.margin_left + (n * size_w),
+                                      height - ((size + interligne) * line) - self.margin_top,
+                                      i,
+                                      'black',
+                                      'white'))
+                        n += 1
                 chars.append('show')
                 line = 0
+                if self.entetes.get():
+                    n = 0
+                    for i in entete:
+                        chars.append((self.margin_left + (n * size_w),
+                                      height - ((size + interligne) * line) - self.margin_top,
+                                      i,
+                                      'black',
+                                      'white'))
+                        n += 1
 
             if char == '\n':
                 line += 1
+                line_text += 1
                 column = 0
+                column_text = 0
                 continue
 
             elif char in ('\t', '\r'):
@@ -245,7 +311,8 @@ class Export(AskMargins):
                     begin_y, begin_x = begin.split('.')
                     end_y, end_x = end.split('.')
                     begin_x, begin_y, end_x, end_y = int(begin_x), int(begin_y) - 1, int(end_x), int(end_y) - 1
-                    if begin_x <= column <= end_x and begin_y <= line <= end_y:
+                    if begin_x <= column_text < end_x and begin_y <= line_text <= end_y:
+                        print(tag, char, column_text, line_text, column, line)
                         fc = fg
                         bc = bg
                         break
@@ -261,6 +328,7 @@ class Export(AskMargins):
                           bc))
 
             column += 1
+            column_text += 1
 
         for x, y, char, f, b in chars:
             if char == 'show':
