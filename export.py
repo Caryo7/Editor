@@ -235,7 +235,7 @@ class Export(AskMargins):
     
         police = get_font()
         size = int(get_font_size())
-        size_w = int(get_font_size()) - 2
+        size_w = int(get_font_size()) - 3
         wrap = 'char'
         interligne = self.inter_ligne
 
@@ -266,12 +266,6 @@ class Export(AskMargins):
                 line += 1
                 column = 0
                 len_line.insert(line, 999)
-
-            #elif column > len_line[line]:
-                #line += 1
-                #line_text += 1
-                #column = 0
-                #column_text = 0
 
             if line > maxi_high:
                 if self.pieds.get():
@@ -311,8 +305,22 @@ class Export(AskMargins):
                     begin_y, begin_x = begin.split('.')
                     end_y, end_x = end.split('.')
                     begin_x, begin_y, end_x, end_y = int(begin_x), int(begin_y) - 1, int(end_x), int(end_y) - 1
-                    if begin_x <= column_text < end_x and begin_y <= line_text <= end_y:
-                        print(tag, char, column_text, line_text, column, line)
+                    if begin_y < line_text < end_y:
+                        fc = fg
+                        bc = bg
+                        break
+
+                    elif begin_y == end_y and begin_y <= line_text <= end_y and begin_x <= column_text < end_x:
+                        fc = fg
+                        bc = bg
+                        break
+
+                    elif begin_y <= line_text < end_y and begin_x <= column_text:
+                        fc = fg
+                        bc = bg
+                        break
+
+                    elif begin_y <= line_text <= end_y and begin_x <= column_text < end_x:
                         fc = fg
                         bc = bg
                         break

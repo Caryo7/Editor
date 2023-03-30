@@ -9,12 +9,12 @@ from tkinter.simpledialog import *
 from counter import *
 from confr import *
 
-PYTHON_VERSION = '3.10'
-ARDUINO_VERSION = '1.16'
-GUI_VERSION = '30'
-COMPILATOR_VERSION = '-'
-LANGS_VERSION = '1.4'
-FILE_VERSION = '1.5'
+##PYTHON_VERSION = '3.10'
+##ARDUINO_VERSION = '1.16'
+##GUI_VERSION = '30'
+##COMPILATOR_VERSION = '-'
+##LANGS_VERSION = '1.4'
+##FILE_VERSION = '1.5'
 
 class help:
     curseurs = ['arrow', 'man', 'based_arrow_down', 'middlebutton', 'based_arrow_up', 'mouse', 'boat', 'pencil', 'bogosity', 'pirate', 'bottom_left_corner', 'plus', 'bottom_right_corner', 'question_arrow', 'bottom_side', 'right_ptr', 'bottom_tee', 'right_side', 'box_spiral', 'right_tee', 'center_ptr', 'rightbutton', 'circle', 'rtl_logo', 'clock', 'sailboat', 'coffee_mug', 'sb_down_arrow', 'cross', 'sb_h_double_arrow', 'cross_reverse', 'sb_left_arrow', 'crosshair', 'sb_right_arrow', 'diamond_cross',
@@ -72,24 +72,24 @@ class help:
         Frame(cad, borderwidth = 1, relief = SUNKEN, height = 2, bg = '#bbbbbb').grid(row=5, column=0, sticky=EW, columnspan=3, padx=5, pady=5)
 
         Label(cad, text = 'Python :', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 6, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = PYTHON_VERSION,      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 6, column = 1, sticky = W, padx = 10, pady = 5)
+        Label(cad, text = self.PYTHON_VERSION,      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 6, column = 1, sticky = W, padx = 10, pady = 5)
         
         Label(cad, text = 'Arduino :', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 7, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = ARDUINO_VERSION,      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 7, column = 1, sticky = W, padx = 10, pady = 5)
+        Label(cad, text = self.ARDUINO_VERSION,      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 7, column = 1, sticky = W, padx = 10, pady = 5)
 
         Frame(cad, borderwidth = 1, relief = SUNKEN, height = 2, bg = '#bbbbbb').grid(row=8, column=0, sticky=EW, columnspan=3, padx=5, pady=5)
 
         Label(cad, text = lg('GUI'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 9, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = GUI_VERSION,      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 9, column = 1, sticky = W, padx = 10, pady = 5)
+        Label(cad, text = self.GUI_VERSION,      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 9, column = 1, sticky = W, padx = 10, pady = 5)
 
         Label(cad, text = lg('compilator'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 10, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = COMPILATOR_VERSION,              justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 10, column = 1, sticky = W, padx = 10, pady = 5)
+        Label(cad, text = self.COMPILATOR_VERSION,              justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 10, column = 1, sticky = W, padx = 10, pady = 5)
 
         Label(cad, text = lg('langs'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 11, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = LANGS_VERSION,       justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 11, column = 1, sticky = W, padx = 10, pady = 5)
+        Label(cad, text = self.LANGS_VERSION,       justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 11, column = 1, sticky = W, padx = 10, pady = 5)
 
         Label(cad, text = lg('flm'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 12, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = FILE_VERSION,     justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 12, column = 1, sticky = W, padx = 10, pady = 5)
+        Label(cad, text = self.FILE_VERSION,     justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 12, column = 1, sticky = W, padx = 10, pady = 5)
 
         Frame(cad, borderwidth = 1, relief = SUNKEN, height = 2, bg = '#bbbbbb').grid(row=13, column=0, sticky=EW, columnspan=3, padx=5, pady=5)
 
@@ -98,6 +98,7 @@ class help:
         Button(cad, text = lg('autors'),    justify = CENTER, relief = GROOVE, bd = 3, command = self.Authors).grid(row = 16, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
 
         Button(zak, text = lg('close'), command = zak.destroy, relief = SOLID, bd = 3).grid(row = 1, column = 0, padx = 10, pady = 10)
+        zak.update()
 
     def ToDo(self):
         if not(self.dialoging):

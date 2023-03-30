@@ -24,6 +24,8 @@ class Auto_Save(Thread):
     def run(self):
         self.main_self.add_task(code='AutoSave', time=time.time(), desc='MAIN_LOOP\nThis task is running to save your work at a frequency. You can set it on the configuration page (Option -> Options -> Autosave -> Frequency). You can\'t stop it.')
         while True:
+            if self.main_self.programme_termine:
+                break
             time.sleep(self.intertime)
             if not not(self.main_self.savedd) and not(self.main_self.saved):
                 self.main_self.save()

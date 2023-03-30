@@ -3,12 +3,13 @@ title Compilation...
 set "yes=yes"
 set "no=no"
 
+xcopy /E /I G:\Exe\Editor G:\Exe\Edit < t
+cls
+
 set /p conf=Confirmation? 
 if %conf% EQU %no% (
 exit
 )
-
-xcopy /E /I G:\Exe\Editor G:\Exe\Edit < t
 
 set /p auto=ModeAuto? 
 if %auto% EQU %yes% (
@@ -17,11 +18,13 @@ set "comp=yes"
 set "inst=yes"
 set "open=yes"
 set "pause=no"
+set "mobile=yes"
 )
 if %auto% EQU %no% (
 set /p zip=Zip? 
 set /p comp=Compilation? 
 set /p inst=Installer? 
+set /p mobile=VersionMobile? 
 set /p open=Ouvrir? 
 set /p pause=Pause? 
 )
@@ -29,7 +32,7 @@ set /p pause=Pause?
 rd G:\Exe\Edit\build /S /Q
 
 if %zip% EQU %yes% (
-"C:\Program Files\7-Zip\7z.exe" a "N:\source\Edit_31.1_20230324.zip" G:\Exe\Edit
+"C:\Program Files\7-Zip\7z.exe" a "N:\source\Edit_32.0_20230328.zip" G:\Exe\Edit
 )
 
 if %pause% EQU %yes% (
@@ -37,8 +40,10 @@ start N:\source\
 pause
 )
 
+cd G:\Exe\Edit\
+
 if %comp% EQU %yes% (
-G:\Exe\Edit\setup.py build
+setup.py build
 )
 
 if %pause% EQU %yes% (
@@ -46,9 +51,18 @@ start G:\Exe\Edit\build\exe.win-amd64-3.10\
 pause
 )
 
+if %mobile% EQU %yes% (
+"C:\Program Files\7-Zip\7z.exe" a "N:\mobile\mobile_32_win.zip" G:\Exe\Edit\build\exe.win-amd64-3.10\*
+)
+
+if %pause% EQU %yes% (
+start N:\mobile\
+pause
+)
+
 if %inst% EQU %yes% (
-"C:\Program Files (x86)\Inno Setup 6\iscc.exe" G:\Exe\Edit\compilation.iss
-"C:\Program Files\7-Zip\7z.exe" a "N:\setup\setup_31_win.zip" "N:\setup\setup_31_win.exe"
+"C:\Program Files (x86)\Inno Setup 6\iscc.exe" compilation.iss
+"C:\Program Files\7-Zip\7z.exe" a "N:\setup\setup_32_win.zip" "N:\setup\setup_32_win.exe"
 )
 
 if %pause% EQU %yes% (

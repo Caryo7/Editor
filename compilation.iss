@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Editor"
-#define MyAppVersion "0.31"
+#define MyAppVersion "0.32"
 #define MyAppPublisher "Benc Corp"
 #define MyAppURL "https://bgtarino.wixsite.com/Editor"
 #define MyAppExeName "__init__.exe"
@@ -26,13 +26,13 @@ DisableDirPage=yes
 ChangesAssociations=yes
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=G:\Exe\Edit\license.txt
+LicenseFile=G:\Exe\Edit\LICENSE
 ; InfoAfterFile=G:\Exe\Edit\after.log
 ; InfoBeforeFile=
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputDir=N:\setup
-OutputBaseFilename=setup_31_win
+OutputBaseFilename=setup_32_win
 SetupIconFile=G:\Exe\Edit\image\ico.ico
 Compression=lzma
 SolidCompression=yes

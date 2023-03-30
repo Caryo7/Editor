@@ -47,12 +47,14 @@ class Win:
                 self.save()
                 self.master.destroy()
                 self.close()
+                self.programme_termine = True
                 # raise KeyboardInterrupt
                 # exit(code='ClosedByUserWithSave')
 
             elif dem == False:
                 self.master.destroy()
                 self.close()
+                self.programme_termine = True
                 # raise KeyboardInterrupt
                 # exit(code='ClosedByUserWithoutSave')
 

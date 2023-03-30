@@ -5,6 +5,19 @@
 def wprint(*args):
     print(*args)
 
+import time, inspect, os
+
+__version__ = VERSION = '0.32'
+NAME = 'Editor'
+DESC = NAME
+PYTHON_VERSION = '3.10'
+ARDUINO_VERSION = '1.16'
+GUI_VERSION = '31'
+COMPILATOR_VERSION = '-'
+LANGS_VERSION = '1.4'
+FILE_VERSION = '1.5'
+PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
+
 wprint('Importing files : ')
 wprint('content -> ')
 from content import *
@@ -68,13 +81,6 @@ wprint('Done\nMenus ->')
 from iomenu import *
 wprint('Done\n')
 
-import time, inspect
-
-__version__ = VERSION = '0.31'
-NAME = 'Editor'
-DESC = NAME
-PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
-
 # 2 - Création de la class et importation de toute la hiérarchie
 
 wprint('Importing classes')
@@ -109,6 +115,15 @@ class Main(Win,
 # Partie 3 - Informations de base du logiciel
 
     def __init__(self, sys_args = None, **args):
+        self.NAME = NAME
+        self.DESC = DESC
+        self.PYTHON_VERSION = PYTHON_VERSION
+        self.ARDUINO_VERSION = ARDUINO_VERSION
+        self.GUI_VERSION = GUI_VERSION
+        self.COMPILATOR_VERSION = COMPILATOR_VERSION
+        self.LANGS_VERSION = LANGS_VERSION
+        self.FILE_VERSION = FILE_VERSION
+        self.programme_termine = False
         self.sys_args = sys_args
         wprint('Définition du répertoire de travail...')
         self.path_prog = PATH_PROG

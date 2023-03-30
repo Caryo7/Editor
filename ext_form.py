@@ -15,7 +15,9 @@ class ExForm:
         self.text.insert(END, result)
         lst_tag = str(f.read('tags.csv').decode(get_encode())).split('\n')
         for i in lst_tag:
-            self.lst_tags.append(i.split(','))
+            i = i.replace('\r', '')
+            if i != '':
+                self.lst_tags.append(i.split(','))
         self.write_tags()
         f.close()
 
