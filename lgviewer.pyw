@@ -16,8 +16,8 @@ from confr import *
 PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
 
 class LgViewer:
-    def __init__(self):
-        Password(self.create)
+    def __init__(self, master = None):
+        Password(self.create, tk = master)
 
     def create(self):
         self.master = Tk()

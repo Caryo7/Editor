@@ -48,7 +48,7 @@ class KeyB:
                         'lnb' :        [lambda evt : self.act_widget_ln(), None, 'self.act_widget_ln()'], # # -> Numéro de lignes
                         'dark' :       [lambda evt : self.act_color_theme(), None, 'self.act_color_theme()'], # # -> Mode sombre
                         'visut' :      [lambda evt : self.show(), None, 'self.show()'], # # -> Visualisateur des taches en cours
-                        'lgv' :        [lambda evt : LgViewer(), None, 'LgViewer()'], # # -> Visualisateur des langues
+                        'lgv' :        [lambda evt : lambda : LgViewer(self.master), None, 'LgViewer()'], # # -> Visualisateur des langues
                         'about' :      [lambda evt : self.About(), None, 'self.About()'], # # -> A propos
                         'doc' :        [lambda evt : self.documentation(), None, 'self.documentation()'], # # -> Documentation
                         'todo' :       [lambda evt : self.ToDo(), None, 'self.ToDo()'], # # -> A Faire

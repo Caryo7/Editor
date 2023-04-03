@@ -153,7 +153,7 @@ class MenuBar:
             menuopt.add_command(label=lg('Dark_Mode'), stat='normal', command=self.act_color_theme, accelerator=self.get_accelerator('dark'), image = self.images['dark'], compound='left')
             menuopt.add_separator()
             menuopt.add_command(label=lg('Tasks'), stat='normal', command=self.show, accelerator=self.get_accelerator('visut'), image = self.images['visut'], compound='left')
-            menuopt.add_command(label=lg('Lgv'), stat = 'normal', command=LgViewer, accelerator=self.get_accelerator('lgv'), image = self.images['lgv'], compound='left')
+            menuopt.add_command(label=lg('Lgv'), stat = 'normal', command=lambda : LgViewer(self.master), accelerator=self.get_accelerator('lgv'), image = self.images['lgv'], compound='left')
 
         if get_menuhelp():
             menuaide = Menu(menubar, tearoff=0)

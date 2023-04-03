@@ -15,9 +15,13 @@ from confr import *
 class Password:
     askpwd = False
 
-    def __init__(self, cmd = None):
+    def __init__(self, cmd = None, tk = None):
+        if not tk:
+            self.master = Tk()
+        else:
+            self.master = Toplevel()
+            self.master.transient(tk)
         self.cmd = cmd
-        self.master = Tk()
         self.master.iconbitmap(PATH_PROG + '/image/password.ico')
         self.master.title(lg('Administrator'))
         menu = Menu(self.master)
@@ -48,7 +52,8 @@ Voici les étapes pour la création d\'un nouveau compte :
         self.master.bind_all('<Return>', self.connect)
 
         self.master.protocol('WM_DELETE_WINDOW', self.Quitter)
-        self.master.mainloop()
+        if not tk:
+            self.master.mainloop()
 
     def append(self):
         self.askpwd = True

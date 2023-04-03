@@ -32,7 +32,7 @@ set /p pause=Pause?
 rd G:\Exe\Edit\build /S /Q
 
 if %zip% EQU %yes% (
-"C:\Program Files\7-Zip\7z.exe" a "N:\source\Edit_32.0_20230328.zip" G:\Exe\Edit
+"C:\Program Files\7-Zip\7z.exe" a "N:\source\Edit_32.1_20230330.zip" G:\Exe\Edit
 )
 
 if %pause% EQU %yes% (
