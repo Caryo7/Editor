@@ -35,7 +35,7 @@ class Auto_Save(Thread):
                 f.close()
 
 
-class File(ExForm):
+class File(ExForm, ExText):
     def __file__(self):
         self.path = 'untitled.x'
         self.saved = False
@@ -65,6 +65,10 @@ class File(ExForm):
                       (lg('if'), '*.ini *.inf'),
                       (lg('floppyf'), '*.floppy'),
                       ]
+        self.meta = {}
+# Bonjour et bienvenue dans cette petite information à propos de l'Editor.
+# Vous utilisez actuellement la version 0.32.
+# Bonne utilisation !!!
 
     def open_recent(self, name):
         self.open(evt = None, name = name)
@@ -127,7 +131,7 @@ class File(ExForm):
                 if self.ext(self.path) not in self.listexta:
                     ExText.save(self, self.path, self.get_text())
                 else:
-                    ExForm.save(self, self.path, self.get_text())
+                    ExForm.save(self, self.path, self.get_text(), self.meta)
                 self.saved = True
                 self.master.title(self.title + ' - ' + self.path)
                 
@@ -136,13 +140,15 @@ class File(ExForm):
             self.dialoging = True
             if not name:
                 name = self.asksaveas()
+                if '.' not in name:
+                    name += '.form'
 
             if name:
                 self.path = name
                 if self.ext(self.path) not in self.listexta:
                     ExText.save(self, self.path, self.get_text())
                 else:
-                    ExForm.save(self, self.path, self.get_text())
+                    ExForm.save(self, self.path, self.get_text(), self.meta)
                 self.saved = True
                 self.savedd = True
                 self.add_f(self.path)

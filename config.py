@@ -689,7 +689,7 @@ class Configurator:
     def validate_choice(self):
         p = Progress(self.root, title = lg('Configurator'), maximum = 40, decimals = 0, oncolor = 'blue')
         self.tree.unbind('<Double-Button-1>')
-        log = open('log.txt', 'a')
+        log = open(self.path_prog + '/log.txt', 'a')
         try:
             p.step('mode_dark')
             write('global', 'mode_dark', self.mode_dark_.get())

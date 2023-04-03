@@ -16,6 +16,7 @@ GUI_VERSION = '31'
 COMPILATOR_VERSION = '-'
 LANGS_VERSION = '1.4'
 FILE_VERSION = '1.5'
+FORM_VERSION = '2.0'
 PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
 
 wprint('Importing files : ')
@@ -123,6 +124,7 @@ class Main(Win,
         self.COMPILATOR_VERSION = COMPILATOR_VERSION
         self.LANGS_VERSION = LANGS_VERSION
         self.FILE_VERSION = FILE_VERSION
+        self.FORM_VERSION = FORM_VERSION
         self.programme_termine = False
         self.sys_args = sys_args
         wprint('Définition du répertoire de travail...')

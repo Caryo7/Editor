@@ -91,11 +91,14 @@ class help:
         Label(cad, text = lg('flm'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 12, column = 0, sticky = E, padx = padx, pady = 5)
         Label(cad, text = self.FILE_VERSION,     justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 12, column = 1, sticky = W, padx = 10, pady = 5)
 
-        Frame(cad, borderwidth = 1, relief = SUNKEN, height = 2, bg = '#bbbbbb').grid(row=13, column=0, sticky=EW, columnspan=3, padx=5, pady=5)
+        Label(cad, text = lg('formf'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 13, column = 0, sticky = E, padx = padx, pady = 5)
+        Label(cad, text = self.FORM_VERSION,     justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 13, column = 1, sticky = W, padx = 10, pady = 5)
 
-        Button(cad, text = lg('copyright'), justify = CENTER, relief = GROOVE, bd = 3, command = None        ).grid(row = 14, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
-        Button(cad, text = lg('License'),   justify = CENTER, relief = GROOVE, bd = 3, command = self.License).grid(row = 15, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
-        Button(cad, text = lg('autors'),    justify = CENTER, relief = GROOVE, bd = 3, command = self.Authors).grid(row = 16, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
+        Frame(cad, borderwidth = 1, relief = SUNKEN, height = 2, bg = '#bbbbbb').grid(row=14, column=0, sticky=EW, columnspan=3, padx=5, pady=5)
+
+        Button(cad, text = lg('copyright'), justify = CENTER, relief = GROOVE, bd = 3, command = None        ).grid(row = 15, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
+        Button(cad, text = lg('License'),   justify = CENTER, relief = GROOVE, bd = 3, command = self.License).grid(row = 16, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
+        Button(cad, text = lg('autors'),    justify = CENTER, relief = GROOVE, bd = 3, command = self.Authors).grid(row = 17, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
 
         Button(zak, text = lg('close'), command = zak.destroy, relief = SOLID, bd = 3).grid(row = 1, column = 0, padx = 10, pady = 10)
         zak.update()
