@@ -16,6 +16,7 @@ base = None
 # - reportlab
 # - serial / pyserial
 # - glob
+# - inspect
 
 if sys.platform == 'win32':
     base = 'Win32GUI'
@@ -43,5 +44,5 @@ if sys.platform == 'win32':
     setup(name = NAME,
           version = VERSION,
           description = DESC,
-          options = {'build_exe': {'include_files': includefiles}},
+          options = {'build_exe': {'include_files': includefiles}},#, 'includes': {'hashlib','sqlite3','python-docx','reportlab','serial','pyserial','glob','inspect'}},
           executables = [target])

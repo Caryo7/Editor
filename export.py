@@ -274,8 +274,8 @@ class Export(AskMargins):
                         chars.append((self.margin_left + (n * size_w),
                                       height - ((size + interligne) * line) - self.margin_top,
                                       i,
-                                      'black',
-                                      'white'))
+                                      'white',
+                                      'back'))
                         n += 1
                 chars.append('show')
                 line = 0
@@ -285,8 +285,8 @@ class Export(AskMargins):
                         chars.append((self.margin_left + (n * size_w),
                                       height - ((size + interligne) * line) - self.margin_top,
                                       i,
-                                      'black',
-                                      'white'))
+                                      'white',
+                                      'black'))
                         n += 1
 
             if char == '\n':

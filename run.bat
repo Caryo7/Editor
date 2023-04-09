@@ -32,7 +32,7 @@ set /p pause=Pause?
 rd G:\Exe\Edit\build /S /Q
 
 if %zip% EQU %yes% (
-"C:\Program Files\7-Zip\7z.exe" a "N:\source\Edit_32.1_20230330.zip" G:\Exe\Edit
+"C:\Program Files\7-Zip\7z.exe" a "N:\source\Edit_32.3_20230403.zip" G:\Exe\Edit
 )
 
 if %pause% EQU %yes% (
@@ -70,8 +70,13 @@ start N:\setup\
 pause
 )
 
+rd N:\last_version /S /Q
+mkdir N:\last_version
+copy "N:\setup\setup_32_win.exe" "N:\last_version\setup_32_win.exe"
+copy "N:\setup\setup_32_win.zip" "N:\last_version\setup_32_win.zip"
+copy "N:\source\Edit_32.3_20230403.zip" "N:\last_version\Edit_32.3_20230403.zip"
+copy "N:\mobile\mobile_32_win.zip" "N:\last_version\mobile_32_win.zip"
+
 if %open% EQU %yes% (
-start G:\Exe\Edit\build\exe.win-amd64-3.10\
-start N:\source\
-start N:\setup\
+start N:\last_version\
 )
