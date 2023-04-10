@@ -32,7 +32,7 @@ set /p pause=Pause?
 rd G:\Exe\Edit\build /S /Q
 
 if %zip% EQU %yes% (
-"C:\Program Files\7-Zip\7z.exe" a "N:\source\Edit_32.3_20230403.zip" G:\Exe\Edit
+"C:\Program Files\7-Zip\7z.exe" a "N:\source\Edit_33.0_20230410.zip" G:\Exe\Edit
 )
 
 if %pause% EQU %yes% (
@@ -52,7 +52,7 @@ pause
 )
 
 if %mobile% EQU %yes% (
-"C:\Program Files\7-Zip\7z.exe" a "N:\mobile\mobile_32_win.zip" G:\Exe\Edit\build\exe.win-amd64-3.10\*
+"C:\Program Files\7-Zip\7z.exe" a "N:\mobile\mobile_33_win.zip" G:\Exe\Edit\build\exe.win-amd64-3.10\*
 )
 
 if %pause% EQU %yes% (
@@ -62,7 +62,7 @@ pause
 
 if %inst% EQU %yes% (
 "C:\Program Files (x86)\Inno Setup 6\iscc.exe" compilation.iss
-"C:\Program Files\7-Zip\7z.exe" a "N:\setup\setup_32_win.zip" "N:\setup\setup_32_win.exe"
+"C:\Program Files\7-Zip\7z.exe" a "N:\setup\setup_33_win.zip" "N:\setup\setup_33_win.exe"
 )
 
 if %pause% EQU %yes% (
@@ -72,10 +72,10 @@ pause
 
 rd N:\last_version /S /Q
 mkdir N:\last_version
-copy "N:\setup\setup_32_win.exe" "N:\last_version\setup_32_win.exe"
-copy "N:\setup\setup_32_win.zip" "N:\last_version\setup_32_win.zip"
-copy "N:\source\Edit_32.3_20230403.zip" "N:\last_version\Edit_32.3_20230403.zip"
-copy "N:\mobile\mobile_32_win.zip" "N:\last_version\mobile_32_win.zip"
+copy "N:\setup\setup_32_win.exe" "N:\last_version\setup_33_win.exe"
+copy "N:\setup\setup_32_win.zip" "N:\last_version\setup_33_win.zip"
+copy "N:\source\Edit_32.3_20230403.zip" "N:\last_version\Edit_33.0_20230410.zip"
+copy "N:\mobile\mobile_32_win.zip" "N:\last_version\mobile_33_win.zip"
 
 if %open% EQU %yes% (
 start N:\last_version\

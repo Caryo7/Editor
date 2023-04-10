@@ -7,16 +7,17 @@ def wprint(*args):
 
 import time, inspect, os
 
-__version__ = VERSION = '0.32'
+__version__ = VERSION = '0.33'
 NAME = 'Editor'
 DESC = NAME
 PYTHON_VERSION = '3.10'
 ARDUINO_VERSION = '1.16'
-GUI_VERSION = '31'
+GUI_VERSION = '32'
 COMPILATOR_VERSION = '-'
 LANGS_VERSION = '1.4'
-FILE_VERSION = '1.5'
-FORM_VERSION = '2.0'
+FILE_VERSION = '1.6'
+FORM_VERSION = '2.1'
+AUTHOR = 'Ben CARYO'
 PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
 
 wprint('Importing files : ')
