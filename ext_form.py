@@ -56,16 +56,17 @@ class ExForm2:
                 i = i.replace('\r', '')
                 if i != '':
                     lst_tags.append(i.split(','))
-    
+        
             meta = {}
             meta_data = f.read('meta.ini').decode(get_encode())
+            meta_data = meta_data.replace('\r', '\n')
             for i in meta_data.split('\n'):
                 if meta_data != '':
                     key, value = i.split('-')
                     key = key.replace('"', '')
                     value = value.replace('"', '')
                     meta[key] = value
-    
+        
             f.close()
             return (result, lst_tags, meta)
 
@@ -101,8 +102,29 @@ class ExForm2:
             log.close()
 
 
+import hashlib
+def askpswd(pwdh, cmd):
+    zak = Toplevel()
+    zak.transient()
+    zak.title(lg('Password'))
+    zak.resizable(False, False)
+    Label(zak, text = lg('password')).place(x = 10, y = 10)
+    pwd = StringVar()
+    Entry(zak, textvariable = pwd, show = '•').place(x = 10, y = 40)
+    def command():
+        ha = hashlib.sha512()
+        ha.update(pwd.get().encode())
+        if str(ha.hexdigest()) == pwdh:
+            zak.destroy()
+            cmd()
+        else:
+            showerror(lg('password'), lg('err_pswd'))
+    Button(zak, text = lg('OK'), command = command).place(x = 10, y = 70)
+
+
 class ExForm:
     def open(self, name):
+        pop_deck()
         if '1.' in self.FORM_VERSION:
             data, lst_tags = ExForm1.open(self.path_prog, name)
             meta = {}
@@ -112,13 +134,28 @@ class ExForm:
             data, lst_tags = ExForm1.open(self.path_prog, name)
             meta = {}
 
+        if meta != {}:
+            self.menufichier.entryconfig(lg('settings'), stat = 'normal')
+
+        try:
+            askpswd(meta['password'], lambda : self.begin_openning(data, lst_tags, meta))
+        except Exception:
+            self.begin_openning(data, lst_tags, meta)
+
+    def begin_openning(self, data, lst_tags, meta):
         if get_encrypted():
             self.text.insert(END, self.decrypt(data))
         else:
             self.text.insert(END, data)
 
+        try:
+            set_deck(meta['lang'])
+        except:
+            pass
+
         for tag in lst_tags:
             self.lst_tags.append(tag)
+
         self.write_tags()
         self.meta = meta
 

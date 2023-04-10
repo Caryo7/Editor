@@ -9,6 +9,7 @@ class Images:
                        'save' : PhotoImage(file = self.path_prog + '/image/save.png'),
                        'saveas' : PhotoImage(file = self.path_prog + '/image/saveas.png'),
                        'savecopyas' : PhotoImage(file = self.path_prog + '/image/savecopyas.png'),
+                       'settings' : PhotoImage(file = self.path_prog + '/image/config.png'),
                        'print': PhotoImage(file = self.path_prog + '/image/printer.png'),
                        'close': PhotoImage(file = self.path_prog + '/image/close.png'),
                        'exit': PhotoImage(file = self.path_prog + '/image/fermer.png'),

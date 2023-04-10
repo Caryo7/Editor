@@ -38,6 +38,7 @@ class Win:
         self.clear_text()
         self.stat_text(False)
         self.update_line_numbers()
+        self.menufichier.entryconfig(lg('settings'), stat = 'disabled')
         self.master.title(self.title + ' - ' + lg('NFO'))
         
     def Quitter(self, evt=None):

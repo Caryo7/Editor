@@ -180,9 +180,6 @@ def get_inter_time():
 def get_autosave_path():
     return p.get('auto_save', 'path')
 
-def get_deck():
-    return p.get('global', 'lang')
-
 def get_mode():
     return get_deck()
 
@@ -191,6 +188,16 @@ def get_key():
         return int(str(p.get('crypt', 'key')).replace('\n', ''))
     except c.ParsingError:
         return 1
+
+deck_color = p.get('global', 'lang')
+old_deck = deck_color
+def get_deck():
+    return deck_color
+
+def set_deck(deck):
+    deck_color = deck
+def pop_deck():
+    deck_color = old_deck
 
 def get_min_info():
     return {'dev': p.get('minitel', 'dev'),

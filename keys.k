@@ -3,6 +3,7 @@ open = <Control-o>
 save = <Control-s>
 saveas = <Control-S>
 savecopyas = <Control-Alt-s>
+settings = 
 print = <Control-p
 close = <Control-w>
 quit = <Control-q>

@@ -15,6 +15,7 @@ class KeyB:
                         'save' :       [lambda evt : self.save(), None, 'self.save()'],
                         'saveas' :     [lambda evt : self.saveas(), None, 'self.saveas()'],
                         'savecopyas' : [lambda evt : self.savecopyas(), None, 'self.savecopyas()'],
+                        'settings' :   [None, None, ''],
                         'print' :      [lambda evt : self.print_window(), None, 'self.print_window()'],
                         'close' :      [lambda evt : self.fermer(), None, 'self.fermer()'],
                         'quit' :       [lambda evt : self.Quitter(), None, 'self.Quitter()'],

@@ -99,6 +99,7 @@ class File(ExForm, ExText):
 
             if name:
                 try:
+                    self.menufichier.entryconfig(lg('settings'), stat = 'disabled')
                     self.stat_text(True)
                     self.clear_text()
                     if self.ext(name) in self.listext:
@@ -106,7 +107,7 @@ class File(ExForm, ExText):
 
                     elif self.ext(name) in self.listexta:
                         ExForm.open(self, name)
-    
+
                     self.saved = True
                     self.savedd = True
                     self.path = name
