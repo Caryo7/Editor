@@ -14,7 +14,7 @@ class Configurator:
     colors = {lg('black'): 'black', lg('white'): 'white', lg('blue'): 'blue', lg('green'): 'green', lg('yellow'): 'yellow', lg('red'): 'red', lg('pink'): 'pink', lg('orange'): 'orange', lg('grey'): 'grey', }
     colors_name = [v for v, _ in colors.items()]
     font_lst = ['Courier', 'Calibri', 'Arial']
-    lgs = ['an', 'fr', 'al']
+    lgs = ['an', 'fr', 'al', 'es', 'it', 'ch']
     codages = ['UTF-8', 'UTF-16', 'UTF-4', 'ASCII']
     browsers = ['firefox']
     languages = ['Python', 'C++', 'C', 'Fortran', 'BASIC', 'Brain F', 'Cobol', 'Assembly']
@@ -386,7 +386,7 @@ class Configurator:
         self.tree.place(x = 0, y = 0)
         self.tree.config(yscrollcommand = scroll.set)
         self.tree.heading(1, text = lg('event'))
-        self.tree.heading(2, text = lg('key'))
+        self.tree.heading(2, text = lg('key_t'))
         self.tree.heading(3, text = lg('action'))
         self.tree.column(1, width = 150)
         self.tree.column(2, width = 150)

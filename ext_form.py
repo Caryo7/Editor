@@ -61,7 +61,7 @@ class ExForm2:
             meta_data = f.read('meta.ini').decode(get_encode())
             meta_data = meta_data.replace('\r', '\n')
             for i in meta_data.split('\n'):
-                if meta_data != '':
+                if i != '':
                     key, value = i.split('-')
                     key = key.replace('"', '')
                     value = value.replace('"', '')
@@ -92,7 +92,7 @@ class ExForm2:
                 meta['version'] = 'Form_2.0'
     
             for key, value in meta.items():
-                f.write(str('"' + key + '"-"' + value + '"').encode(get_encode()))
+                f.write(str('"' + key + '"-"' + value + '"\n').encode(get_encode()))
             f.close()
             z.close()
 
@@ -110,16 +110,29 @@ def askpswd(pwdh, cmd):
     zak.resizable(False, False)
     Label(zak, text = lg('password')).place(x = 10, y = 10)
     pwd = StringVar()
-    Entry(zak, textvariable = pwd, show = '•').place(x = 10, y = 40)
+    e = Entry(zak, textvariable = pwd, show = '•')
+    e.place(x = 10, y = 40)
+    e.focus()
+    
     def command():
         ha = hashlib.sha512()
         ha.update(pwd.get().encode())
         if str(ha.hexdigest()) == pwdh:
+            zak.focus()
             zak.destroy()
             cmd()
+
         else:
             showerror(lg('password'), lg('err_pswd'))
+            zak.focus()
+            e.focus()
+
+    def commande(evt):
+        command()
+
+    e.bind('<Return>', commande)
     Button(zak, text = lg('OK'), command = command).place(x = 10, y = 70)
+    zak.geometry('160x120')
 
 
 class ExForm:
@@ -138,11 +151,11 @@ class ExForm:
             self.menufichier.entryconfig(lg('settings'), stat = 'normal')
 
         try:
-            askpswd(meta['password'], lambda : self.begin_openning(data, lst_tags, meta))
+            askpswd(meta['password'], lambda : self.begin_openning(data, lst_tags, meta, name))
         except Exception:
-            self.begin_openning(data, lst_tags, meta)
+            self.begin_openning(data, lst_tags, meta, name)
 
-    def begin_openning(self, data, lst_tags, meta):
+    def begin_openning(self, data, lst_tags, meta, name):
         if get_encrypted():
             self.text.insert(END, self.decrypt(data))
         else:
@@ -158,6 +171,15 @@ class ExForm:
 
         self.write_tags()
         self.meta = meta
+
+        self.saved = True
+        self.savedd = True
+        self.path = name
+        self.add_f(self.path)
+        self.autocolorwords()
+        self.master.title(self.title + ' - ' + self.path)
+        self.update_line_numbers(fforbid = True)
+        self.text.focus()
 
     def save(self, file, data, meta):
         if get_encrypted():

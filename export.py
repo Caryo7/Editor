@@ -45,13 +45,15 @@ class AskMargins:
         self.pt.transient(self.am)
         self.pt.title(lg('piedtete'))
         self.pt.resizable(False, False)
-        c1 = ttk.Checkbutton(self.pt, text = 'Entêtes'      , onvalue = 1, offvalue = 0, variable = self.entetes).place(x = 10, y = 10) ###############################################
-        r1 = ttk.Radiobutton(self.pt, text = 'Numéros de page', value = 'h', variable = self.nb_pages).place(x = 200, y = 10)###################################################
+        c1 = ttk.Checkbutton(self.pt, text = lg('Entete')     , onvalue = 1, offvalue = 0, variable = self.entetes).place(x = 10, y = 10)
+        r1 = ttk.Radiobutton(self.pt, text = lg('nb_page_haut'), value = 'h', variable = self.nb_pages).place(x = 200, y = 10)
         txt_ent = ttk.Entry(self.pt, textvariable = self.text_entete, font = ('courier', 10, 'italic'), width = 45).place(x = 20, y = 40)
 
-        c2 = ttk.Checkbutton(self.pt, text = 'Pieds de page', onvalue = 1, offvalue = 0, variable = self.pieds).place(x = 10, y = 80) #####
-        r1 = ttk.Radiobutton(self.pt, text = 'Numéros de page', value = 'b', variable = self.nb_pages).place(x = 200, y = 80)###################################################
-        txt_pied = ttk.Entry(self.pt, textvariable = self.text_pieds, font = ('courier', 10, 'italic'), width = 45).place(x = 20, y = 110)
+        r1 = ttk.Radiobutton(self.pt, text = lg('no_nb_page'), value = 'a', variable = self.nb_pages).place(x = 200, y = 70)
+
+        c2 = ttk.Checkbutton(self.pt, text = lg('Pieds_de_page'), onvalue = 1, offvalue = 0, variable = self.pieds).place(x = 10, y = 100)
+        r1 = ttk.Radiobutton(self.pt, text = lg('nb_page_bas')  , value = 'b', variable = self.nb_pages).place(x = 200, y = 100)
+        txt_pied = ttk.Entry(self.pt, textvariable = self.text_pieds, font = ('courier', 10, 'italic'), width = 45).place(x = 20, y = 130)
 
         def validate(self):
             self.pt.destroy()
@@ -64,9 +66,9 @@ class AskMargins:
             self.nb_pages.set('b')
             validate(self)
 
-        Button(self.pt, text = lg('OK'), command = lambda : validate(self)).place(x = 50, y = 150)
-        Button(self.pt, text = lg('cancel'), command = lambda : cancel(self)).place(x = 200, y = 150)
-        self.pt.geometry('400x200')
+        Button(self.pt, text = lg('OK'), command = lambda : validate(self)).place(x = 50, y = 170)
+        Button(self.pt, text = lg('cancel'), command = lambda : cancel(self)).place(x = 200, y = 170)
+        self.pt.geometry('400x220')
 
     def protect_pdf(self):
         self.pp = Toplevel()
@@ -137,7 +139,7 @@ class AskMargins:
         self.inter_lines.set(int((self.inter_ligne / cm) * (10**self.decimals)) / (10**self.decimals))
 
         Button(self.am, text = lg('security'), command = self.protect_pdf, stat = 'normal' if not self.mode_print else 'disabled').place(x = 100, y = 370)
-        Button(self.am, text = lg('piedtete'), command = self.askpiedtete).place(x = 190, y = 370)####################################################################################
+        Button(self.am, text = lg('piedtete'), command = self.askpiedtete).place(x = 190, y = 370)
         
         Button(self.am, text = lg('OK'), command = self.lunch_export_pdf).place(x = 10, y = 370)
         self.am.geometry('350x410')
@@ -261,6 +263,39 @@ class Export(AskMargins):
         list_styles.insert(0, ('normal', bc, fc, '0.0', '0.0'))
         line_text = 0
         column_text = 0
+        self.page = 0
+        def new_page(self):
+            self.page += 1
+
+            if self.entetes.get():
+                n = 0
+                for i in entete:
+                    chars.append((self.margin_left + (n * size_w),
+                                  int(height - (self.margin_top / 2)),
+                                  i,
+                                  'black',
+                                  'white'))
+                    n += 1
+
+            if self.pieds.get():
+                n = 0
+                for i in pieds:
+                    chars.append((self.margin_left + (n * size_w),
+                                  int(self.margin_bottom / 2),
+                                  i,
+                                  'black',
+                                  'white'))
+                    n += 1
+
+            if self.nb_pages.get() != 'a':
+                page_ = str(self.page)
+                for n in range(len(page_)):
+                    chars.append((width - self.margin_right - (n * size_w),
+                                  int(self.margin_bottom / 2) if self.nb_pages.get() == 'b' else int(height - (self.margin_top / 2)),
+                                  page_[len(page_) - 1 - n],
+                                  'black',
+                                  'white'))
+
         for char in text:
             if column > maxi_larg:
                 line += 1
@@ -268,26 +303,9 @@ class Export(AskMargins):
                 len_line.insert(line, 999)
 
             if line > maxi_high:
-                if self.pieds.get():
-                    n = 0
-                    for i in pieds:
-                        chars.append((self.margin_left + (n * size_w),
-                                      height - ((size + interligne) * line) - self.margin_top,
-                                      i,
-                                      'white',
-                                      'back'))
-                        n += 1
+                new_page(self)
                 chars.append('show')
                 line = 0
-                if self.entetes.get():
-                    n = 0
-                    for i in entete:
-                        chars.append((self.margin_left + (n * size_w),
-                                      height - ((size + interligne) * line) - self.margin_top,
-                                      i,
-                                      'white',
-                                      'black'))
-                        n += 1
 
             if char == '\n':
                 line += 1
@@ -337,6 +355,8 @@ class Export(AskMargins):
 
             column += 1
             column_text += 1
+
+        new_page(self)
 
         for x, y, char, f, b in chars:
             if char == 'show':

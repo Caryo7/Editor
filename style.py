@@ -43,19 +43,50 @@ class Styles:
             self.zak.title(lg('Style'))
             self.lst = Listbox(self.zak)
             self.lst.grid()
+            lst = []
             for i in self.lst_tags:
-                if i[0] != '':
-                    self.lst.insert(END, i[0])
-                    self.lst.itemconfig(END, background=i[1], foreground=i[2])
+                if i[0] not in lst:
+                    if i[0] != '':
+                        self.lst.insert(END, i[0])
+                        self.lst.itemconfig(END, background=i[1], foreground=i[2])
+                        lst.append(i[0])
             self.lst.bind('<Double-Button-1>', self.selected_tag)
             b = ttk.Button(self.zak, text = lg('New'), command = self.ask_new_tag).grid()
         except TclError:
             showerror(self.title, lg('VDSUT'))
 
+    def clear_tags(self):
+        for name, _, _, _, _ in self.lst_tags:
+            self.text.tag_remove('@0.0', 'end')
+
     def write_tags(self):
+        #self.clear_tags()
         for i in self.lst_tags:
             if i[0] != '':
                 self.new_tag(i[1], i[2], i[0], i[3], i[4], False)
+
+    def config_tags(self):
+        self.zak = Toplevel()
+        self.zak.iconbitmap(self.ico['style'])
+        self.zak.transient(self.master)
+        self.zak.title(lg('Style'))
+        self.lst = Listbox(self.zak)
+        self.lst.grid()
+        lst = []
+        for i in self.lst_tags:
+            if i[0] not in lst:
+                if i[0] != '':
+                    self.lst.insert(END, i[0])
+                    self.lst.itemconfig(END, background=i[1], foreground=i[2])
+                    lst.append(i[0])
+
+        def config_item(evt):
+            popup = Menu(zak, tearoff=0)
+            popup.add_command(label = 'modifier', command=None)
+            popup.add_command(label = 'delete', command=None)
+            popup.tk_popup(evt.x_root, evt.y_root)
+
+        self.lst.bind('<Button-3>', config_item)
 
     def key_press_test(self, evt):
         if evt.char == ' ' and self.char_p == '':

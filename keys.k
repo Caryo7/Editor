@@ -45,3 +45,4 @@ lines =
 struct = 
 prog = 
 clear_recent = 
+configs = 

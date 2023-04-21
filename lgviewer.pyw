@@ -25,11 +25,16 @@ class LgViewer:
         self.master.iconbitmap(PATH_PROG + '/image/lg.ico')
         self.master.resizable(False, False)
 
+        def write_temp():
+            if askyesno('', 'Configmation'):
+                self.write_temp()
+
         menu = Menu(self.master)
         self.master['menu'] = menu
         menu.add_command(label = 'Ouvrir', command = self.open)
         menu.add_command(label = 'Quitter', command = self.master.destroy)
         menu.add_command(label = 'Actualiser', command = self.insert_data)
+        menu.add_command(label = 'Ecrire temp/', command = write_temp)
         menu.add_command(label = 'Ajouter', command = self.append)
         self.open()
         self.Generate()

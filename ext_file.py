@@ -13,6 +13,15 @@ class ExText:
         else:
             self.text.insert(END, r)
 
+        self.saved = True
+        self.savedd = True
+        self.path = name
+        self.add_f(self.path)
+        self.autocolorwords()
+        self.master.title(self.title + ' - ' + self.path)
+        self.update_line_numbers(fforbid = True)
+        self.text.focus()
+
     def save(self, file, data, cryptage = True):
         f = open(file, 'w', encoding = get_encode())
         if get_encrypted() and cryptage:

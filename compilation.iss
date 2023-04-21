@@ -22,7 +22,6 @@ AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
-DisableDirPage=yes
 ChangesAssociations=yes
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
@@ -36,7 +35,18 @@ OutputBaseFilename=setup_33_win
 SetupIconFile=image\ico.ico
 Compression=lzma
 SolidCompression=yes
-WizardStyle=modern
+;WizardStyle=classic, modern
+WizardStyle=classic
+
+;icone en haut :
+;WizardSmallImageFile=G:\Exe\Edit\image\ico.png
+;WizardImageFile=C:\Documents and Settings\mybmp.bmp 'Image à mettre, pour la page d'entrée
+;WizardImageFile2=C:\Documents and Settings\mybmp.bmp 'Image à mettre, pour la page de sortie
+DisableWelcomePage=no
+DisableFinishedPage=yes 
+;DisableDirPage=yes
+DisableDirPage=no
+
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -87,5 +97,5 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait skipifsilent
 

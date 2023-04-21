@@ -53,6 +53,7 @@ class Content:
                          insertwidth = read('text', 'insertwidth'),
                          selectbackground = read('text', 'selectbackground'),
                          selectborderwidth = read('text', 'selectborderwidth'),)
+
         self.text.focus()
         self.text.bind('<KeyPress>', self.unsave)
         self.text.bind('<KeyRelease>', self.infobar_changement)

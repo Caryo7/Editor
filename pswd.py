@@ -21,6 +21,9 @@ class Password:
         else:
             self.master = Toplevel()
             self.master.transient(tk)
+
+        self.master.focus()
+
         self.cmd = cmd
         self.master.iconbitmap(PATH_PROG + '/image/password.ico')
         self.master.title(lg('Administrator'))
