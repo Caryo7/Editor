@@ -7,7 +7,7 @@ def wprint(*args):
 
 import time, inspect, os
 
-__version__ = VERSION = '0.33.2' ###
+__version__ = VERSION = '0.33.3' ###
 GUI_VERSION = '32.1' ###
 FILE_VERSION = '1.7' ##
 FORM_VERSION = '2.2' ##

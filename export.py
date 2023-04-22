@@ -28,6 +28,10 @@ except ImportError:
     ERROR(5)
     export_word = False
 
+
+## Rajouter dimensions personnalisées de page PDF (griser donc les radio buttons orientation)
+
+
 class AskMargins:
     margin_left = 2 * cm
     margin_right = 2 * cm
@@ -41,19 +45,73 @@ class AskMargins:
     pdf_password = None
 
     def askpiedtete(self):
-        self.pt = Toplevel()
+        self.pt = Toplevel(self.am)
         self.pt.transient(self.am)
+        self.pt.iconbitmap(self.ico['config'])
         self.pt.title(lg('piedtete'))
         self.pt.resizable(False, False)
-        c1 = ttk.Checkbutton(self.pt, text = lg('Entete')     , onvalue = 1, offvalue = 0, variable = self.entetes).place(x = 10, y = 10)
-        r1 = ttk.Radiobutton(self.pt, text = lg('nb_page_haut'), value = 'h', variable = self.nb_pages).place(x = 200, y = 10)
-        txt_ent = ttk.Entry(self.pt, textvariable = self.text_entete, font = ('courier', 10, 'italic'), width = 45).place(x = 20, y = 40)
+
+        def style_piedtete(type_, self):
+            assert type_ in ('pieds', 'tete')
+            z = Toplevel(self.pt)
+            z.transient()
+            z.title(lg('style'))
+            z.iconbitmap(self.ico['config'])
+            Label(z, text = lg('background')).place(x = 10, y = 10)
+            Label(z, text = lg('foreground')).place(x = 10, y = 70)
+
+            c1 = ttk.Combobox(z, value = self.colors_name)
+            c1.place(x = 10, y = 40)
+            c2 = ttk.Combobox(z, value = self.colors_name)
+            c2.place(x = 10, y = 100)
+
+            c1.current(1)
+            c2.current(0)
+
+            ch = IntVar()
+            Checkbutton(z, text = lg('nb_tt_pages'), onvalue = 1, offvalue = 0, variable = ch, stat = 'disabled').place(x = 10, y = 130)
+            def valide(self):
+                if type_ == 'tete':
+                    self.bg_tete.set(self.colors[c1.get()])
+                    self.fg_tete.set(self.colors[c2.get()])
+                else:
+                    self.bg_pieds.set(self.colors[c1.get()])
+                    self.fg_pieds.set(self.colors[c2.get()])
+                self.show_tt_pages.set(ch.get())
+                z.destroy()
+
+            Button(z, text = lg('ok'), command = lambda : valide(self)).place(x = 10, y = 160)
+            z.geometry('200x200')
+
+        r1 = ttk.Radiobutton(self.pt, text = lg('nb_page_haut'), value = 'h', variable = self.nb_pages)
+        r1.place(x = 200, y = 10)
+        txt_ent = ttk.Entry(self.pt, textvariable = self.text_entete, font = ('courier', 10, 'italic'), width = 41)
+        txt_ent.place(x = 20, y = 40)
+        b1 = Button(self.pt, text = lg('...'), command = lambda : style_piedtete('tete', self), width = 3)
+        b1.place(x = 360, y = 40)
+        def active1(self):
+            txt_ent.config(stat = 'disabled' if self.entetes.get() == 0 else 'normal')
+            b1.config(stat = 'disabled' if self.entetes.get() == 0 else 'normal')
+
+        active1(self)
+        c1 = ttk.Checkbutton(self.pt, text = lg('Entete')     , onvalue = 1, offvalue = 0, variable = self.entetes, command = lambda : active1(self))
+        c1.place(x = 10, y = 10)
 
         r1 = ttk.Radiobutton(self.pt, text = lg('no_nb_page'), value = 'a', variable = self.nb_pages).place(x = 200, y = 70)
 
-        c2 = ttk.Checkbutton(self.pt, text = lg('Pieds_de_page'), onvalue = 1, offvalue = 0, variable = self.pieds).place(x = 10, y = 100)
-        r1 = ttk.Radiobutton(self.pt, text = lg('nb_page_bas')  , value = 'b', variable = self.nb_pages).place(x = 200, y = 100)
-        txt_pied = ttk.Entry(self.pt, textvariable = self.text_pieds, font = ('courier', 10, 'italic'), width = 45).place(x = 20, y = 130)
+        r2 = ttk.Radiobutton(self.pt, text = lg('nb_page_bas')  , value = 'b', variable = self.nb_pages)
+        r2.place(x = 200, y = 100)
+        txt_pied = ttk.Entry(self.pt, textvariable = self.text_pieds, font = ('courier', 10, 'italic'), width = 41)
+        txt_pied.place(x = 20, y = 130)
+        b2 = Button(self.pt, text = lg('...'), command = lambda : style_piedtete('pieds', self), width = 3)
+        b2.place(x = 360, y = 130)
+        def active2(self):
+            txt_pied.config(stat = 'disabled' if self.pieds.get() == 0 else 'normal')
+            b2.config(stat = 'disabled' if self.pieds.get() == 0 else 'normal')
+
+        active2(self)
+        c2 = ttk.Checkbutton(self.pt, text = lg('Pieds_de_page'), onvalue = 1, offvalue = 0, variable = self.pieds, command = lambda : active2(self))
+        c2.place(x = 10, y = 100)
 
         def validate(self):
             self.pt.destroy()
@@ -72,6 +130,7 @@ class AskMargins:
 
     def protect_pdf(self):
         self.pp = Toplevel()
+        self.pp.iconbitmap(self.ico['security'])
         self.pp.transient(self.am)
         self.pp.title(lg('security'))
         self.pp.resizable(False, False)
@@ -102,6 +161,7 @@ class AskMargins:
     def ask_margins(self, name):
         self.nom_pdf = name
         self.am = Toplevel()
+        self.am.iconbitmap(self.ico['config'])
         self.am.transient(self.master)
         self.am.title(lg('Marges'))
         Label(self.am, text=lg('haut')).place(x = 100, y = 25)
@@ -203,6 +263,11 @@ class Export(AskMargins):
                 self.nb_pages = StringVar()
                 self.entetes = IntVar()
                 self.pieds = IntVar()
+                self.fg_pieds = StringVar()
+                self.bg_pieds = StringVar()
+                self.fg_tete = StringVar()
+                self.bg_tete = StringVar()
+                self.show_tt_pages = IntVar()
 
                 self.pdf_can_print.set(1)
                 self.pdf_can_modify.set(1)
@@ -214,6 +279,12 @@ class Export(AskMargins):
                 self.nb_pages.set('b')
                 self.pieds.set(1)
                 self.entetes.set(0)
+                self.fg_pieds.set('black')
+                self.bg_pieds.set('white')
+                self.fg_tete.set('black')
+                self.bg_tete.set('white')
+                self.show_tt_pages.set(0)
+
                 self.ask_margins(name)
 
     def begin_export_pdf(self, name):
@@ -264,6 +335,7 @@ class Export(AskMargins):
         line_text = 0
         column_text = 0
         self.page = 0
+
         def new_page(self):
             self.page += 1
 
@@ -273,8 +345,8 @@ class Export(AskMargins):
                     chars.append((self.margin_left + (n * size_w),
                                   int(height - (self.margin_top / 2)),
                                   i,
-                                  'black',
-                                  'white'))
+                                  self.fg_tete.get(),
+                                  self.bg_tete.get()))
                     n += 1
 
             if self.pieds.get():
@@ -283,8 +355,8 @@ class Export(AskMargins):
                     chars.append((self.margin_left + (n * size_w),
                                   int(self.margin_bottom / 2),
                                   i,
-                                  'black',
-                                  'white'))
+                                  self.fg_pieds.get(),
+                                  self.bg_pieds.get()))
                     n += 1
 
             if self.nb_pages.get() != 'a':
