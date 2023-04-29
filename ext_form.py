@@ -104,7 +104,7 @@ class ExForm2:
 
 import hashlib
 def askpswd(pwdh, cmd):
-    zak = Toplevel()
+    zak = Tk()
     zak.transient()
     zak.title(lg('Password'))
     zak.resizable(False, False)
@@ -112,6 +112,7 @@ def askpswd(pwdh, cmd):
     pwd = StringVar()
     e = Entry(zak, textvariable = pwd, show = '•')
     e.place(x = 10, y = 40)
+    zak.wm_attributes('-topmost')
     e.focus()
     
     def command():
@@ -196,3 +197,4 @@ class ExForm:
 
 if __name__ == '__main__':
     from __init__ import *
+

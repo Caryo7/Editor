@@ -9,14 +9,7 @@ from tkinter.simpledialog import *
 from counter import *
 from confr import *
 
-##PYTHON_VERSION = '3.10'
-##ARDUINO_VERSION = '1.16'
-##GUI_VERSION = '30'
-##COMPILATOR_VERSION = '-'
-##LANGS_VERSION = '1.4'
-##FILE_VERSION = '1.5'
-
-class help:
+class help_:
     curseurs = ['arrow', 'man', 'based_arrow_down', 'middlebutton', 'based_arrow_up', 'mouse', 'boat', 'pencil', 'bogosity', 'pirate', 'bottom_left_corner', 'plus', 'bottom_right_corner', 'question_arrow', 'bottom_side', 'right_ptr', 'bottom_tee', 'right_side', 'box_spiral', 'right_tee', 'center_ptr', 'rightbutton', 'circle', 'rtl_logo', 'clock', 'sailboat', 'coffee_mug', 'sb_down_arrow', 'cross', 'sb_h_double_arrow', 'cross_reverse', 'sb_left_arrow', 'crosshair', 'sb_right_arrow', 'diamond_cross',
                'sb_up_arrow', 'dot', 'sb_v_double_arrow', 'dotbox', 'shuttle', 'double_arrow', 'sizing', 'draft_large', 'spider', 'draft_small', 'spraycan', 'draped_box', 'star', 'exchange', 'target', 'fleur', 'tcross', 'gobbler', 'top_left_arrow', 'gumby', 'top_left_corner', 'hand1', 'top_right_corner', 'hand2', 'top_side', 'heart', 'top_tee', 'icon', 'trek', 'iron_cross', 'ul_angle', 'left_ptr', 'umbrella', 'left_side', 'ur_angle', 'left_tee', 'watch', 'leftbutton', 'xterm', 'll_angle', 'X_cursor', 'lr_angle']
 
@@ -24,11 +17,13 @@ class help:
         if self.dialoging:
             return
 
-        zak = Toplevel()
+        self.dialoging = True
+        zak = Tk()
         zak.iconbitmap(self.ico['help'])
-        zak.transient(self.master)
+        zak.resizable(False, False)
         zak['bg'] = '#bbbbbb'
         zak.config(borderwidth = 5)
+        zak.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(zak))
         zak.title(lg('About'))
         zak.bind('<Escape>', lambda evt: zak.destroy())
         zak.bind('<Return>', lambda evt: zak.destroy())
@@ -62,9 +57,9 @@ class help:
         #s2 = Label(cad, text = '07.87.25.46.41', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 4, column = 1, sticky = W, padx = 10, pady = 5)
 
         Label(cad, text = lg('site'),       justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 3, column = 0, sticky = E, padx = padx, pady = 5)
-        s3 = Label(cad, text = 'bgtarino.wixsite.com/Editor', justify = LEFT, fg = 'blue', bg = '#bbbbbb', font = ('Courier', 11, 'underline'), cursor = 'hand2')
+        s3 = Label(cad, text = self.URL, justify = LEFT, fg = 'blue', bg = '#bbbbbb', font = ('Courier', 11, 'underline'), cursor = 'hand2')
         s3.grid(row = 3, column = 1, sticky = W, padx = 10, pady = 5)
-        s3.bind('<Button-1>', lambda evt: self.open_internet('https://bgtarino.wixsite.com/Editor'))
+        s3.bind('<Button-1>', lambda evt: self.open_internet(self.URL))
         
         Label(cad, text = lg('copyright'),      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 4, column = 0, sticky = E, padx = padx, pady = 5)
         Label(cad, text = 'All Right Reserved', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 4, column = 1, sticky = W, padx = 10, pady = 5)
@@ -100,18 +95,21 @@ class help:
         Button(cad, text = lg('License'),   justify = CENTER, relief = GROOVE, bd = 3, command = self.License).grid(row = 16, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
         Button(cad, text = lg('autors'),    justify = CENTER, relief = GROOVE, bd = 3, command = self.Authors).grid(row = 17, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
 
-        Button(zak, text = lg('close'), command = zak.destroy, relief = SOLID, bd = 3).grid(row = 1, column = 0, padx = 10, pady = 10)
+        def close():
+            zak.destroy()
+            self.dialoging = False
+
+        Button(zak, text = lg('close'), command = close, relief = SOLID, bd = 3).grid(row = 1, column = 0, padx = 10, pady = 10)
         zak.update()
 
     def ToDo(self):
-        if not(self.dialoging):
-            f = open(self.path_prog + '/TODO.txt', 'r', encoding = get_encode())
-            SimpleDialog(self.master,
-                         text=f.read(),
-                         buttons = [lg('close')],
-                         default = 0,
-                         title = lg('About')).go()
-            f.close()
+        f = open(self.path_prog + '/TODO.txt', 'r', encoding = get_encode())
+        SimpleDialog(self.master,
+                     text=f.read(),
+                     buttons = [lg('close')],
+                     default = 0,
+                     title = lg('About')).go()
+        f.close()
 
     def License(self):
         f = open(self.path_prog + '/LICENSE', 'r', encoding = get_encode())
@@ -131,7 +129,7 @@ class help:
 
     def Authors(self):
         SimpleDialog(self.master,
-                     text='Auteur : Benoit CHARREYRON',
+                     text='Auteur : Ben CARYO',
                      buttons = [lg('close')],
                      default = 0,
                      title = lg('License')).go()

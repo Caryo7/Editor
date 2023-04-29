@@ -160,9 +160,43 @@ class AskMargins:
 
     def ask_margins(self, name):
         self.nom_pdf = name
-        self.am = Toplevel()
+        self.am = Tk()
+        # Variables
+        self.pdf_can_print = IntVar()
+        self.pdf_can_modify = IntVar()
+        self.pdf_can_copy = IntVar()
+        self.pdf_can_annotate = IntVar()
+        self.keep_styles = IntVar()
+        self.orient_paper = StringVar()
+        self.text_entete = StringVar()
+        self.text_pieds = StringVar()
+        self.nb_pages = StringVar()
+        self.entetes = IntVar()
+        self.pieds = IntVar()
+        self.fg_pieds = StringVar()
+        self.bg_pieds = StringVar()
+        self.fg_tete = StringVar()
+        self.bg_tete = StringVar()
+        self.show_tt_pages = IntVar()
+        #Valeurs
+        self.pdf_can_print.set(1)
+        self.pdf_can_modify.set(1)
+        self.pdf_can_copy.set(1)
+        self.pdf_can_annotate.set(1)
+        self.keep_styles.set(1)
+        self.orient_paper.set('p')
+        self.password_for_pdf = False
+        self.nb_pages.set('b')
+        self.pieds.set(1)
+        self.entetes.set(0)
+        self.fg_pieds.set('black')
+        self.bg_pieds.set('white')
+        self.fg_tete.set('black')
+        self.bg_tete.set('white')
+        self.show_tt_pages.set(0)
+        #Fenêtre
         self.am.iconbitmap(self.ico['config'])
-        self.am.transient(self.master)
+        self.am.transient()
         self.am.title(lg('Marges'))
         Label(self.am, text=lg('haut')).place(x = 100, y = 25)
         Label(self.am, text=lg('bas')).place(x = 100, y = 220)
@@ -244,7 +278,6 @@ class Export(AskMargins):
             self.dialoging = True
             if not mode_print:
                 name = asksaveasfilename(title=lg('Export_PDF'), filetypes=[(lg('pdff'), '*.pdf *.pdff')])
-                self.dialoging = False
             else:
                 name = self.path_prog + '/temp/temp_pdf.pdf'
 
@@ -252,40 +285,10 @@ class Export(AskMargins):
             self.cmd_print = cmd_print
             if name and export_pdf:
                 if name[-4:] != '.pdf' and name[-5:] != '.pdff':name += '.pdf'
-                self.pdf_can_print = IntVar()
-                self.pdf_can_modify = IntVar()
-                self.pdf_can_copy = IntVar()
-                self.pdf_can_annotate = IntVar()
-                self.keep_styles = IntVar()
-                self.orient_paper = StringVar()
-                self.text_entete = StringVar()
-                self.text_pieds = StringVar()
-                self.nb_pages = StringVar()
-                self.entetes = IntVar()
-                self.pieds = IntVar()
-                self.fg_pieds = StringVar()
-                self.bg_pieds = StringVar()
-                self.fg_tete = StringVar()
-                self.bg_tete = StringVar()
-                self.show_tt_pages = IntVar()
-
-                self.pdf_can_print.set(1)
-                self.pdf_can_modify.set(1)
-                self.pdf_can_copy.set(1)
-                self.pdf_can_annotate.set(1)
-                self.keep_styles.set(1)
-                self.orient_paper.set('p')
-                self.password_for_pdf = False
-                self.nb_pages.set('b')
-                self.pieds.set(1)
-                self.entetes.set(0)
-                self.fg_pieds.set('black')
-                self.bg_pieds.set('white')
-                self.fg_tete.set('black')
-                self.bg_tete.set('white')
-                self.show_tt_pages.set(0)
-
                 self.ask_margins(name)
+                self.dialoging = False
+            else:
+                self.dialoging = False
 
     def begin_export_pdf(self, name):
         enc = pdfencrypt.StandardEncryption(userPassword = self.pdf_password,

@@ -8,7 +8,7 @@ from confr import *
 import urllib.request as url
 import os, inspect, zipfile as zf, time
 
-PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
+PATH_PROG = os.path.abspath(os.getcwd())
 
 class Check(Thread):
     def __init__(self, main_self):
@@ -119,8 +119,8 @@ class Installer(Thread):
 class Update:
     def __update__(self):
         self.path = ''
-        t = Check(self)
-        t.start()
+        self.check_update = Check(self)
+        self.check_update.start()
         self.checkupdate = IntVar()
         self.checkupdate.set(get_update_test())
 

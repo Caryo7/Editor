@@ -13,10 +13,10 @@ class TasksViewer:
         self.nb = 1
         
     def show(self):
-        self.zak = Toplevel()
+        self.zak = Tk()
         self.zak.iconbitmap(self.ico['task'])
         self.zak.title(lg('TaV'))
-        self.zak.transient(self.master)
+        self.zak.transient()
         self.zak.resizable(width=False, height=False)
         self.tree = ttk.Treeview(self.zak, height=10, show='headings', columns=('Id', 'Name', 'Start Time', 'Stat', 'Loop'))
         self.tree.grid(row=0, column=0)

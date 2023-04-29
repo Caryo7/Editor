@@ -34,6 +34,11 @@ class Printer:
         except NameError:
             self.all_printers = []
             maxi = 20
+        
+        if self.dialoging:
+            return
+
+        self.dialoging = True
 
         self.root = Tk()
         self.root.iconbitmap(self.ico['printer'])
@@ -55,8 +60,11 @@ class Printer:
         self.rsv.place(x = 10, y = 365)
         ToolTip(self.rsv, text = lg("notimp")) #############
 
+        def close():
+            self.root.destroy()
+            self.dialoging = False
         Button(self.root, text = lg('startimp'), command = self.begin).place(x = 10, y = 395)
-        Button(self.root, text = lg('close'), command = self.root.destroy).place(x = 10, y = 430)
+        Button(self.root, text = lg('close'), command = close).place(x = 10, y = 430)
 
         self.l = Label(self.root, text = lg('stnpr'), font = ('Consolas', 11))
         self.l.place(x = 10, y = 465)

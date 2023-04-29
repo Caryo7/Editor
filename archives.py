@@ -66,14 +66,18 @@ class Archives:
                 z.close()
 
     def compare(self):
+        if self.dialoging:
+            return
+
+        self.dialoging = True
         if os.path.exists(self.path + '.zip'):
             z = zipfile.ZipFile(self.path + '.zip', mode='r')
             l = z.namelist()
             z.close()
             self.lv = []
-            self.zak = Toplevel()
+            self.zak = Tk()
             self.zak.iconbitmap(self.ico['archive'])
-            self.zak.transient(self.master)
+            self.zak.transient()
             self.zak.title(lg('Archive'))
             lst = Listbox(self.zak, width=30, height=10)
             lst.grid(row=0, column=0)
@@ -96,6 +100,8 @@ class Archives:
             self.cpl2_ = Entry(c, textvariable=self.cpl2, width=26)
             self.cpl2_.grid(row=1, column=1, sticky='w')
             Button(self.zak, text=lg('OK'), command=self.start_analyse).grid(row=2, column=0)
+
+        self.dialoging = False
 
         
 

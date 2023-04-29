@@ -32,14 +32,20 @@ class Styles:
             n += 1
         self.new_tag(bg=self.lst_tags[n][1], fg=self.lst_tags[n][2], name=self.lst_tags[n][0], i=self.deb_tag, r=self.fin_tag, save=True, menu=False)
         self.zak.destroy()
+        self.dialoging = False
 
     def add_tag_here(self):
+        if self.dialoging:
+            return
+
+        self.dialoging = True
         try:
             self.deb_tag = self.text.index('sel.first')
             self.fin_tag = self.text.index('sel.last')
-            self.zak = Toplevel()
+            self.zak = Tk()
+            self.zak.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(self.zak))
             self.zak.iconbitmap(self.ico['style'])
-            self.zak.transient(self.master)
+            self.zak.transient()
             self.zak.title(lg('Style'))
             self.lst = Listbox(self.zak)
             self.lst.grid()
@@ -54,6 +60,7 @@ class Styles:
             b = ttk.Button(self.zak, text = lg('New'), command = self.ask_new_tag).grid()
         except TclError:
             showerror(self.title, lg('VDSUT'))
+            self.dialoging = False
 
     def clear_tags(self):
         for name, _, _, _, _ in self.lst_tags:
@@ -66,9 +73,14 @@ class Styles:
                 self.new_tag(i[1], i[2], i[0], i[3], i[4], False)
 
     def config_tags(self):
-        self.zak = Toplevel()
+        if self.dialoging:
+            return
+
+        self.dialoging = True
+        self.zak = Tk()
         self.zak.iconbitmap(self.ico['style'])
-        self.zak.transient(self.master)
+        self.zak.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(self.zak))
+        self.zak.transient()
         self.zak.title(lg('Style'))
         self.lst = Listbox(self.zak)
         self.lst.grid()
@@ -124,11 +136,17 @@ class Styles:
         except AttributeError:
             pass
 
+        if self.dialoging:
+            return
+
+        self.dialoging = True
+
         try:
             self.i, self.r = self.text.index('sel.first'), self.text.index('sel.last')
-            self.zak = Toplevel()
+            self.zak = Tk()
             self.zak.iconbitmap(self.ico['style'])
-            self.zak.transient(self.master)
+            self.zak.transient()
+            self.zak.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(self.zak))
             self.zak.title(lg('Style'))
             Label(self.zak, text=lg('Name')).grid(row=0, column=0, sticky='e')
             Label(self.zak, text=lg('Background')).grid(row=1, column=0, sticky='e')
@@ -142,6 +160,7 @@ class Styles:
             Button(self.zak, text=lg('ok'), command=self.nt).grid(row=3, column=1, sticky = 'w')
         except TclError:
             showerror(self.title, lg('VDSUT'))
+            self.dialoging = False
 
     def nt(self):
         self.new_tag(self.colors[self.bg.get()],
@@ -151,6 +170,7 @@ class Styles:
                      self.r)
 
         self.zak.destroy()
+        self.dialoging = False
 
 if __name__ == '__main__':
     from __init__ import *

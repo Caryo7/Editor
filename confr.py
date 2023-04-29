@@ -5,7 +5,7 @@ from lg import *
 import os, inspect
 from tkinter.messagebox import *
 
-PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
+PATH_PROG = os.path.abspath(os.getcwd())
 
 p = ConfigParser()
 p.read(PATH_PROG + '/config.ini', encoding = 'UTF-8')
@@ -26,6 +26,10 @@ def get_nav():
 
 def get_sur():
     if p.get('global', 'surcharge') == '1':return True
+    else:return False
+
+def get_notifs():
+    if p.get('global', 'notifs') == '1':return True
     else:return False
 
 def get_update_test():

@@ -2,88 +2,127 @@
 # -*- coding: utf-8 -*-
 # Partie 1 - Importation de tous les fichiers
 
+class StartUp_Console:
+    nb = 0
+    i = 0
+
+    def add(self, text):
+        self.i += 1
+        print(int((self.i / self.nb) * 100), '% :', text, end='\r')
+
+    def finish(self):
+        print('Initialing done !')
+
+    def kill(self):
+        pass
+
+print('Démarrage...')
+from startup import *
+
+if True:
+    startup = Startup()
+    startup.nb = 100 # Nombre de wprint
+else:
+    startup = StartUp_Console()
+    startup.nb = 100
+
 def wprint(*args):
-    print(*args)
+    global startup
+    try:
+        startup.add(*args)
+    except TclError:
+        startup = StartUp_Console()
+        startup.nb = 100
+        startup.add(*args)
 
 import time, inspect, os
 
-__version__ = VERSION = '0.33.3' ###
-GUI_VERSION = '32.1' ###
+__version__ = VERSION = '33.5' ###
+GUI_VERSION = '34' ###
 FILE_VERSION = '1.7' ##
 FORM_VERSION = '2.2' ##
 
 NAME = 'Editor'
 DESC = NAME
+URL = 'https://bgtarino.wixsite.com/Editor'
 PYTHON_VERSION = '3.10'
 ARDUINO_VERSION = '1.16'
 COMPILATOR_VERSION = '-'
 LANGS_VERSION = '1.4'
 AUTHOR = 'Ben CARYO'
 
-PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
+PATH_PROG = os.path.abspath(os.getcwd())
+'''
+Liste des fichiers demandant PATH_PROG :
+ - main.py
+ - confr.py
+ - lgviewer.py
+ - pswd.py
+ - update.py
+ - tree.py
+ - counter.py
+'''
 
 wprint('Importing files : ')
-wprint('content -> ')
+wprint('content')
 from content import *
-wprint('Done\nhelp -> ')
+wprint('help')
 from help import *
-wprint('Done\niofile -> ')
+wprint('iofile')
 from iofile import *
-wprint('Done\nmenubar -> ')
+wprint('menubar')
 from menubar import *
-wprint('Done\nsearch -> ')
+wprint('search')
 from search import *
-wprint('Done\nwin -> ')
+wprint('win')
 from win import *
-wprint('Done\nsecurity -> ')
+wprint('security')
 from security import *
-wprint('Done\narchives -> ')
+wprint('archives')
 from archives import *
-wprint('Done\nconfr -> ')
+wprint('confr')
 from confr import *
-wprint('Done\ncrypt -> ')
+wprint('crypt')
 from crypt import *
-wprint('Done\nminitel -> ')
+wprint('minitel')
 from minitel import *
-wprint('Done\nconfig -> ')
+wprint('config')
 from config import *
-wprint('Done\nexport -> ')
+wprint('export')
 from export import *
-wprint('Done\nupdate -> ')
+wprint('update')
 from update import *
-wprint('Done\nextensions -> ')
+wprint('extensions')
 from extensions import *
-wprint('Done\ntasksviewer -> ')
+wprint('tasksviewer')
 from tasksviewer import *
-wprint('Done\nprinter -> ')
+wprint('printer')
 from printer import *
-wprint('Done\nerrors -> ')
+wprint('errors')
 from errors import *
-wprint('Done\nclkright -> ')
+wprint('clkright')
 from clkright import *
-wprint('Done\nstyle -> ')
+wprint('style')
 from style import *
-wprint('Done\nautocolor -> ')
+wprint('autocolor')
 from autocolor import *
-wprint('Done\nrecentfile -> ')
+wprint('recentfile')
 from recentfile import *
-wprint('Done\nstartup -> ')
-from startup import *
-wprint('Done\npi -> ')
+wprint('pi')
 from pi import *
-wprint('Done\napi -> ')
+wprint('api')
 from api import *
-wprint('Done\nbgtask -> ')
+wprint('bgtask')
 from bgtask import *
-wprint('Done\nmacros -> ')
+wprint('macros')
 from macros import *
-wprint('Done\nkeyboard -> ')
+wprint('keyboard')
 from keyb import *
-wprint('Done\nimages -> ')
+wprint('images')
 from images import *
-wprint('Done\nMenus ->')
+wprint('Menus')
 from iomenu import *
-wprint('Done\n')
+wprint('End of importation')
 
 # 2 - Création de la class et importation de toute la hiérarchie
 
@@ -91,7 +130,7 @@ wprint('Importing classes')
 class Main(Win,
            File,
            Search,
-           help,
+           help_,
            Content,
            MenuBar,
            Archives,
@@ -121,6 +160,8 @@ class Main(Win,
     def __init__(self, sys_args = None, **args):
         self.NAME = NAME
         self.DESC = DESC
+        self.URL = URL
+        self.VERSION = VERSION
         self.PYTHON_VERSION = PYTHON_VERSION
         self.ARDUINO_VERSION = ARDUINO_VERSION
         self.GUI_VERSION = GUI_VERSION
@@ -261,10 +302,8 @@ class Main(Win,
         wprint('Raising errors of initialing stat')
         self.runErrors()
         wprint('Begin the main process of the window')
+        startup.finish()
         self.Generate()
-
-    def close(self):
-        ""
 
 # Partie 5 - Execution de la class avec la connexion si demandée
 
@@ -283,6 +322,9 @@ def RunProg(debug=True, sys_args = ['']):
 def RunTestMacro(**args):
     args['macro'] = True
     m = Main(**args)
+
+def KillStartup():
+    startup.kill()
 
 if __name__ == '__main__':
     wprint('Run main program')

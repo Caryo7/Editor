@@ -5,7 +5,7 @@ from confr import *
 from pathlib import Path
 import os
 
-PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
+PATH_PROG = os.path.abspath(os.getcwd())
 
 class Struct:
     def __init__(self):

@@ -15,7 +15,12 @@ class API:
             os.system(self.cmd_nav + ' ' + self.url_nav.replace('$', data))
 
     def bresearch(self):
+        if self.dialoging:
+            return
+
+        self.dialoging = True
         data = askstring(self.title, lg('keyword') + ' : ')
+        self.dialoging = False
         if data:
             return data.replace(' ', '+')
         else:

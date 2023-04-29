@@ -2,8 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Editor"
-#define MyAppVersion "0.33"
-#define MyAppPublisher "Benc Corp"
+#define MyAppVersion "33.4"
+#define Directory "G:\USB_TRANSFER_SAUVEGARDE\setup"
+
+#define MyAppPublisher "Tarino"
 #define MyAppURL "https://bgtarino.wixsite.com/editor"
 #define MyAppExeName "__init__.exe"
 #define MyAppAssocName MyAppName + " Documents"
@@ -30,7 +32,7 @@ LicenseFile=G:\Exe\Edit\LICENSE
 ; InfoBeforeFile=
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputDir=N:\setup
+OutputDir={#Directory}
 OutputBaseFilename=setup_33_win
 SetupIconFile=image\ico.ico
 Compression=lzma
@@ -38,10 +40,13 @@ SolidCompression=yes
 ;WizardStyle=classic, modern
 WizardStyle=classic
 
-;icone en haut :
-;WizardSmallImageFile=G:\Exe\Edit\image\ico.png
-;WizardImageFile=C:\Documents and Settings\mybmp.bmp 'Image à mettre, pour la page d'entrée
-;WizardImageFile2=C:\Documents and Settings\mybmp.bmp 'Image à mettre, pour la page de sortie
+; Icone en haut :
+WizardSmallImageFile=G:\Exe\Edit\image\ico.bmp
+; Image à mettre, pour la page d'entrée
+;WizardImageFile=C:\Documents and Settings\mybmp.bmp
+; Image à mettre, pour la page de sortie
+;WizardImageFile2=C:\Documents and Settings\mybmp.bmp
+
 DisableWelcomePage=no
 DisableFinishedPage=yes 
 ;DisableDirPage=yes

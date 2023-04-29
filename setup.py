@@ -1,6 +1,7 @@
 from cx_Freeze import setup, Executable
 from pathlib import Path
 from main import *
+KillStartup()
 import os.path, sys, os, datetime
 
 modules = ['inspect', 'glob',

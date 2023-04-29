@@ -51,9 +51,9 @@ class Configurator:
         showinfo(self.title, lg('MWSNS'))
         
     def IHM(self):
-        self.tk = Toplevel()
+        self.tk = Tk()
         self.tk.iconbitmap(self.ico['config'])
-        self.tk.transient(self.master)
+        self.tk.transient()
         self.tk.title(lg('Configurator'))
         self.tk.resizable(width=False, height=False)
         self.tk.protocol('WM_DELETE_WINDOW', self.cancel)
@@ -121,6 +121,10 @@ class Configurator:
         self.update = Checkbutton(g, text=lg('Update'), variable=self.update_, onvalue=1, offvalue=0)
         self.update.grid(row=4, column=0, sticky='w')
         if read('global', 'look_update') == '1':self.update_.set(1)
+        self.notifs_ = IntVar()
+        self.notifs = Checkbutton(g, text=lg('Notifs'), variable=self.notifs_, onvalue=1, offvalue=0)
+        self.notifs.grid(row=4, column=0, sticky='w')
+        if read('global', 'notifs') == '1':self.notifs_.set(1)
 
         minic = Frame(g)
         minic.grid(row = 5, column = 0, sticky = 'e')
@@ -717,6 +721,12 @@ class Configurator:
         try:
             p.step('language')
             write('global', 'lang', self.lang.get())
+        except Exception as e:
+            log.write(str(e) + '\n')
+
+        try:
+            p.step('notifications')
+            write('global', 'notifs', self.notifs_.get())
         except Exception as e:
             log.write(str(e) + '\n')
 

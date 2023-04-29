@@ -43,9 +43,9 @@ class File(ExForm, ExText):
         self.savedd = False
         self.ast = Auto_Save(self)
 
-        self.listext = ['.txt', '.log', '.py', '.pyw', '.html', '.htm', '.php', '.ino', '.h', '.c', '.cpp', '.cc', '.bat', '.bas', '.ba', '.bf', '.f', '.f90', '.f95', '.eq', '.ini', '.inf']
+        self.listext = ['.xml', '.mxml', '.txt', '.log', '.py', '.pyw', '.html', '.htm', '.php', '.ino', '.h', '.c', '.cpp', '.cc', '.bat', '.bas', '.ba', '.bf', '.f', '.f90', '.f95', '.eq', '.ini', '.inf']
         self.listexta = ['.zip', '.PADS', '.form', '.dat', '.exe', '.7z', '.tar', '.gz', '.sqlite', '.mysql']
-        self.ttext = [(lg('ttfpec'), '*.form *.txt *.log *.html *.htm *.php *.ino *.c *.h *.cpp *.cc *.bat *.bas *.ba *.py *.pyw *.f *.f90 *.f95 *.bf *.eq *.ini *.inf'),
+        self.ttext = [(lg('ttfpec'), '*.form *.txt *.log *.html *.htm *.xml *.mxml *.php *.ino *.c *.h *.cpp *.cc *.bat *.bas *.ba *.py *.pyw *.f *.f90 *.f95 *.bf *.eq *.ini *.inf'),
                       (lg('Formf'), '*.form'),
                       (lg('alf'), '*.*'),
                       (lg('TF'), '*.txt *.log *.dat'),
@@ -53,6 +53,7 @@ class File(ExForm, ExText):
                       (lg('zipf'), '*.zip *.tar *.gz *.exe *.7z'),
                       (lg('exef'), '*.exe'),
                       (lg('HF'), '*.html *.htm *.php'),
+                      (lg('XMLF'), '*.xml *.mxml'),
                       (lg('AF'), '*.ino *.h *.c *.cpp'),
                       (lg('CF'), '*.cpp *.c *.h *.cc'),
                       (lg('PF'), '*.py *.pyw'),
@@ -86,15 +87,21 @@ class File(ExForm, ExText):
         return name[i:]
 
     def askopen(self):
-        return askopenfilename(title=lg('Open'), initialdir='.', filetypes=self.ttext)
+        n = askopenfilename(title=lg('Open'), initialdir='.', filetypes=self.ttext)
+        return n
 
     def asksaveas(self):
-        return asksaveasfilename(title=lg('Save_as'), initialdir='.', filetypes=self.ttext)
+        n = asksaveasfilename(title=lg('Save_as'), initialdir='.', filetypes=self.ttext)
+        return n
 
     def ask_settings(self):
-        zak = Toplevel()
+        if self.dialoging:
+            return
+
+        self.dialoging = True
+        zak = Tk()
         zak.iconbitmap(self.ico['config'])
-        zak.transient(self.master)
+        zak.transient()
         zak.title(lg('Settings'))
         zak.resizable(False, False)
 
@@ -183,7 +190,7 @@ class File(ExForm, ExText):
             pp = Menu(zak, tearoff = 0)
             pp.add_command(label = lg('delete'), command = lambda : remove(self))
             pp.add_command(label = lg('modifier'), command = lambda : change(self))
-            pp.add_command(label = lg('add'), command = lambda : append(self))
+            pp.add_command(label = lg('append'), command = lambda : append(self))
             pp.tk_popup(evt.x_root, evt.y_root)
 
         tree.bind('<Button-3>', lambda evt: popup(evt, self))
@@ -193,6 +200,7 @@ class File(ExForm, ExText):
             zak.focus()
             zak.destroy()
             self.text.focus()
+            self.dialoging = False
 
         zak.protocol('WM_DELETE_WINDOW', demander_fermeture)
         
@@ -230,6 +238,7 @@ class File(ExForm, ExText):
                     ExText.save(self, self.path, self.get_text())
                 else:
                     ExForm.save(self, self.path, self.get_text(), self.meta)
+                    
 
                 self.saved = True
                 self.master.title(self.title + ' - ' + self.path)
@@ -239,15 +248,17 @@ class File(ExForm, ExText):
             self.dialoging = True
             if not name:
                 name = self.asksaveas()
-                if '.' not in name:
-                    name += '.form'
 
             if name:
+                if '.' not in name:
+                    name += '.form'
                 self.path = name
                 if self.ext(self.path) not in self.listexta:
                     ExText.save(self, self.path, self.get_text())
                 else:
                     ExForm.save(self, self.path, self.get_text(), self.meta)
+                    self.menufichier.entryconfig(lg('settings'), stat = 'normal')
+
                 self.saved = True
                 self.savedd = True
                 self.add_f(self.path)
