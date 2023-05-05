@@ -18,15 +18,14 @@ class help_:
             return
 
         self.dialoging = True
-        zak = Tk()
+        zak = Toplevel(self.master)
+        zak.transient(self.master)
         zak.iconbitmap(self.ico['help'])
         zak.resizable(False, False)
         zak['bg'] = '#bbbbbb'
         zak.config(borderwidth = 5)
         zak.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(zak))
         zak.title(lg('About'))
-        zak.bind('<Escape>', lambda evt: zak.destroy())
-        zak.bind('<Return>', lambda evt: zak.destroy())
 
         padx = 0
 
@@ -39,7 +38,7 @@ class help_:
         cad = Frame(cadre, bg = '#bbbbbb')
         cad.grid(row = 1, column = 0, sticky = N, padx = 10, pady = 0)
 
-        icon = PhotoImage(file = str(str(self.ico['win']).replace('.ico', '.png')))
+        icon = PhotoImage(master = self.master, file = str(str(self.ico['win']).replace('.ico', '.png')))
         Label(logo, image = icon).grid(row = 0, column = 0, sticky = W, rowspan=2, padx = 10, pady = 0) ########
 
         Label(logo, text = f'{self.title}', fg = '#000000', bg = '#bbbbbb', font = ('Courier', 20, 'bold')).grid(row = 0, column = 1, sticky = E, padx = 10, pady = 0)
@@ -57,7 +56,7 @@ class help_:
         #s2 = Label(cad, text = '07.87.25.46.41', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 4, column = 1, sticky = W, padx = 10, pady = 5)
 
         Label(cad, text = lg('site'),       justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 3, column = 0, sticky = E, padx = padx, pady = 5)
-        s3 = Label(cad, text = self.URL, justify = LEFT, fg = 'blue', bg = '#bbbbbb', font = ('Courier', 11, 'underline'), cursor = 'hand2')
+        s3 = Label(cad, text = self.URL.replace('https://', ''), justify = LEFT, fg = 'blue', bg = '#bbbbbb', font = ('Courier', 11, 'underline'), cursor = 'hand2')
         s3.grid(row = 3, column = 1, sticky = W, padx = 10, pady = 5)
         s3.bind('<Button-1>', lambda evt: self.open_internet(self.URL))
         
@@ -100,6 +99,8 @@ class help_:
             self.dialoging = False
 
         Button(zak, text = lg('close'), command = close, relief = SOLID, bd = 3).grid(row = 1, column = 0, padx = 10, pady = 10)
+        zak.bind('<Escape>', lambda evt: close())
+        zak.bind('<Return>', lambda evt: close())
         zak.update()
 
     def ToDo(self):
@@ -115,7 +116,7 @@ class help_:
         f = open(self.path_prog + '/LICENSE', 'r', encoding = get_encode())
         r = f.read()
         f.close()
-        zak = Toplevel()
+        zak = Toplevel(self.master)
         zak.transient(self.master)
         zak.title(lg('license'))
         zak.iconbitmap(self.ico['help'])
@@ -156,3 +157,4 @@ class help_:
 #help().About()
 if __name__ == '__main__':
     from __init__ import *
+

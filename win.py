@@ -21,7 +21,7 @@ class notif_destroy(Thread):
         self.url = url
 
     def run(self):
-        #time.sleep(5)
+        time.sleep(60)
         if zroya.init(self.title, 'a', 'b', 'c', 'd') and get_notifs():
             t = zroya.Template(zroya.TemplateType.ImageAndText4)
             t.setAudio(zroya.Audio.Default) #liste : Default, IM, Mail, Reminder, Call2-10, Call, Alarm, Alarm2-10)
@@ -78,6 +78,12 @@ class Win:
         return True
 
     def fermer(self, evt = None):
+        dem = askyesnocancel(self.title, lg('DYWTS'))
+        if dem == True:
+            self.save()
+        elif dem == None:
+            return
+
         self.clear_text()
         self.stat_text(False)
         self.update_line_numbers()
@@ -98,18 +104,11 @@ class Win:
     def Quitter(self, evt=None):
         def destroy():
             self.master.destroy()
-
-            #self.ast._stop = Event()
-            #self.check_update._stop = Event()
-            #self.bloc_try(self.ast._stop.set)
-            #self.bloc_try(self.check_update._stop.set)
-
             i = notif_destroy(self.ico['win'],
                               self.title,
                               self.path_prog,
                               self.VERSION,
                               self.URL)
-
             i.start()
 
         if self.saved == False or self.saved == None or get_askclose:

@@ -5,6 +5,11 @@ import winsound as sound
 
 print()
 
+f = open('recent_file_list.log', 'w')
+f.close()
+f = open('log.txt', 'w')
+f.close()
+
 chemin = 'G:/USB_TRANSFER_SAUVEGARDE'
 
 dir_7zip = 'C:\\Program Files\\7-Zip\\7z.exe'

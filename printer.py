@@ -40,7 +40,8 @@ class Printer:
 
         self.dialoging = True
 
-        self.root = Tk()
+        self.root = Toplevel(self.master)
+        self.root.transient(self.master)
         self.root.iconbitmap(self.ico['printer'])
         self.root.resizable(width = False, height = True)
         self.root.title(lg('print'))
@@ -55,7 +56,7 @@ class Printer:
         self.spin.place(x = 10, y = 325)
         self.spin.set(1)
 
-        self.rv = IntVar()
+        self.rv = IntVar(master = self.master)
         self.rsv = ttk.Checkbutton(self.root, onvalue = 1, offvalue = 0, variable = self.rv, text = lg('resve'))
         self.rsv.place(x = 10, y = 365)
         ToolTip(self.rsv, text = lg("notimp")) #############
@@ -63,6 +64,9 @@ class Printer:
         def close():
             self.root.destroy()
             self.dialoging = False
+
+        self.root.bind('<Escape>', lambda evt : close())
+
         Button(self.root, text = lg('startimp'), command = self.begin).place(x = 10, y = 395)
         Button(self.root, text = lg('close'), command = close).place(x = 10, y = 430)
 

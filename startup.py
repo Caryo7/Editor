@@ -7,6 +7,8 @@ from confr import *
 from pathlib import Path
 import time, random, os
 
+PATH_PROG = os.path.abspath(os.getcwd())
+
 class Startup:
     nb = 0
 
@@ -30,6 +32,7 @@ class Startup:
         self.canvas.place(x=10, y=10)
         self.list_line = []
         self.i = 0
+        self.image = PhotoImage(master = self.top, file = PATH_PROG + '/image/TarinoMark.png')
 
     def finish(self):
         time.sleep(2)
@@ -51,8 +54,19 @@ class Startup:
         self.pb['value'] = (self.i / self.nb) * 100
         self.pc.set(str(int(self.pb['value'])) + ' %')
         self.canvas.delete('all')
+        self.canvas.create_image((self.image.width() / 2),
+                                 (self.image.height() / 2),
+                                 image = self.image)
+
         for i in range(int(600 / self.nb)):
-            self.list_line.append((random.randint(0, self.width-20), random.randint(0, self.height-65), random.randint(0, self.width-20), random.randint(0, self.height-65), self.colors[random.randint(0, len(self.colors)-1)]))
+            x1, y1 = random.randint(0, self.width-20), random.randint(0, self.height-65)
+            while x1 < self.image.width() and y1 < self.image.height():
+                x1 = random.randint(0, self.width-20)
+            x2, y2 = random.randint(0, self.width-20), random.randint(0, self.height-65)
+            while x2 < self.image.width() and y2 < self.image.height():
+                x2 = random.randint(0, self.width-20)
+
+            self.list_line.append((x1, y1, x2, y2, self.colors[random.randint(0, len(self.colors)-1)]))
 
         for x1, y1, x2, y2, fill in self.list_line:
             self.canvas.create_line(x1, y1, x2, y2, fill=fill)
@@ -65,4 +79,9 @@ class Startup:
 
 
 if __name__ == '__main__':
-    from __init__ import *
+    s = Startup()
+    s.nb = 100
+    for i in range(70):
+        s.add(str(random.randint(10000, 99999)))
+        time.sleep(1/random.randint(1, 500))
+    s.finish()

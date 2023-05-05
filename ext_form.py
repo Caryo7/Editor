@@ -3,6 +3,10 @@
 from tkinter import *
 from confr import *
 import zipfile as zp
+import os
+import hashlib
+
+PATH_PROG = os.path.abspath(os.getcwd())
 
 class ExForm1:
     @classmethod
@@ -90,6 +94,8 @@ class ExForm2:
             f = z.open('meta.ini', 'w')
             if 'version' not in meta.keys():
                 meta['version'] = 'Form_2.0'
+            if 'time' not in meta.keys():
+                meta['time'] = '0'
     
             for key, value in meta.items():
                 f.write(str('"' + key + '"-"' + value + '"\n').encode(get_encode()))
@@ -101,15 +107,30 @@ class ExForm2:
             log.write(str(e) + '\n')
             log.close()
 
+    @classmethod
+    def write_meta(self, meta):
+        try:
+            z = zp.ZipFile(file, 'w')
+            f = z.open('meta.ini', 'w')
+            for key, value in meta.items():
+                f.write(str('"' + key + '"-"' + value + '"\n').encode(get_encode()))
+            f.close()
+            z.close()
 
-import hashlib
-def askpswd(pwdh, cmd):
-    zak = Tk()
-    zak.transient()
+        except Exception as e:
+            log = open(path_prog + '/log.txt', 'a')
+            log.write(str(e) + '\n')
+            log.close()
+
+
+def askpswd(pwdh, cmd, master):
+    zak = Toplevel(master)
+    zak.iconbitmap(PATH_PROG + '/image/password.ico')
+    zak.transient(master)
     zak.title(lg('Password'))
     zak.resizable(False, False)
     Label(zak, text = lg('password')).place(x = 10, y = 10)
-    pwd = StringVar()
+    pwd = StringVar(master = master)
     e = Entry(zak, textvariable = pwd, show = '•')
     e.place(x = 10, y = 40)
     zak.wm_attributes('-topmost')
@@ -152,7 +173,7 @@ class ExForm:
             self.menufichier.entryconfig(lg('settings'), stat = 'normal')
 
         try:
-            askpswd(meta['password'], lambda : self.begin_openning(data, lst_tags, meta, name))
+            askpswd(meta['password'], lambda : self.begin_openning(data, lst_tags, meta, name), self.master)
         except Exception:
             self.begin_openning(data, lst_tags, meta, name)
 
@@ -194,6 +215,14 @@ class ExForm:
             ExForm2.save(self.path_prog, file, data, self.lst_tags, meta)
         else:
             ExForm1.save(self.path_prog, file, data, self.lst_tags)
+
+    def write_meta(self):
+        if '1.' in self.FORM_VERSION:
+            pass
+        elif '2.' in self.FORM_VERSION:
+            ExForm2.write_meta(self.meta)
+        else:
+            pass
 
 if __name__ == '__main__':
     from __init__ import *

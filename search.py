@@ -16,10 +16,10 @@ class Search:
     def search(self, evt=None):
         if not(self.dialoging):
             self.dialoging = True
-            zak = Tk()
+            zak = Toplevel(self.master)
             zak.iconbitmap(self.ico['search'])
             zak.protocol('WM_DELETE_WINDOW', lambda : self.end_dialoging(zak))
-            zak.transient()
+            zak.transient(self.master)
             zak.title(lg('Search'))
             zak.resizable(width=False, height=False)
             Label(zak, text=lg('Keyword')).grid(row=0, column=0, sticky='e')
@@ -50,10 +50,10 @@ class Search:
     def replace(self, evt=None):
         if not(self.dialoging):
             self.dialoging = True
-            zak = Tk()
+            zak = Toplevel(self.master)
             zak.iconbitmap(self.ico['replace'])
             zak.protocol('WM_DELETE_WINDOW', lambda : self.end_dialoging(zak))
-            zak.transient()
+            zak.transient(self.master)
             zak.title(lg('Replace'))
             zak.resizable(width=False, height=False)
             Label(zak, text=lg('Keyword')).grid(row=0, column=0, sticky='e')

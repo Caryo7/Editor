@@ -19,7 +19,7 @@ class Password:
         if not tk:
             self.master = Tk()
         else:
-            self.master = Toplevel()
+            self.master = Toplevel(tk)
             self.master.transient(tk)
 
         self.master.focus()
@@ -39,12 +39,12 @@ Voici les étapes pour la création d\'un nouveau compte :
 5. Une fois que vous aurez tout valider, en cliquant sur Valider, le nouvel utilisateur sera ajouté''')
         Label(self.master, text = lg('username')).grid(row = 0, column = 0)
         Label(self.master, text = lg('password')).grid(row = 1, column = 0)
-        self.usern = StringVar()
+        self.usern = StringVar(master = self.master)
         self.usern.set('ADMIN')
         e = Entry(self.master, textvariable = self.usern, width = 20)
         e.grid(row = 0, column = 1)
         ToolTip(e, lg('type_username'), wraplength = 270)
-        self.pswd = StringVar()
+        self.pswd = StringVar(master = self.master)
         p = Entry(self.master, textvariable = self.pswd, width = 20, show = '*')
         p.grid(row = 1, column = 1)
         p.focus()
@@ -95,13 +95,13 @@ Voici les étapes pour la création d\'un nouveau compte :
         return False
 
     def append_password(self):
-        self.zak = Toplevel()
+        self.zak = Toplevel(master = self.master)
         self.zak.transient(self.master)
         self.zak.title(lg('New_User'))
         
-        self.username = StringVar()
-        self.password = StringVar()
-        self.passwordc = StringVar()
+        self.username = StringVar(master = self.master)
+        self.password = StringVar(master = self.master)
+        self.passwordc = StringVar(master = self.master)
 
         Label(self.zak, text = lg('new_compte'), font = ('Consolas', 16, 'bold')).place(x = 50, y = 10)
         Label(self.zak, text = lg('username'), font = ('Consolas', 14)).place(x = 10, y = 60)

@@ -70,6 +70,7 @@ class File(ExForm, ExText):
                       ]
 
         self.meta = {}
+        self.begin_time = 0
 
     def open_recent(self, name):
         self.open(evt = None, name = name)
@@ -210,17 +211,26 @@ class File(ExForm, ExText):
             if not name:
                 name = self.askopen()
 
+            if self.savedd != False:
+                end = int(time.time())
+                temps = end - self.begin_time
+                self.meta['time'] = str(int(self.meta['time']) + temps)
+                if self.ext(name) in self.listexta:
+                    ExForm.write_meta()
+
             if name:
                 try:
                     self.menufichier.entryconfig(lg('settings'), stat = 'disabled')
                     self.stat_text(True)
                     self.clear_text()
+                    self.meta = {}
                     self.master.focus()
                     if self.ext(name) in self.listext:
                         ExText.open(self, name)
 
                     elif self.ext(name) in self.listexta:
                         ExForm.open(self, name)
+                        self.begin_time = int(time.time())
 
                 except FileNotFoundError:
                     self.saved = False
@@ -233,6 +243,7 @@ class File(ExForm, ExText):
         if not self.dialoging:
             if not self.savedd:
                 self.saveas()
+
             elif not self.saved:
                 if self.ext(self.path) not in self.listexta:
                     ExText.save(self, self.path, self.get_text())
@@ -253,6 +264,7 @@ class File(ExForm, ExText):
                 if '.' not in name:
                     name += '.form'
                 self.path = name
+
                 if self.ext(self.path) not in self.listexta:
                     ExText.save(self, self.path, self.get_text())
                 else:

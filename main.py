@@ -61,6 +61,7 @@ Liste des fichiers demandant PATH_PROG :
  - update.py
  - tree.py
  - counter.py
+ - ext_form.py
 '''
 
 wprint('Importing files : ')

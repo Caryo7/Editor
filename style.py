@@ -42,10 +42,10 @@ class Styles:
         try:
             self.deb_tag = self.text.index('sel.first')
             self.fin_tag = self.text.index('sel.last')
-            self.zak = Tk()
+            self.zak = Toplevel(self.master)
             self.zak.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(self.zak))
             self.zak.iconbitmap(self.ico['style'])
-            self.zak.transient()
+            self.zak.transient(self.master)
             self.zak.title(lg('Style'))
             self.lst = Listbox(self.zak)
             self.lst.grid()
@@ -77,10 +77,10 @@ class Styles:
             return
 
         self.dialoging = True
-        self.zak = Tk()
+        self.zak = Toplevel(self.master)
         self.zak.iconbitmap(self.ico['style'])
         self.zak.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(self.zak))
-        self.zak.transient()
+        self.zak.transient(self.master)
         self.zak.title(lg('Style'))
         self.lst = Listbox(self.zak)
         self.lst.grid()
@@ -143,15 +143,15 @@ class Styles:
 
         try:
             self.i, self.r = self.text.index('sel.first'), self.text.index('sel.last')
-            self.zak = Tk()
+            self.zak = Toplevel(self.master)
             self.zak.iconbitmap(self.ico['style'])
-            self.zak.transient()
+            self.zak.transient(self.master)
             self.zak.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(self.zak))
             self.zak.title(lg('Style'))
             Label(self.zak, text=lg('Name')).grid(row=0, column=0, sticky='e')
             Label(self.zak, text=lg('Background')).grid(row=1, column=0, sticky='e')
             Label(self.zak, text=lg('Foreground')).grid(row=2, column=0, sticky='e')
-            self.name_ = StringVar()
+            self.name_ = StringVar(master = self.master)
             name = ttk.Entry(self.zak, textvariable=self.name_, width=32).grid(row=0, column=1, sticky='w')
             self.bg = ttk.Combobox(self.zak, values=self.colors_name)
             self.bg.grid(row=1, column=1, sticky='w')
