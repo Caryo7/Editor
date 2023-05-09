@@ -108,7 +108,7 @@ class ExForm2:
             log.close()
 
     @classmethod
-    def write_meta(self, meta):
+    def write_meta(self, meta, path_prog):
         try:
             z = zp.ZipFile(file, 'w')
             f = z.open('meta.ini', 'w')
@@ -220,7 +220,7 @@ class ExForm:
         if '1.' in self.FORM_VERSION:
             pass
         elif '2.' in self.FORM_VERSION:
-            ExForm2.write_meta(self.meta)
+            ExForm2.write_meta(self.meta, self.path_prog)
         else:
             pass
 

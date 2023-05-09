@@ -16,6 +16,12 @@ class StartUp_Console:
     def kill(self):
         pass
 
+########## psutil :
+    ## for proc in psutil.process_iter():
+    ##     print(proc.name())
+    ##     print(proc.pid())
+
+
 print('Démarrage...')
 from startup import *
 
@@ -37,9 +43,9 @@ def wprint(*args):
 
 import time, inspect, os
 
-__version__ = VERSION = '33.5' ###
+__version__ = VERSION = '34.2' ###
 GUI_VERSION = '34' ###
-FILE_VERSION = '1.7' ##
+FILE_VERSION = '1.8' ##
 FORM_VERSION = '2.2' ##
 
 NAME = 'Editor'
@@ -48,7 +54,7 @@ URL = 'https://bgtarino.wixsite.com/Editor'
 PYTHON_VERSION = '3.10'
 ARDUINO_VERSION = '1.16'
 COMPILATOR_VERSION = '-'
-LANGS_VERSION = '1.4'
+LANGS_VERSION = '1.5'
 AUTHOR = 'Ben CARYO'
 
 PATH_PROG = os.path.abspath(os.getcwd())
@@ -194,6 +200,7 @@ class Main(Win,
                     'task': self.path_prog + '/image/task.ico',
                     'progress': self.path_prog + '/image/progress.ico',
                     'file': self.path_prog + '/image/file.ico',
+                    'pdf': self.path_prog + '/image/pdf.ico',
                     }
 
         wprint('Loading application name')

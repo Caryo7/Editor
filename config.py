@@ -46,11 +46,16 @@ class Configurator:
     
     def cancel(self):
         self.tk.destroy()
+        self.dialoging = False
         
     def info(self, _):
         showinfo(self.title, lg('MWSNS'))
         
     def IHM(self):
+        if self.dialoging:
+            return
+
+        self.dialoging = True
         self.tk = Toplevel(self.master)
         self.tk.iconbitmap(self.ico['config'])
         self.tk.transient(self.master)
@@ -959,4 +964,5 @@ class Configurator:
 
 
 if __name__ == '__main__':
-    from __init__ import*
+    from __init__ import *
+

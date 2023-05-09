@@ -270,3 +270,4 @@ auto_notif =  Notification Automatiques
 _site = Site
 append = Ajouter
 XMLF = Fichiers XML
+open_finish = Ouvrir à la fin

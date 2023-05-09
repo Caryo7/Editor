@@ -214,9 +214,12 @@ class File(ExForm, ExText):
             if self.savedd != False:
                 end = int(time.time())
                 temps = end - self.begin_time
-                self.meta['time'] = str(int(self.meta['time']) + temps)
-                if self.ext(name) in self.listexta:
-                    ExForm.write_meta()
+                try:
+                    self.meta['time'] = str(int(self.meta['time']) + temps)
+                    if self.ext(name) in self.listexta:
+                        ExForm.write_meta(self)
+                except KeyError:
+                    pass
 
             if name:
                 try:

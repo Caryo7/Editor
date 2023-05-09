@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from tkinter.simpledialog import *
+from tkinter.messagebox import *
 from confr import *
 import os
 
@@ -19,7 +20,7 @@ class API:
             return
 
         self.dialoging = True
-        data = askstring(self.title, lg('keyword') + ' : ')
+        data = askstring(self.title, lg('keyword') + ' : ', parent = self.master)
         self.dialoging = False
         if data:
             return data.replace(' ', '+')
@@ -28,6 +29,15 @@ class API:
 
     def open_internet(self, url):
         os.system(self.cmd_nav + ' ' + url)
+
+    def info_sys(self):
+        showinfo(lg('info'), 'Caractéristiques Système :' + 
+                 '\nNombre de coeur : ' + str(os.cpu_count()) +
+                 '\nFréquence du CPU : ' + str(0.0) + ' GHz' +
+                 '\nTurbo : ' + str(0.0) + ' GHz' + 
+                 '\nMémoire RAM : ' + str(0.0) + ' Go' +
+                 '\n' + str() + ' ')
+
 
 if __name__ == '__main__':
     from __init__ import *

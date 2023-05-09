@@ -63,6 +63,7 @@ class Images:
                        'lnb': PhotoImage(master = self.master, file = self.path_prog + '/image/line.png'),
                        'dark': PhotoImage(master = self.master, file = self.path_prog + '/image/dark.png'),
                        'visut': PhotoImage(master = self.master, file = self.path_prog + '/image/task.png'),
+                       'win': PhotoImage(master = self.master, file = self.path_prog + '/image/windows.png'),
                        'lgv': PhotoImage(master = self.master, file = self.path_prog + '/image/lg.png'),
 
                        'about': PhotoImage(master = self.master, file = self.path_prog + '/image/help.png'),

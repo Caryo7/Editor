@@ -212,12 +212,7 @@ class Content:
             line, column = int(line), int(column)
             len_line = len(lines) - 1
             len_col = len(lines[line - 1])
-            try:
-                self.label_infobar.config(text = lg('Encodage') + str(get_encode()) + '  ' + lg('Line') + str(line) + '/' + str(len_line) + '  ' + lg('Column') + str(column) + '/' + str(len_col) + '  ' + lg('Position') + str(self.text.index('insert')))
-            except AttributeError as e:
-                f = open(self.path_prog + '/log.txt', 'a')
-                f.write(str(e) + '\n')
-                f.close()
+            self.label_infobar.config(text = lg('Encodage') + str(get_encode()) + '  ' + lg('Line') + str(line) + '/' + str(len_line) + '  ' + lg('Column') + str(column) + '/' + str(len_col) + '  ' + lg('Position') + str(self.text.index('insert')))
 
     def uln(self, evt):
         if self.lst_fnct['autoline']:

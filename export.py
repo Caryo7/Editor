@@ -162,6 +162,7 @@ class AskMargins:
         self.nom_pdf = name
         self.am = Toplevel(self.master)
         # Variables
+        self.open_finish = IntVar(master = self.master)
         self.pdf_can_print = IntVar(master = self.master)
         self.pdf_can_modify = IntVar(master = self.master)
         self.pdf_can_copy = IntVar(master = self.master)
@@ -179,6 +180,7 @@ class AskMargins:
         self.bg_tete = StringVar(master = self.master)
         self.show_tt_pages = IntVar(master = self.master)
         #Valeurs
+        self.open_finish.set(1)
         self.pdf_can_print.set(1)
         self.pdf_can_modify.set(1)
         self.pdf_can_copy.set(1)
@@ -222,7 +224,9 @@ class AskMargins:
         self._subject_pdf_s = StringVar(master = self.master)
         self._subject_pdf = ttk.Entry(self.am, width = 20, textvariable = self._subject_pdf_s, stat = 'normal' if not self.mode_print else 'disabled')
         self._subject_pdf.place(x = 100, y = 180)
+
         kps = ttk.Checkbutton(self.am, text = lg('kpstyles'), variable = self.keep_styles).place(x = 100, y = 280)
+        ope = ttk.Checkbutton(self.am, text = lg('open_finish'), variable = self.open_finish).place(x = 200, y = 250)
 
         r1 = ttk.Radiobutton(self.am, text = lg('paysage'), value = 'P', variable = self.orient_paper).place(x = 150, y = 310)
         r2 = ttk.Radiobutton(self.am, text = lg('portrait'), value = 'p', variable = self.orient_paper).place(x = 15, y = 310)
@@ -291,6 +295,27 @@ class Export(AskMargins):
                 self.dialoging = False
 
     def begin_export_pdf(self, name):
+        zak = Toplevel(self.master)
+        zak.iconbitmap(self.ico['pdf'])
+        zak.transient(self.master)
+        zak.resizable(False, False)
+        zak.title(lg('export_pdf'))
+        pb = Progressbar(zak, orient='horizontal', mode='determinate', length = 300)
+        pb.place(x = 10, y = 50)
+        zak.geometry("320x130")
+        zak.update()
+
+        nmax = len(self.get_text())
+        def step():
+            pb['value'] += (1 / nmax) * 100
+            zak.update()
+
+        def reset(maxi):
+            global nmax
+            nmax = maxi
+            pb['value'] = 0
+            zak.update()
+
         enc = pdfencrypt.StandardEncryption(userPassword = self.pdf_password,
                                             ownerPassword = self.pdf_password,
                                             canPrint = self.pdf_can_print.get(),
@@ -341,7 +366,6 @@ class Export(AskMargins):
 
         def new_page(self):
             self.page += 1
-
             if self.entetes.get():
                 n = 0
                 for i in entete:
@@ -372,6 +396,7 @@ class Export(AskMargins):
                                   'white'))
 
         for char in text:
+            step()
             if column > maxi_larg:
                 line += 1
                 column = 0
@@ -379,7 +404,7 @@ class Export(AskMargins):
 
             if line > maxi_high:
                 new_page(self)
-                chars.append('show')
+                chars.append((None, None, 'show', None, None))
                 line = 0
 
             if char == '\n':
@@ -432,17 +457,19 @@ class Export(AskMargins):
             column_text += 1
 
         new_page(self)
-
+        reset(len(chars))
         for x, y, char, f, b in chars:
+            step()
             if char == 'show':
                 c.showPage()
                 continue
-
+    
             if self.keep_styles.get():
                 c.setFillColor(b)
                 c.rect(x, y - (size / 4), size_w, size, fill = 1, stroke = 0)
                 c.setFillColor(f)
 
+            c.setFont(police, size)
             c.drawString(x, y, char)
     
         c.showPage()
@@ -454,6 +481,8 @@ class Export(AskMargins):
         if self.mode_print:
             self.cmd_print()
 
+        zak.destroy()
+        os.popen(name)
         self.dialoging = False
 
 if __name__ == '__main__':

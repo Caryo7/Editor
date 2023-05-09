@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Editor"
-#define MyAppVersion "33.4"
+#define MyAppVersion "34.1"
 #define Directory "G:\USB_TRANSFER_SAUVEGARDE\setup"
 
 #define MyAppPublisher "Tarino"
@@ -33,7 +33,7 @@ LicenseFile=G:\Exe\Edit\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputDir={#Directory}
-OutputBaseFilename=setup_33_win
+OutputBaseFilename=setup_34_win
 SetupIconFile=image\ico.ico
 Compression=lzma
 SolidCompression=yes

@@ -7,7 +7,12 @@ from tkinter.messagebox import *
 from tkinter.filedialog import *
 from tkinter.simpledialog import *
 from threading import *
-import time, os, sys, time, zroya
+import time
+import os
+import sys
+import time
+import zroya
+import signal
 
 from confr import *
 
@@ -20,37 +25,51 @@ class notif_destroy(Thread):
         self.VERSION = version
         self.url = url
 
+    def EOP(self):
+        os.kill(os.getpid(), signal.SIGINT)#signal.SIGKILL
+
     def run(self):
-        time.sleep(60)
         if zroya.init(self.title, 'a', 'b', 'c', 'd') and get_notifs():
+            time.sleep(60)
+
             t = zroya.Template(zroya.TemplateType.ImageAndText4)
-            t.setAudio(zroya.Audio.Default) #liste : Default, IM, Mail, Reminder, Call2-10, Call, Alarm, Alarm2-10)
+            t.setAudio(zroya.Audio.Default) # liste : Default, IM, Mail, Reminder, Call2-10, Call, Alarm, Alarm2-10)
             t.setImage(self.icon)
             t.setFirstLine(lg('back_tasks'))
             t.setSecondLine(lg('doc_notif'))
             t.addAction(lg('_Site'))
             t.addAction(lg('Tasks'))
             t.addAction(lg('dontshowagain'))
+            t.setExpiration(3)
             t.setAttribution(self.title + lg('auto_notif'))
 
             def button(nid, action_id):
                 if action_id == 0:
                     os.system('start ' + self.url)
+                    self.EOP()
                 elif action_id == 1:
                     os.system('taskmgr')
+                    self.EOP()
                 elif action_id == 2:
                     write('global', 'notifs', '0')
+                    self.EOP()
 
             def clique(nid): # nid pour notification ID
                 os.system('taskmgr')
+                self.EOP()
 
             def onDismissHandler(nid, reason):
-                pass ## Quand on ferme la norification
+                self.EOP()
+                ## Quand on ferme la norification
 
             def onFailHandler(nid):
-                pass ## Si erreur lors de la notification (genre : elle est bloquée)
+                self.EOP()
+                ## Si erreur lors de la notification (genre : elle est bloquée)
 
             zroya.show(t, on_action=button, on_fail=onFailHandler, on_dismiss = onDismissHandler, on_click = clique)
+
+        time.sleep(60)
+        self.EOP()
 
 
 class Win:
@@ -109,10 +128,15 @@ class Win:
                               self.path_prog,
                               self.VERSION,
                               self.URL)
-            i.start()
+            #i.start()
+            i.EOP()
+
+        if self.dialoging:
+            return
 
         if self.saved == False or self.saved == None or get_askclose:
-            dem = askyesnocancel(self.title, lg('DYWTS'))
+            self.dialoging = True
+            dem = askyesnocancel(self.title, lg('DYWTS'), master = self.master)
             if dem == True:
                 self.save()
                 destroy()
@@ -130,6 +154,8 @@ class Win:
             destroy()
             # raise KeyboardInterrupt
             # exit(code='ClosedByUserWithAutoSave')
+
+        self.dialoging = False
         
     def Generate(self):
         self.master.focus_force()
