@@ -14,7 +14,18 @@ class Configurator:
     colors = {lg('black'): 'black', lg('white'): 'white', lg('blue'): 'blue', lg('green'): 'green', lg('yellow'): 'yellow', lg('red'): 'red', lg('pink'): 'pink', lg('orange'): 'orange', lg('grey'): 'grey', }
     colors_name = [v for v, _ in colors.items()]
     font_lst = ['Courier', 'Calibri', 'Arial']
+<<<<<<< Updated upstream
     lgs = ['an', 'fr', 'al']
+=======
+    #lgs = ['an', 'fr', 'al', 'es', 'it', 'ch']
+    langs = {lg('anglais') : 'an',
+             lg('francais') : 'fr',
+             lg('allemand') : 'al',
+             lg('espagnol') : 'es',
+             lg('italien') : 'it',
+             lg('chinois') : 'ch',}
+
+>>>>>>> Stashed changes
     codages = ['UTF-8', 'UTF-16', 'UTF-4', 'ASCII']
     browsers = ['firefox']
     languages = ['Python', 'C++', 'C', 'Fortran', 'BASIC', 'Brain F', 'Cobol', 'Assembly']
@@ -320,7 +331,7 @@ class Configurator:
         ## Cadre l pour la personnalisation
 
         Label(l, text = lg('langage')).grid(row = 0, column = 0)
-        self.lg = Combobox(l, value=self.lgs)
+        self.lg = Combobox(l, value=list(self.langs.keys()))
         self.lg.grid(row=0, column=1, sticky='w')
         self.lg.current(self.get_lg_pos(sel_lg()))
         self.lg.bind('<<ComboboxSelected>>', self.info)
@@ -682,7 +693,7 @@ class Configurator:
         
     def get_lg_pos(self, data):
         try:
-            return self.lgs.index(data)
+            return list(self.langs.values()).index(data)
         except:
             pass
         
@@ -935,7 +946,7 @@ class Configurator:
         log.close()
 
         p.step('Saving choosed langage')
-        set_n_lg(self.lg.get())
+        set_n_lg(self.langs[self.lg.get()])
 
         print('Restarting...')
         self.cancel()

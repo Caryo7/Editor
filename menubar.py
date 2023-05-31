@@ -61,12 +61,12 @@ class MenuBar:
             menuedition.add_command(label=lg('Search'), accelerator=self.get_accelerator('search'), stat='normal', command=self.search, image = self.images['search'], compound='left')
             menuedition.add_command(label=lg('Replace'), accelerator=self.get_accelerator('replace'), stat='normal', command=self.replace, image = self.images['replace'], compound='left')
 
+        self.info_bar.set(get_infobar())
+        self.ruban.set(get_ruban())
+        self.boutons.set(get_boutons())
         if get_menuview():
             menuview = Menu(menubar, tearoff = 0)
             menubar.add_cascade(label = lg('view'), menu = menuview)
-            self.info_bar.set(get_infobar())
-            self.ruban.set(get_ruban())
-            self.boutons.set(get_boutons())
             menuview.add_command(label=lg('menu'), stat = 'disabled')
             menuview.add_checkbutton(label=lg('infobar'), onvalue=1, offvalue=0, variable=self.info_bar, image = self.images['infobar'], compound='left', command = self.changebars)
             menuview.add_checkbutton(label=lg('buttonbar'), onvalue=1, offvalue=0, variable=self.boutons, image = self.images['buttonbar'], compound='left', command = self.changebars)
@@ -78,6 +78,7 @@ class MenuBar:
             menustyle.add_command(label=lg('NewS'), command=self.ask_new_tag, accelerator=self.get_accelerator('news'), image = self.images['news'], compound='left')
             menustyle.add_command(label=lg('CStyle'), command=self.add_tag_here, accelerator=self.get_accelerator('cstyle'), image = self.images['cstyle'], compound='left')
             menustyle.add_separator()
+            self.menu_styles = []
             self.mls = Menu(menustyle, tearoff=0)
             menustyle.add_cascade(label=lg('Styles'), menu=self.mls)
 
@@ -88,8 +89,10 @@ class MenuBar:
             menufor.add_command(label=lg('Uncomment'), stat='disabled', accelerator=self.get_accelerator('uncomment'), image = self.images['uncomment'], compound='left')
 
         if get_menurun():
-            menurun = Menu(menubar, tearoff=0)
-            menubar.add_cascade(label=lg('Run'), menu=menurun)
+            menurun = Menu(menubar, tearoff=0)                #    |
+            menubar.add_cascade(label=lg('Run'), menu=menurun)#### V ########
+            menurun.add_command(label=lg('Run_python'), stat = 'normal', accelerator = self.get_accelerator('run_python'), image = self.images['run_python'], compound = 'left', command = self.run_python)
+            menurun.add_command(label=lg('python'), stat = 'normal', accelerator = self.get_accelerator('python'), image = self.images['run_python'], compound = 'left', command = self.python_exe)
             menurun.add_command(label=lg('Compile'), stat='disabled', accelerator=self.get_accelerator('compile'), image = self.images['compile'], compound='left')
             menurun.add_command(label=lg('Runs'), stat='disabled', accelerator=self.get_accelerator('run'), image = self.images['run'], compound='left')
             menurun.add_command(label=lg('Check'), stat='disabled', accelerator=self.get_accelerator('check'), image = self.images['check'], compound='left')
@@ -174,3 +177,4 @@ class MenuBar:
 
 if __name__ == '__main__':
     from __init__ import *
+

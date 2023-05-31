@@ -28,6 +28,9 @@ class Content:
         self.ruban = IntVar()
         self.info_bar = IntVar()
         self.boutons = IntVar()
+        #self.ruban.set(get_ruban())
+        #self.info_bar.set(get_infobar())
+        #self.boutons.set(get_boutons())
 
         self.scroll = ttk.Scrollbar(self.master, orient='vertical')
 

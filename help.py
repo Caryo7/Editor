@@ -53,7 +53,7 @@ class help:
         Label(cad, text = f'{self.version}', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 1, column = 1, sticky = W, padx = 10, pady = 5)
         
         Label(cad, text = lg('writeby'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 2, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = 'Ben CARYO',   justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 2, column = 1, sticky = W, padx = 10, pady = 5)
+        Label(cad, text = self.AUTHOR,   justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 2, column = 1, sticky = W, padx = 10, pady = 5)
         
         #Label(cad, text = lg('email'),                       justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 3, column = 0, sticky = E, padx = padx, pady = 5)
         #s1 = Label(cad, text = 'bravocharlie1273@orange.fr', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 3, column = 1, sticky = W, padx = 10, pady = 5)
@@ -154,3 +154,8 @@ class help:
 #help().About()
 if __name__ == '__main__':
     from __init__ import *
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes

@@ -2,9 +2,17 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Editor"
+<<<<<<< Updated upstream
 #define MyAppVersion "0.31"
 #define MyAppPublisher "Benc Corp"
 #define MyAppURL "https://bgtarino.wixsite.com/Editor"
+=======
+#define MyAppVersion "35" ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
+#define Directory "G:\USB_TRANSFER_SAUVEGARDE\setup"
+
+#define MyAppPublisher "Tarino"
+#define MyAppURL "https://bgtarino.wixsite.com/editor"
+>>>>>>> Stashed changes
 #define MyAppExeName "__init__.exe"
 #define MyAppAssocName MyAppName + " Documents"
 #define MyAppAssocExt ".form"
@@ -30,6 +38,7 @@ LicenseFile=G:\Exe\Edit\license.txt
 ; InfoAfterFile=G:\Exe\Edit\after.log
 ; InfoBeforeFile=
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
+<<<<<<< Updated upstream
 ;PrivilegesRequired=lowest
 OutputDir=N:\setup
 OutputBaseFilename=setup_31_win
@@ -37,6 +46,30 @@ SetupIconFile=G:\Exe\Edit\image\ico.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+=======
+; PrivilegesRequired=lowest
+OutputDir={#Directory}
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+OutputBaseFilename=setup_35_win
+SetupIconFile=image\icons\ico.ico
+Compression=lzma
+SolidCompression=yes
+;WizardStyle=classic, modern
+WizardStyle=classic
+
+; Icone en haut :
+WizardSmallImageFile=G:\Exe\Edit\image\icons\ico.bmp
+; Image à mettre, pour la page d'entrée
+;WizardImageFile=C:\Documents and Settings\mybmp.bmp
+; Image à mettre, pour la page de sortie
+;WizardImageFile2=C:\Documents and Settings\mybmp.bmp
+
+DisableWelcomePage=no
+DisableFinishedPage=yes 
+;DisableDirPage=yes
+DisableDirPage=no
+
+>>>>>>> Stashed changes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -87,5 +120,9 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
+<<<<<<< Updated upstream
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
+=======
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait skipifsilent
+>>>>>>> Stashed changes

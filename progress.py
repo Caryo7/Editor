@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from tkinter import *
+from tkinter import ttk
+from tkinter.ttk import *
 from confr import *
 import time
 from threading import Thread
@@ -41,7 +43,7 @@ class Compute(Thread):
 class Progress:
     oldpos = 0
 
-    def __init__(self, master, title, maximum, decimals = 0, offcolor='white', oncolor = 'green'):
+    def __init__(self, master, title, maximum, decimals = 0, offcolor='white', oncolor = 'green', killable = False):
         if master:
             self.zak = Toplevel()
             self.zak.transient(master)
@@ -56,6 +58,7 @@ class Progress:
         self.oncolor = oncolor
         self.offcolor = offcolor
         self.counter = 0
+        self.killable = killable
         self.title = title
         self.content()
 
@@ -110,13 +113,32 @@ class Progress:
         self.zak.mainloop()
 
     def Quitter(self):
-        self.second.breaker = True
-        self.zak.destroy()
+        if not self.killable:
+            showwarning(self.title, lg('ycstp'))
+        else:
+            self.second.breaker = True
+            self.zak.destroy()
         return
 
+class ProgressBar(Progressbar):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def set(self, value):
+        self.stop()
+        self.start()
+        
+
 if __name__ == '__main__':
-    p = Progress(master = None, title = 'test1', maximum = 105, decimals = 2, oncolor = 'red')
+    root = Tk()
+    p = ProgressBar(root, orient = 'vertical', mode = 'indeterminate')#master = None, title = 'test1', maximum = 105, decimals = 2, oncolor = 'red')
+    p.place(x = 0, y = 0)
+    p.start()
     for i in range(105):
-        p.step('blablabla', 'ablabla')
-        #time.sleep(0.1)
-    p.Generate()
+        #p.step('blablabla', 'ablabla')
+        #p.step()
+        time.sleep(0.1)
+        root.update()
+    #p.Generate()
+    root.mainloop()
+

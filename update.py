@@ -40,7 +40,7 @@ class Check(Thread):
             except Exception:
                 pass
 
-            time.sleep(60)
+            time.sleep(600)
 
 
 class Installer(Thread):

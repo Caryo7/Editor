@@ -10,6 +10,7 @@ import time, random, os
 class Startup:
     def __init__(self):
         self.top = Tk()
+        self.top.iconbitmap(PATH_PROG + '/image/icons/ico.ico')
         self.top.overrideredirect(1)
         self.width = 400
         self.height = 300
@@ -31,6 +32,16 @@ class Startup:
         self.canvas = Canvas(self.top, width=self.width-20, height=self.height-65)
         self.canvas.place(x=10, y=10)
         self.list_line = []
+<<<<<<< Updated upstream
+=======
+        self.i = 0
+        self.image = PhotoImage(master = self.top, file = PATH_PROG + '/image/icons/TarinoMark.png')
+
+    def finish(self):
+        time.sleep(2)
+        self.pb['value'] = 100.0
+        self.pc.set('100 %')
+>>>>>>> Stashed changes
         self.top.update()
         self.stat = False
         self.go()

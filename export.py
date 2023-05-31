@@ -6,6 +6,7 @@ from tkinter.ttk import *
 from tkinter.filedialog import *
 from tkinter.messagebox import *
 from confr import *
+from progress import *
 
 try: # reportlab
     from reportlab.pdfgen import canvas
@@ -215,6 +216,30 @@ class Export(AskMargins):
                 self.ask_margins(name)
 
     def begin_export_pdf(self, name):
+<<<<<<< Updated upstream
+=======
+        zak = Toplevel(self.master)
+        zak.iconbitmap(self.ico['pdf'])
+        zak.transient(self.master)
+        zak.resizable(False, False)
+        zak.title(lg('export_pdf'))
+        pb = ProgressBar(zak, orient='horizontal', mode='determinate', length = 300)
+        pb.place(x = 10, y = 50)
+        zak.geometry("320x130")
+        zak.update()
+
+        nmax = len(self.get_text())
+        def step():
+            pb.move((1 / nmax) * 100)
+            zak.update()
+
+        def reset(maxi):
+            global nmax
+            nmax = maxi
+            pb.set(0)
+            zak.update()
+
+>>>>>>> Stashed changes
         enc = pdfencrypt.StandardEncryption(userPassword = self.pdf_password,
                                             ownerPassword = self.pdf_password,
                                             canPrint = self.pdf_can_print.get(),

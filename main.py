@@ -1,9 +1,52 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+################## Fichiers à changer : v?? compilation.iss ####################
+__version__ = VERSION = '35' ###
+GUI_VERSION = '35' ###
+FILE_VERSION = '1.8' ##
+FORM_VERSION = '2.2' ##
+
 # Partie 1 - Importation de tous les fichiers
 
 def wprint(*args):
+<<<<<<< Updated upstream
     print(*args)
+=======
+    global startup
+    try:
+        startup.add(*args)
+    except TclError:
+        startup = StartUp_Console()
+        startup.nb = 100
+        startup.add(*args)
+
+import time, inspect, os
+
+NAME = 'Editor'
+DESC = NAME
+URL = 'https://bgtarino.wixsite.com/Editor'
+PYTHON_VERSION = '3.10'
+ARDUINO_VERSION = '1.16'
+COMPILATOR_VERSION = '0.1 - PYTHON BETA'
+LANGS_VERSION = '1.5'
+AUTHOR = 'Benoit CHARREYRON'
+
+PATH_PROG = os.path.abspath(os.getcwd())
+'''
+Liste des fichiers demandant PATH_PROG :
+ - main.py
+ - confr.py
+ - lgviewer.py
+ - pswd.py
+ - update.py
+ - tree.py
+ - counter.py
+ - ext_form.py
+ - runner.py
+ - startup.py (icon)
+'''
+>>>>>>> Stashed changes
 
 wprint('Importing files : ')
 wprint('content -> ')
@@ -66,6 +109,7 @@ wprint('Done\nimages -> ')
 from images import *
 wprint('Done\nMenus ->')
 from iomenu import *
+<<<<<<< Updated upstream
 wprint('Done\n')
 
 import time, inspect
@@ -74,6 +118,11 @@ __version__ = VERSION = '0.31'
 NAME = 'Editor'
 DESC = NAME
 PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
+=======
+wprint('Python interpreter')
+from runner import *
+wprint('End of importation')
+>>>>>>> Stashed changes
 
 # 2 - Création de la class et importation de toute la hiérarchie
 
@@ -104,11 +153,29 @@ class Main(Win,
            Macro,
            KeyB,
            Images,
-           IOMenu):
+           IOMenu,
+           RunPython,
+           ):
     
 # Partie 3 - Informations de base du logiciel
 
     def __init__(self, sys_args = None, **args):
+<<<<<<< Updated upstream
+=======
+        self.NAME = NAME
+        self.DESC = DESC
+        self.URL = URL
+        self.VERSION = VERSION
+        self.PYTHON_VERSION = PYTHON_VERSION
+        self.ARDUINO_VERSION = ARDUINO_VERSION
+        self.GUI_VERSION = GUI_VERSION
+        self.COMPILATOR_VERSION = COMPILATOR_VERSION
+        self.LANGS_VERSION = LANGS_VERSION
+        self.FILE_VERSION = FILE_VERSION
+        self.FORM_VERSION = FORM_VERSION
+        self.AUTHOR = AUTHOR
+        self.programme_termine = False
+>>>>>>> Stashed changes
         self.sys_args = sys_args
         wprint('Définition du répertoire de travail...')
         self.path_prog = PATH_PROG
@@ -117,6 +184,7 @@ class Main(Win,
         wprint('Importing version')
         self.version = self.__ver__ = VERSION
         wprint('Loading application ico')
+<<<<<<< Updated upstream
         self.ico = {'win': self.path_prog + '/image/ico.ico',
                     'search': self.path_prog + '/image/search.ico',
                     'replace': self.path_prog + '/image/replace.ico',
@@ -132,6 +200,25 @@ class Main(Win,
                     'task': self.path_prog + '/image/task.ico',
                     'progress': self.path_prog + '/image/progress.ico',
                     'file': self.path_prog + '/image/file.ico',
+=======
+        self.ico = {'win': self.path_prog + '/image/icons/ico.ico',
+                    'search': self.path_prog + '/image/icons/search.ico',
+                    'replace': self.path_prog + '/image/icons/replace.ico',
+                    'printer': self.path_prog + '/image/icons/printer.ico',
+                    'tree': self.path_prog + '/image/icons/tree.ico',
+                    'security': self.path_prog + '/image/icons/security.ico',
+                    'password': self.path_prog + '/image/icons/password.ico',
+                    'error': self.path_prog + '/image/icons/error.ico',
+                    'help': self.path_prog + '/image/icons/help.ico',
+                    'config': self.path_prog + '/image/icons/config.ico',
+                    'archive': self.path_prog + '/image/icons/archive.ico',
+                    'style': self.path_prog + '/image/icons/style.ico',
+                    'task': self.path_prog + '/image/icons/task.ico',
+                    'progress': self.path_prog + '/image/icons/progress.ico',
+                    'file': self.path_prog + '/image/icons/file.ico',
+                    'pdf': self.path_prog + '/image/icons/pdf.ico',
+                    'python': self.path_prog + '/image/icons/python.ico',
+>>>>>>> Stashed changes
                     }
 
         wprint('Loading application name')
@@ -205,6 +292,9 @@ class Main(Win,
         self.__cert__()
         wprint('Loading macros')
         self.__macro__()
+        wprint('Loading python runner')
+        self.__runner__()
+
         if self.configurating:
             wprint('Restart configurate window')
             self.IHM()
@@ -241,6 +331,11 @@ class Main(Win,
         wprint('Raising errors of initialing stat')
         self.runErrors()
         wprint('Begin the main process of the window')
+<<<<<<< Updated upstream
+=======
+        startup.finish()
+        print('Démarrage fini avec succès !')
+>>>>>>> Stashed changes
         self.Generate()
 
     def close(self):
@@ -267,3 +362,4 @@ def RunTestMacro(**args):
 if __name__ == '__main__':
     wprint('Run main program')
     RunProg(False)
+

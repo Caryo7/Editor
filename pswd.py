@@ -17,8 +17,12 @@ class Password:
 
     def __init__(self, cmd = None):
         self.cmd = cmd
+<<<<<<< Updated upstream
         self.master = Tk()
         self.master.iconbitmap(PATH_PROG + '/image/password.ico')
+=======
+        self.master.iconbitmap(PATH_PROG + '/image/icons/password.ico')
+>>>>>>> Stashed changes
         self.master.title(lg('Administrator'))
         menu = Menu(self.master)
         self.master['menu'] = menu
@@ -89,6 +93,7 @@ Voici les étapes pour la création d\'un nouveau compte :
     def append_password(self):
         self.zak = Toplevel()
         self.zak.transient(self.master)
+        self.zak.iconbitmap(PATH_PROG + '/image/icons/password.ico')
         self.zak.title(lg('New_User'))
         
         self.username = StringVar()

@@ -22,7 +22,7 @@ class LgViewer:
     def create(self):
         self.master = Tk()
         self.master.title('Lg Viewer')
-        self.master.iconbitmap(PATH_PROG + '/image/lg.ico')
+        self.master.iconbitmap(PATH_PROG + '/image/icons/lg.ico')
         self.master.resizable(False, False)
 
         menu = Menu(self.master)
@@ -75,6 +75,7 @@ class LgViewer:
         assert type in ('Change', 'Ajouter')
         self.mode = type
         self.root = Toplevel()
+        self.root.iconbitmap(PATH_PROG + '/image/lg.ico')
         self.root.transient(master)
         self.root.title(type)
         self.root.resizable(False, False)

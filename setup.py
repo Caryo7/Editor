@@ -39,9 +39,38 @@ if sys.platform == 'win32':
                         icon = 'image/ico.ico',
                         base = base)
 
+<<<<<<< Updated upstream
     print('Définition des paramètres...')
     setup(name = NAME,
           version = VERSION,
           description = DESC,
           options = {'build_exe': {'include_files': includefiles}},
           executables = [target])
+=======
+##options_msi = {#'add_to_path': True,
+##               #'all_users': True,
+##               'data': msi_data,
+##               'summary_data': msi_summary,
+##               'install_icon': 'image/ico.ico',
+##               'product_code': '1000000000',
+##               'upgrade_code': '{10000000-0000-0000-0000-000000000000}',
+##               #'extensions': ,
+##               }
+
+options = {'build_exe': options_exe,
+           #'bdist_msi': options_msi,
+           }
+
+target = Executable(script = 'G:\\Exe\\Edit\\__init__.py',
+                    copyright= 'Copyright © ' + str(datetime.datetime.now().year) + ' ' + AUTHOR,
+                    icon = 'image/icons/ico.ico',
+                    base = 'Win32GUI' if sys.platform == 'win32' else 'Console',
+                    shortcut_name = 'Editor',
+                    shortcut_dir = 'TARINO',)
+
+setup(name = NAME,
+      version = VERSION,
+      description = DESC,
+      options = options,
+      executables = [target])
+>>>>>>> Stashed changes

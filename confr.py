@@ -121,6 +121,7 @@ def get_alerte_min():
     else:return False
 
 def get_ruban():
+    print('oui')
     if p.get('view', 'ruban') == '1':return True
     else:return False
 

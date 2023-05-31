@@ -35,6 +35,7 @@ class Win:
         return True
 
     def fermer(self, evt = None):
+<<<<<<< Updated upstream
         self.clear_text()
         self.stat_text(False)
         self.update_line_numbers()
@@ -43,6 +44,49 @@ class Win:
     def Quitter(self, evt=None):
         if self.saved == False or self.saved == None or get_askclose:
             dem = askyesnocancel(self.title, lg('DYWTS'))
+=======
+        if (self.saved == False or self.saved == None) and get_askclose:
+            dem = askyesnocancel(self.title, lg('DYWTS'))
+            if dem == True:
+                self.save()
+            elif dem == None:
+                return
+    
+            self.clear_text()
+            self.stat_text(False)
+            self.update_line_numbers()
+            self.menufichier.entryconfig(lg('settings'), stat = 'disabled')
+            self.master.title(self.title + ' - ' + lg('NFO'))
+
+    def bloc_try(self, ifnormal, exception = Exception, iferror = None):
+        try:
+            ifnormal()
+        except exception:
+            if iferror != None:
+                iferror()
+
+    def protocol_dialog(self, tk):
+        tk.destroy()
+        self.dialoging = False
+        
+    def Quitter(self, evt=None):
+        def destroy():
+            self.master.destroy()
+            i = notif_destroy(self.ico['win'],
+                              self.title,
+                              self.path_prog,
+                              self.VERSION,
+                              self.URL)
+            #i.start()
+            i.EOP()
+
+        if self.dialoging:
+            return
+
+        if (self.saved == False or self.saved == None) and get_askclose:
+            self.dialoging = True
+            dem = askyesnocancel(self.title, lg('DYWTS'), master = self.master)
+>>>>>>> Stashed changes
             if dem == True:
                 self.save()
                 self.master.destroy()
@@ -63,6 +107,12 @@ class Win:
             # exit(code='ClosedByUserWithAutoSave')
         
     def Generate(self):
+<<<<<<< Updated upstream
+=======
+        self.master.focus_force()
+        self.text.focus()
+        self.conf_win(generate = True)
+>>>>>>> Stashed changes
         self.master.mainloop()
 
 if __name__ == '__main__':

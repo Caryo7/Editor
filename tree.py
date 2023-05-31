@@ -93,7 +93,7 @@ def nbClasses():
 class Code:
     def __init__(self):
         self.master = Tk()
-        self.master.iconbitmap(PATH_PROG + '/image/tree.ico')
+        self.master.iconbitmap(PATH_PROG + '/image/icons/tree.ico')
         self.master.title(lg('program'))
         self.master.resizable(False, False)
         
@@ -121,7 +121,7 @@ class Code:
 class Tkin:
     def __init__(self):
         self.master = Tk()
-        self.master.iconbitmap(PATH_PROG + '/image/tree.ico')
+        self.master.iconbitmap(PATH_PROG + '/image.icons/tree.ico')
         self.master.title(lg('Struct'))
         self.master.resizable(False, False)
         
