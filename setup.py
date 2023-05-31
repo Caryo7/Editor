@@ -1,52 +1,52 @@
 from cx_Freeze import setup, Executable
 from pathlib import Path
 from main import *
-import os.path, sys, os
+KillStartup()
+import os.path, sys, os, datetime
+
+modules = ['inspect', 'glob',
+           'hashlib', 
+           'docx', 'reportlab',
+           'serial',
+           ]
+
+def includefiles():
+    p = Path('')
+    files = list(p.glob('**/*'))
+    i = 0
+    while True:
+        try:
+            if '/' in list(str(files[i])) or '\\' in list(str(files[i])):
+                files.pop(i)
+            else:
+                files[i] = str(files[i])
+                print(files[i])
+                i += 1
+        except IndexError:
+            break
+    return files
+
+
 
 PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
 os.environ['TCL_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tcl8.6')
 os.environ['TK_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tk8.6')
-options = {'build_exe': {'include_files': [os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tk86t.dll'), os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tcl86t.dll')]}}
-base = None
 
-## Modules requis :
-# - hashlib
-# - sqlite3
-# - python-docx
-# - reportlab
-# - serial / pyserial
-# - glob
+options_exe = {'include_files': [os.path.join(PYTHON_INSTALL_DIR,  'DLLs', 'tk86t.dll'),
+                                 os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tcl86t.dll')],
+               'packages': modules,
+               'include_files': includefiles(),
+               "include_msvcr": True,
+               }
 
-if sys.platform == 'win32':
-    base = 'Win32GUI'
-    print('Récupération des fichiers...')
-    p = Path('')
-    includefiles = list(p.glob('**/*'))
-    i = 0
-    while True:
-        try:
-            if '/' in list(str(includefiles[i])) or '\\' in list(str(includefiles[i])):
-                includefiles.pop(i)
-            else:
-                includefiles[i] = str(includefiles[i])
-                i += 1
-        except IndexError:
-            break
+#directory_table = [("TARINO", "TARGETDIR", "."),
+                   #("Editor", "TARINO", "TARINO|Editor")]
 
-    print('Chemin de l\'éxécutable...')
-    target = Executable(script = 'G:\\Exe\\Edit\\__init__.py',
-                        copyright= 'Copyright © 2023 Benoit CHARREYRON',
-                        icon = 'image/ico.ico',
-                        base = base)
+##msi_data = {'Icon': [('IconId', 'image/ico.ico')],}
+##
+##msi_summary = {'author': AUTHOR,
+##               'comments': DESC,}
 
-<<<<<<< Updated upstream
-    print('Définition des paramètres...')
-    setup(name = NAME,
-          version = VERSION,
-          description = DESC,
-          options = {'build_exe': {'include_files': includefiles}},
-          executables = [target])
-=======
 ##options_msi = {#'add_to_path': True,
 ##               #'all_users': True,
 ##               'data': msi_data,
@@ -73,4 +73,3 @@ setup(name = NAME,
       description = DESC,
       options = options,
       executables = [target])
->>>>>>> Stashed changes

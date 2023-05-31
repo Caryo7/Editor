@@ -7,7 +7,7 @@ import os
 from confr import *
 from tree import *
 
-p = Path('')
+p = Path(os.path.abspath(os.getcwd()))
 tt = list(p.glob('**/*.py')) + list(p.glob('**/*.pyw')) + list(p.glob('**/*.ext'))
 s = 0
 for i in tt:

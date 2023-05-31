@@ -9,10 +9,37 @@ FORM_VERSION = '2.2' ##
 
 # Partie 1 - Importation de tous les fichiers
 
+class StartUp_Console:
+    nb = 0
+    i = 0
+
+    def add(self, text):
+        self.i += 1
+        print(int((self.i / self.nb) * 100), '% :', text, end='\r')
+
+    def finish(self):
+        print('Initialing done !')
+
+    def kill(self):
+        pass
+
+########## psutil :
+    ## for proc in psutil.process_iter():
+    ##     print(proc.name())
+    ##     print(proc.pid())
+
+
+print('Démarrage...')
+from startup import *
+
+if True:
+    startup = Startup()
+    startup.nb = 100 # Nombre de wprint
+else:
+    startup = StartUp_Console()
+    startup.nb = 100
+
 def wprint(*args):
-<<<<<<< Updated upstream
-    print(*args)
-=======
     global startup
     try:
         startup.add(*args)
@@ -46,83 +73,69 @@ Liste des fichiers demandant PATH_PROG :
  - runner.py
  - startup.py (icon)
 '''
->>>>>>> Stashed changes
 
 wprint('Importing files : ')
-wprint('content -> ')
+wprint('content')
 from content import *
-wprint('Done\nhelp -> ')
+wprint('help')
 from help import *
-wprint('Done\niofile -> ')
+wprint('iofile')
 from iofile import *
-wprint('Done\nmenubar -> ')
+wprint('menubar')
 from menubar import *
-wprint('Done\nsearch -> ')
+wprint('search')
 from search import *
-wprint('Done\nwin -> ')
+wprint('win')
 from win import *
-wprint('Done\nsecurity -> ')
+wprint('security')
 from security import *
-wprint('Done\narchives -> ')
+wprint('archives')
 from archives import *
-wprint('Done\nconfr -> ')
+wprint('confr')
 from confr import *
-wprint('Done\ncrypt -> ')
+wprint('crypt')
 from crypt import *
-wprint('Done\nminitel -> ')
+wprint('minitel')
 from minitel import *
-wprint('Done\nconfig -> ')
+wprint('config')
 from config import *
-wprint('Done\nexport -> ')
+wprint('export')
 from export import *
-wprint('Done\nupdate -> ')
+wprint('update')
 from update import *
-wprint('Done\nextensions -> ')
+wprint('extensions')
 from extensions import *
-wprint('Done\ntasksviewer -> ')
+wprint('tasksviewer')
 from tasksviewer import *
-wprint('Done\nprinter -> ')
+wprint('printer')
 from printer import *
-wprint('Done\nerrors -> ')
+wprint('errors')
 from errors import *
-wprint('Done\nclkright -> ')
+wprint('clkright')
 from clkright import *
-wprint('Done\nstyle -> ')
+wprint('style')
 from style import *
-wprint('Done\nautocolor -> ')
+wprint('autocolor')
 from autocolor import *
-wprint('Done\nrecentfile -> ')
+wprint('recentfile')
 from recentfile import *
-wprint('Done\nstartup -> ')
-from startup import *
-wprint('Done\npi -> ')
+wprint('pi')
 from pi import *
-wprint('Done\napi -> ')
+wprint('api')
 from api import *
-wprint('Done\nbgtask -> ')
+wprint('bgtask')
 from bgtask import *
-wprint('Done\nmacros -> ')
+wprint('macros')
 from macros import *
-wprint('Done\nkeyboard -> ')
+wprint('keyboard')
 from keyb import *
-wprint('Done\nimages -> ')
+wprint('images')
 from images import *
-wprint('Done\nMenus ->')
+wprint('Menus')
 from iomenu import *
-<<<<<<< Updated upstream
-wprint('Done\n')
-
-import time, inspect
-
-__version__ = VERSION = '0.31'
-NAME = 'Editor'
-DESC = NAME
-PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
-=======
 wprint('Python interpreter')
 from runner import *
 wprint('End of importation')
->>>>>>> Stashed changes
 
 # 2 - Création de la class et importation de toute la hiérarchie
 
@@ -130,7 +143,7 @@ wprint('Importing classes')
 class Main(Win,
            File,
            Search,
-           help,
+           help_,
            Content,
            MenuBar,
            Archives,
@@ -160,8 +173,6 @@ class Main(Win,
 # Partie 3 - Informations de base du logiciel
 
     def __init__(self, sys_args = None, **args):
-<<<<<<< Updated upstream
-=======
         self.NAME = NAME
         self.DESC = DESC
         self.URL = URL
@@ -175,7 +186,6 @@ class Main(Win,
         self.FORM_VERSION = FORM_VERSION
         self.AUTHOR = AUTHOR
         self.programme_termine = False
->>>>>>> Stashed changes
         self.sys_args = sys_args
         wprint('Définition du répertoire de travail...')
         self.path_prog = PATH_PROG
@@ -184,23 +194,6 @@ class Main(Win,
         wprint('Importing version')
         self.version = self.__ver__ = VERSION
         wprint('Loading application ico')
-<<<<<<< Updated upstream
-        self.ico = {'win': self.path_prog + '/image/ico.ico',
-                    'search': self.path_prog + '/image/search.ico',
-                    'replace': self.path_prog + '/image/replace.ico',
-                    'printer': self.path_prog + '/image/printer.ico',
-                    'tree': self.path_prog + '/image/tree.ico',
-                    'security': self.path_prog + '/image/security.ico',
-                    'password': self.path_prog + '/image/password.ico',
-                    'error': self.path_prog + '/image/error.ico',
-                    'help': self.path_prog + '/image/help.ico',
-                    'config': self.path_prog + '/image/config.ico',
-                    'archive': self.path_prog + '/image/archive.ico',
-                    'style': self.path_prog + '/image/style.ico',
-                    'task': self.path_prog + '/image/task.ico',
-                    'progress': self.path_prog + '/image/progress.ico',
-                    'file': self.path_prog + '/image/file.ico',
-=======
         self.ico = {'win': self.path_prog + '/image/icons/ico.ico',
                     'search': self.path_prog + '/image/icons/search.ico',
                     'replace': self.path_prog + '/image/icons/replace.ico',
@@ -218,7 +211,6 @@ class Main(Win,
                     'file': self.path_prog + '/image/icons/file.ico',
                     'pdf': self.path_prog + '/image/icons/pdf.ico',
                     'python': self.path_prog + '/image/icons/python.ico',
->>>>>>> Stashed changes
                     }
 
         wprint('Loading application name')
@@ -331,15 +323,9 @@ class Main(Win,
         wprint('Raising errors of initialing stat')
         self.runErrors()
         wprint('Begin the main process of the window')
-<<<<<<< Updated upstream
-=======
         startup.finish()
         print('Démarrage fini avec succès !')
->>>>>>> Stashed changes
         self.Generate()
-
-    def close(self):
-        ""
 
 # Partie 5 - Execution de la class avec la connexion si demandée
 
@@ -358,6 +344,9 @@ def RunProg(debug=True, sys_args = ['']):
 def RunTestMacro(**args):
     args['macro'] = True
     m = Main(**args)
+
+def KillStartup():
+    startup.kill()
 
 if __name__ == '__main__':
     wprint('Run main program')

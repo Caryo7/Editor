@@ -13,11 +13,11 @@ import os
 from pswd import *
 from confr import *
 
-PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
+PATH_PROG = os.path.abspath(os.getcwd())
 
 class LgViewer:
-    def __init__(self):
-        Password(self.create)
+    def __init__(self, master = None):
+        Password(self.create, tk = master)
 
     def create(self):
         self.master = Tk()
@@ -25,11 +25,16 @@ class LgViewer:
         self.master.iconbitmap(PATH_PROG + '/image/icons/lg.ico')
         self.master.resizable(False, False)
 
+        def write_temp():
+            if askyesno('', 'Configmation'):
+                self.write_temp()
+
         menu = Menu(self.master)
         self.master['menu'] = menu
         menu.add_command(label = 'Ouvrir', command = self.open)
         menu.add_command(label = 'Quitter', command = self.master.destroy)
         menu.add_command(label = 'Actualiser', command = self.insert_data)
+        menu.add_command(label = 'Ecrire temp/', command = write_temp)
         menu.add_command(label = 'Ajouter', command = self.append)
         self.open()
         self.Generate()

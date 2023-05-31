@@ -165,7 +165,7 @@ pdff = PDF Files
 caimp = Choose a printer :
 exemp = Numbers : 
 resve = Recto / Verso
-startimp = Begin Print Process
+startimp = Begin Print Process (with settings)
 stnpr = Stat : No printing
 stapr = Stat : Printing
 vdsui = You have to select a printer !
@@ -174,7 +174,7 @@ settings = Settings
 racc = Keyboard
 todo = To Do
 event = Event
-key = Key
+key_t = Key
 action = Action
 newrac = New Link
 writeby = Writen By :
@@ -248,9 +248,6 @@ pswd_nomatch = There is not match between passwords !
 time_autosave = Timer between autosaving process (minutes)
 infos = Logs
 int_line = Space between Lines (cm)
-<<<<<<< Updated upstream
-piedtete = ?
-=======
 piedtete = ?
 exor = ExOr
 err_pswd = Password Incorrect !
@@ -285,4 +282,3 @@ espagnol = Spainish
 italien = Italien
 chinois = 汉语
 normal = Normal
->>>>>>> Stashed changes

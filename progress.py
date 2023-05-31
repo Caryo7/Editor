@@ -45,7 +45,7 @@ class Progress:
 
     def __init__(self, master, title, maximum, decimals = 0, offcolor='white', oncolor = 'green', killable = False):
         if master:
-            self.zak = Toplevel()
+            self.zak = Toplevel(master)
             self.zak.transient(master)
         else:
             self.zak = Tk()
@@ -65,17 +65,17 @@ class Progress:
     def content(self):
         self.canvas = Canvas(self.zak, width = 210, height = 30)
         self.canvas.place(x = 25, y = 25)
-        self.pc = StringVar()
-        self.time_elapsed = StringVar()
-        self.time_stay = StringVar()
+        self.pc = StringVar(master = self.zak)
+        self.time_elapsed = StringVar(master = self.zak)
+        self.time_stay = StringVar(master = self.zak)
         self.pc.set('0 %')
         self.time_elapsed.set(lg('tecc') + '0 s')
         self.time_stay.set(lg('tere') + '0 s')
         Label(self.zak, textvariable = self.pc).place(x = 235, y = 30)
         Label(self.zak, textvariable = self.time_elapsed).place(x = 30, y = 60)
         Label(self.zak, textvariable = self.time_stay).place(x = 30, y = 90)
-        Button(self.zak, text = lg('Abord'), command=None).place(x = 30, y = 120)
-        Button(self.zak, text = lg('Stdbye'), command = None).place(x = 150, y = 120)
+        Button(self.zak, text = lg('Abord'), command=None, stat = 'disabled').place(x = 30, y = 120)
+        Button(self.zak, text = lg('Stdbye'), command = None, stat = 'disabled').place(x = 150, y = 120)
         self.zak.geometry(str(290 + (self.decs * 5)) + 'x175')
         self.second = Compute(self.lcounter, self.trace)
         self.second.start()

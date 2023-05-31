@@ -65,30 +65,35 @@ class Styles:
 
         self.new_tag(bg=self.lst_tags[m][1], fg=self.lst_tags[m][2], name=self.lst_tags[m][0], i=self.deb_tag, r=self.fin_tag, save=True, menu=False)
         self.zak.destroy()
+        self.dialoging = False
 
     def add_tag_here(self):
+        if self.dialoging:
+            return
+
+        self.dialoging = True
         try:
             self.deb_tag = self.text.index('sel.first')
             self.fin_tag = self.text.index('sel.last')
-            self.zak = Toplevel()
+            self.zak = Toplevel(self.master)
+            self.zak.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(self.zak))
             self.zak.iconbitmap(self.ico['style'])
             self.zak.transient(self.master)
             self.zak.title(lg('Style'))
             self.lst = Listbox(self.zak)
             self.lst.grid()
+            lst = []
             for i in self.lst_tags:
-                if i[0] != '':
-                    self.lst.insert(END, i[0])
-                    self.lst.itemconfig(END, background=i[1], foreground=i[2])
+                if i[0] not in lst:
+                    if i[0] != '':
+                        self.lst.insert(END, i[0])
+                        self.lst.itemconfig(END, background=i[1], foreground=i[2])
+                        lst.append(i[0])
             self.lst.bind('<Double-Button-1>', self.selected_tag)
             b = ttk.Button(self.zak, text = lg('New'), command = self.ask_new_tag).grid()
 
         except TclError:
             showerror(self.title, lg('VDSUT'))
-<<<<<<< Updated upstream
-
-    def write_tags(self):
-=======
             self.dialoging = False
 
     def clear_tags(self):
@@ -98,13 +103,10 @@ class Styles:
 
     def write_tags(self):
         self.clear_tags()
->>>>>>> Stashed changes
         for i in self.lst_tags:
             if i[0] != '':
                 self.new_tag(i[1], i[2], i[0], i[3], i[4], False)
 
-<<<<<<< Updated upstream
-=======
     def config_tags(self):
         if self.dialoging:
             return
@@ -165,7 +167,6 @@ class Styles:
 
         self.lst.bind('<Button-3>', lambda evt: config_item(self, evt))
 
->>>>>>> Stashed changes
     def key_press_test(self, evt):
         if evt.char == ' ' and self.char_p == '':
             self.char_p += ' '
@@ -202,11 +203,6 @@ class Styles:
         except AttributeError:
             pass
 
-<<<<<<< Updated upstream
-        try:
-            self.i, self.r = self.text.index('sel.first'), self.text.index('sel.last')
-            self.zak = Toplevel()
-=======
         if self.dialoging and not forcing:
             return
 
@@ -217,19 +213,15 @@ class Styles:
                 self.i, self.r = self.text.index('sel.first'), self.text.index('sel.last')
 
             self.zak = Toplevel(self.master)
->>>>>>> Stashed changes
             self.zak.iconbitmap(self.ico['style'])
             self.zak.transient(self.master)
+            self.zak.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(self.zak))
             self.zak.title(lg('Style'))
             Label(self.zak, text=lg('Name')).grid(row=0, column=0, sticky='e')
             Label(self.zak, text=lg('Background')).grid(row=1, column=0, sticky='e')
             Label(self.zak, text=lg('Foreground')).grid(row=2, column=0, sticky='e')
-<<<<<<< Updated upstream
-            self.name_ = StringVar()
-=======
             self.name_ = StringVar(master = self.master)
             self.name_.set(values[0] if values[0] else '')
->>>>>>> Stashed changes
             name = ttk.Entry(self.zak, textvariable=self.name_, width=32).grid(row=0, column=1, sticky='w')
             self.bg = ttk.Combobox(self.zak, values=self.colors_name + [lg('normal')])
             self.bg.grid(row=1, column=1, sticky='w')
@@ -241,6 +233,7 @@ class Styles:
 
         except TclError:
             showerror(self.title, lg('VDSUT'))
+            self.dialoging = False
 
     def nt(self, mode_pre):
         self.new_tag(self.colors[self.bg.get()] if self.bg.get() != lg('normal') else '',
@@ -252,6 +245,7 @@ class Styles:
                      save = not mode_pre)
 
         self.zak.destroy()
+        self.dialoging = False
 
 if __name__ == '__main__':
     from __init__ import *

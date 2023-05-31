@@ -8,7 +8,7 @@ from confr import *
 import urllib.request as url
 import os, inspect, zipfile as zf, time
 
-PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
+PATH_PROG = os.path.abspath(os.getcwd())
 
 class Check(Thread):
     def __init__(self, main_self):
@@ -19,6 +19,9 @@ class Check(Thread):
         self.main_self.add_task('CheckUpdate', time.time(), desc='MAIN_LOOP\nTo inform you when a new update is available, this task was built. It is reading every 10 min on the net if a new version is not available. If that is, a massage is showing to yourself to inform you the news device. You can\'t stop this task.', killable = False)
         while True:
             try:
+                if self.main_self.programme_termine:
+                    break
+
                 f = url.urlopen('https://bgtarino.wixsite.com/editor')
                 r = f.read().decode()
                 f.close()
@@ -75,27 +78,49 @@ class Installer(Thread):
             for file in z.namelist():
                 fle = file.replace('Edit/', '')
                 if '.' in fle:
-                    try:
+                    if 'config.ini' in fle:
                         f = open(PATH_PROG + '/' + fle, 'rb')
-                        l = len(f.read())
+                        l = f.read().decode(get_encode()).split('\n')
                         f.close()
-                        if len(z.read(file)) != l:
+                        rl = []
+                        for i in l:
+                            rl.append(i.split(' = ')[0])
+
+                        r = z.read(file)
+                        for line in r.decode(get_encode()).split('\n'):
+                            ln = line.split(' = ')
+                            if ln[0] in rl:
+                                pass
+                            else:
+                                l.append(ln[0] + ' = ' + ln[1])
+
+                        f = open(PATH_PROG + '/' + fle, 'wb')
+                        for i in l:
+                            f.write(i + '\n')
+                        f.close()
+
+                    else:
+                        try:
+                            f = open(PATH_PROG + '/' + fle, 'rb')
+                            l = len(f.read())
+                            f.close()
+                            if len(z.read(file)) != l:
+                                f = open(PATH_PROG + '/' + fle, 'wb')
+                                f.write(z.read(file))
+                                f.close()
+    
+                        except FileNotFoundError:
                             f = open(PATH_PROG + '/' + fle, 'wb')
                             f.write(z.read(file))
                             f.close()
-
-                    except FileNotFoundError:
-                        f = open(PATH_PROG + '/' + fle, 'wb')
-                        f.write(z.read(file))
-                        f.close()
             z.close()
 
 
 class Update:
     def __update__(self):
         self.path = ''
-        t = Check(self)
-        t.start()
+        self.check_update = Check(self)
+        self.check_update.start()
         self.checkupdate = IntVar()
         self.checkupdate.set(get_update_test())
 

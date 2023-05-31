@@ -6,6 +6,7 @@ from tkinter.ttk import *
 from tkinter.messagebox import *
 from tkinter.filedialog import *
 from tkinter.simpledialog import *
+import sys
 
 from counter import *
 from confr import *
@@ -22,28 +23,29 @@ class MenuBar:
         self.master['menu'] = menubar
         
         if get_menufile():
-            menufichier = Menu(menubar, tearoff=0)
-            menubar.add_cascade(label=lg('File'), menu=menufichier)
-            menufichier.add_command(label=lg('New'), accelerator=self.get_accelerator('new'), stat='normal', command=self.new, image = self.images['new'], compound='left')
-            menufichier.add_separator()
-            menufichier.add_command(label=lg('Open'), accelerator=self.get_accelerator('open'), stat='normal', command=self.open, image = self.images['open'], compound='left')
-            self.menurfl = Menu(menufichier, tearoff=0)
-            menufichier.add_cascade(label=lg('RecentFile'), menu=self.menurfl)
+            self.menufichier = Menu(menubar, tearoff=0)
+            menubar.add_cascade(label=lg('File'), menu=self.menufichier)
+            self.menufichier.add_command(label=lg('New'), accelerator=self.get_accelerator('new'), stat='normal', command=self.new, image = self.images['new'], compound='left')
+            self.menufichier.add_separator()
+            self.menufichier.add_command(label=lg('Open'), accelerator=self.get_accelerator('open'), stat='normal', command=self.open, image = self.images['open'], compound='left')
+            self.menurfl = Menu(self.menufichier, tearoff=0)
+            self.menufichier.add_cascade(label=lg('RecentFile'), menu=self.menurfl)
             for k, n in self.get_rfl():
                 cmd = lambda : self.open_recent(n)
                 self.menurfl.add_command(label=str(k) + ' ' + n, command = cmd)
             self.menurfl.add_separator()
             self.menurfl.add_command(label = lg('clear_recent'), command = self.clear_recent, accelerator=self.get_accelerator('clear_recent'))
-
-            menufichier.add_separator()
-            menufichier.add_command(label=lg('Save'), accelerator=self.get_accelerator('save'), stat='normal', command=self.save, image = self.images['save'], compound='left')
-            menufichier.add_command(label=lg('Save_as'), accelerator=self.get_accelerator('saveas'), stat='normal', command=self.saveas, image = self.images['saveas'], compound='left')
-            menufichier.add_command(label=lg('Save_copy_as'), accelerator=self.get_accelerator('savecopyas'), stat='normal', command=self.savecopyas, image = self.images['savecopyas'], compound='left')
-            menufichier.add_separator()
-            menufichier.add_command(label=lg('Print'), accelerator=self.get_accelerator('print'), stat='normal', command=self.print_window, image = self.images['print'], compound='left')
-            menufichier.add_separator()
-            menufichier.add_command(label=lg('close'), accelerator=self.get_accelerator('close'), stat = 'normal', command=self.fermer, image = self.images['close'], compound='left')
-            menufichier.add_command(label=lg('Exit'), accelerator=self.get_accelerator('quit'), stat='normal', command=self.Quitter, image = self.images['exit'], compound='left')
+            self.menufichier.add_separator()
+            self.menufichier.add_command(label=lg('Save'), accelerator=self.get_accelerator('save'), stat='normal', command=self.save, image = self.images['save'], compound='left')
+            self.menufichier.add_command(label=lg('Save_as'), accelerator=self.get_accelerator('saveas'), stat='normal', command=self.saveas, image = self.images['saveas'], compound='left')
+            self.menufichier.add_command(label=lg('Save_copy_as'), accelerator=self.get_accelerator('savecopyas'), stat='normal', command=self.savecopyas, image = self.images['savecopyas'], compound='left')
+            self.menufichier.add_separator()
+            self.menufichier.add_command(label=lg('settings'), accelerator=self.get_accelerator('settings'), stat = 'disabled', command = self.ask_settings, image = self.images['settings'], compound = 'left')
+            self.menufichier.add_separator()
+            self.menufichier.add_command(label=lg('Print'), accelerator=self.get_accelerator('print'), stat='normal', command=self.print_window, image = self.images['print'], compound='left')
+            self.menufichier.add_separator()
+            self.menufichier.add_command(label=lg('close'), accelerator=self.get_accelerator('close'), stat = 'normal', command=self.fermer, image = self.images['close'], compound='left')
+            self.menufichier.add_command(label=lg('Exit'), accelerator=self.get_accelerator('quit'), stat='normal', command=self.Quitter, image = self.images['exit'], compound='left')
             
         if get_menuedit():
             menuedition = Menu(menubar, tearoff=0)
@@ -77,6 +79,7 @@ class MenuBar:
             self.puces_ = menustyle.add_checkbutton(label=lg('Puces'), onvalue=1, offvalue=0, variable=self.puces)
             menustyle.add_command(label=lg('NewS'), command=self.ask_new_tag, accelerator=self.get_accelerator('news'), image = self.images['news'], compound='left')
             menustyle.add_command(label=lg('CStyle'), command=self.add_tag_here, accelerator=self.get_accelerator('cstyle'), image = self.images['cstyle'], compound='left')
+            menustyle.add_command(label=lg('configs'), command=self.config_tags, accelerator=self.get_accelerator('configs'), image = self.images['ihm'], compound = 'left')
             menustyle.add_separator()
             self.menu_styles = []
             self.mls = Menu(menustyle, tearoff=0)
@@ -110,7 +113,12 @@ class MenuBar:
             menucrypt.add_command(label=lg('Generate_key'), command=self.generate_key, accelerator=self.get_accelerator('key'), image = self.images['key'], compound='left')
             menucrypt.add_separator()
             menucrypt.add_command(label=lg('Algorithm'), stat='disabled')
-            menucrypt.add_command(label=lg('Caesar'), stat='disabled')
+            self.iscrypt_cesar = IntVar()
+            self.iscrypt_cesar.set(1)
+            self.iscrypt_exor = IntVar()
+            self.iscrypt_exor.set(1)
+            menucrypt.add_checkbutton(label=lg('Caesar'), onvalue = 1, offvalue = 0, variable = self.iscrypt_cesar)
+            menucrypt.add_checkbutton(label=lg('ExOr'), onvalue = 1, offvalue = 0, variable = self.iscrypt_exor)
 
         if get_menuarch():
             menuarch = Menu(menubar, tearoff=0)
@@ -156,7 +164,8 @@ class MenuBar:
             menuopt.add_command(label=lg('Dark_Mode'), stat='normal', command=self.act_color_theme, accelerator=self.get_accelerator('dark'), image = self.images['dark'], compound='left')
             menuopt.add_separator()
             menuopt.add_command(label=lg('Tasks'), stat='normal', command=self.show, accelerator=self.get_accelerator('visut'), image = self.images['visut'], compound='left')
-            menuopt.add_command(label=lg('Lgv'), stat = 'normal', command=LgViewer, accelerator=self.get_accelerator('lgv'), image = self.images['lgv'], compound='left')
+            menuopt.add_command(label=lg('info'), stat='normal' if sys.platform == 'win32' else 'disabled', command=self.info_sys, image = self.images['win'], compound = 'left')
+            menuopt.add_command(label=lg('Lgv'), stat = 'normal', command=lambda : LgViewer(self.master), accelerator=self.get_accelerator('lgv'), image = self.images['lgv'], compound='left')
 
         if get_menuhelp():
             menuaide = Menu(menubar, tearoff=0)

@@ -13,7 +13,7 @@ class TasksViewer:
         self.nb = 1
         
     def show(self):
-        self.zak = Toplevel()
+        self.zak = Toplevel(self.master)
         self.zak.iconbitmap(self.ico['task'])
         self.zak.title(lg('TaV'))
         self.zak.transient(self.master)

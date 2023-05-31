@@ -7,7 +7,7 @@ from tkinter.messagebox import *
 from tkinter.simpledialog import *
 import sqlite3, hashlib, inspect, os
 
-PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
+PATH_PROG = os.path.abspath(os.getcwd())
 
 from tooltip import *
 from confr import *
@@ -15,14 +15,17 @@ from confr import *
 class Password:
     askpwd = False
 
-    def __init__(self, cmd = None):
+    def __init__(self, cmd = None, tk = None):
+        if not tk:
+            self.master = Tk()
+        else:
+            self.master = Toplevel(tk)
+            self.master.transient(tk)
+
+        self.master.focus()
+
         self.cmd = cmd
-<<<<<<< Updated upstream
-        self.master = Tk()
-        self.master.iconbitmap(PATH_PROG + '/image/password.ico')
-=======
         self.master.iconbitmap(PATH_PROG + '/image/icons/password.ico')
->>>>>>> Stashed changes
         self.master.title(lg('Administrator'))
         menu = Menu(self.master)
         self.master['menu'] = menu
@@ -36,12 +39,12 @@ Voici les étapes pour la création d\'un nouveau compte :
 5. Une fois que vous aurez tout valider, en cliquant sur Valider, le nouvel utilisateur sera ajouté''')
         Label(self.master, text = lg('username')).grid(row = 0, column = 0)
         Label(self.master, text = lg('password')).grid(row = 1, column = 0)
-        self.usern = StringVar()
+        self.usern = StringVar(master = self.master)
         self.usern.set('ADMIN')
         e = Entry(self.master, textvariable = self.usern, width = 20)
         e.grid(row = 0, column = 1)
         ToolTip(e, lg('type_username'), wraplength = 270)
-        self.pswd = StringVar()
+        self.pswd = StringVar(master = self.master)
         p = Entry(self.master, textvariable = self.pswd, width = 20, show = '*')
         p.grid(row = 1, column = 1)
         p.focus()
@@ -52,7 +55,8 @@ Voici les étapes pour la création d\'un nouveau compte :
         self.master.bind_all('<Return>', self.connect)
 
         self.master.protocol('WM_DELETE_WINDOW', self.Quitter)
-        self.master.mainloop()
+        if not tk:
+            self.master.mainloop()
 
     def append(self):
         self.askpwd = True
@@ -91,14 +95,14 @@ Voici les étapes pour la création d\'un nouveau compte :
         return False
 
     def append_password(self):
-        self.zak = Toplevel()
+        self.zak = Toplevel(master = self.master)
         self.zak.transient(self.master)
         self.zak.iconbitmap(PATH_PROG + '/image/icons/password.ico')
         self.zak.title(lg('New_User'))
         
-        self.username = StringVar()
-        self.password = StringVar()
-        self.passwordc = StringVar()
+        self.username = StringVar(master = self.master)
+        self.password = StringVar(master = self.master)
+        self.passwordc = StringVar(master = self.master)
 
         Label(self.zak, text = lg('new_compte'), font = ('Consolas', 16, 'bold')).place(x = 50, y = 10)
         Label(self.zak, text = lg('username'), font = ('Consolas', 14)).place(x = 10, y = 60)

@@ -6,9 +6,71 @@ from tkinter.ttk import *
 from tkinter.messagebox import *
 from tkinter.filedialog import *
 from tkinter.simpledialog import *
-import time, os, sys
+from threading import *
+import time
+import os
+import sys
+import time
+import zroya
+import signal
 
 from confr import *
+
+class notif_destroy(Thread):
+    def __init__(self, icon, title, path, version, url):
+        Thread.__init__(self)
+        self.icon = icon
+        self.title = title
+        self.path = path
+        self.VERSION = version
+        self.url = url
+
+    def EOP(self):
+        os.kill(os.getpid(), signal.SIGINT)#signal.SIGKILL
+
+    def run(self):
+        if zroya.init(self.title, 'a', 'b', 'c', 'd') and get_notifs():
+            time.sleep(60)
+
+            t = zroya.Template(zroya.TemplateType.ImageAndText4)
+            t.setAudio(zroya.Audio.Default) # liste : Default, IM, Mail, Reminder, Call2-10, Call, Alarm, Alarm2-10)
+            t.setImage(self.icon)
+            t.setFirstLine(lg('back_tasks'))
+            t.setSecondLine(lg('doc_notif'))
+            t.addAction(lg('_Site'))
+            t.addAction(lg('Tasks'))
+            t.addAction(lg('dontshowagain'))
+            t.setExpiration(3)
+            t.setAttribution(self.title + lg('auto_notif'))
+
+            def button(nid, action_id):
+                if action_id == 0:
+                    os.system('start ' + self.url)
+                    self.EOP()
+                elif action_id == 1:
+                    os.system('taskmgr')
+                    self.EOP()
+                elif action_id == 2:
+                    write('global', 'notifs', '0')
+                    self.EOP()
+
+            def clique(nid): # nid pour notification ID
+                os.system('taskmgr')
+                self.EOP()
+
+            def onDismissHandler(nid, reason):
+                self.EOP()
+                ## Quand on ferme la norification
+
+            def onFailHandler(nid):
+                self.EOP()
+                ## Si erreur lors de la notification (genre : elle est bloquée)
+
+            zroya.show(t, on_action=button, on_fail=onFailHandler, on_dismiss = onDismissHandler, on_click = clique)
+
+        time.sleep(60)
+        self.EOP()
+
 
 class Win:
     def __win__(self):
@@ -35,16 +97,6 @@ class Win:
         return True
 
     def fermer(self, evt = None):
-<<<<<<< Updated upstream
-        self.clear_text()
-        self.stat_text(False)
-        self.update_line_numbers()
-        self.master.title(self.title + ' - ' + lg('NFO'))
-        
-    def Quitter(self, evt=None):
-        if self.saved == False or self.saved == None or get_askclose:
-            dem = askyesnocancel(self.title, lg('DYWTS'))
-=======
         if (self.saved == False or self.saved == None) and get_askclose:
             dem = askyesnocancel(self.title, lg('DYWTS'))
             if dem == True:
@@ -86,33 +138,30 @@ class Win:
         if (self.saved == False or self.saved == None) and get_askclose:
             self.dialoging = True
             dem = askyesnocancel(self.title, lg('DYWTS'), master = self.master)
->>>>>>> Stashed changes
             if dem == True:
                 self.save()
-                self.master.destroy()
-                self.close()
+                destroy()
+                self.programme_termine = True
                 # raise KeyboardInterrupt
                 # exit(code='ClosedByUserWithSave')
 
             elif dem == False:
-                self.master.destroy()
-                self.close()
+                destroy()
+                self.programme_termine = True
                 # raise KeyboardInterrupt
                 # exit(code='ClosedByUserWithoutSave')
 
         else:
-            self.master.destroy()
-            self.close()
+            destroy()
             # raise KeyboardInterrupt
             # exit(code='ClosedByUserWithAutoSave')
+
+        self.dialoging = False
         
     def Generate(self):
-<<<<<<< Updated upstream
-=======
         self.master.focus_force()
         self.text.focus()
         self.conf_win(generate = True)
->>>>>>> Stashed changes
         self.master.mainloop()
 
 if __name__ == '__main__':

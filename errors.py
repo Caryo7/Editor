@@ -21,7 +21,7 @@ cores = ['AttributeError : Printing function is not implemented !\nFirst, the pr
 class ErrorBox:
     def __init__(self, id):
         self.id = int(id)
-        self.root = Toplevel()
+        self.root = Tk()
         #self.root.iconbitmap(self.path_prog + '/image/error.ico')#
         self.root.transient()
         self.root.protocol('WM_DELETE_WINDOW', self.close)

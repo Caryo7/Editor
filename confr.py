@@ -5,7 +5,7 @@ from lg import *
 import os, inspect
 from tkinter.messagebox import *
 
-PATH_PROG = str(os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])))
+PATH_PROG = os.path.abspath(os.getcwd())
 
 p = ConfigParser()
 p.read(PATH_PROG + '/config.ini', encoding = 'UTF-8')
@@ -26,6 +26,10 @@ def get_nav():
 
 def get_sur():
     if p.get('global', 'surcharge') == '1':return True
+    else:return False
+
+def get_notifs():
+    if p.get('global', 'notifs') == '1':return True
     else:return False
 
 def get_update_test():
@@ -181,9 +185,6 @@ def get_inter_time():
 def get_autosave_path():
     return p.get('auto_save', 'path')
 
-def get_deck():
-    return p.get('global', 'lang')
-
 def get_mode():
     return get_deck()
 
@@ -192,6 +193,16 @@ def get_key():
         return int(str(p.get('crypt', 'key')).replace('\n', ''))
     except c.ParsingError:
         return 1
+
+deck_color = p.get('global', 'lang')
+old_deck = deck_color
+def get_deck():
+    return deck_color
+
+def set_deck(deck):
+    deck_color = deck
+def pop_deck():
+    deck_color = old_deck
 
 def get_min_info():
     return {'dev': p.get('minitel', 'dev'),

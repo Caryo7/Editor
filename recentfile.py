@@ -14,7 +14,7 @@ class RecentFileList:
         for i in range(len(r)):r[i] = r[i].replace('\n', '')
         for i in range(10):
             try:
-                l.append((i, r[i]))
+                l.append((i, r[len(r) - i - 1]))
             except IndexError:
                 break
         return l

@@ -11,6 +11,7 @@ from threading import Thread
 import time
 import zipfile
 import sys
+import hashlib
 
 from ext_form import *
 from ext_file import *
@@ -24,6 +25,8 @@ class Auto_Save(Thread):
     def run(self):
         self.main_self.add_task(code='AutoSave', time=time.time(), desc='MAIN_LOOP\nThis task is running to save your work at a frequency. You can set it on the configuration page (Option -> Options -> Autosave -> Frequency). You can\'t stop it.')
         while True:
+            if self.main_self.programme_termine:
+                break
             time.sleep(self.intertime)
             if not not(self.main_self.savedd) and not(self.main_self.saved):
                 self.main_self.save()
@@ -33,30 +36,25 @@ class Auto_Save(Thread):
                 f.close()
 
 
-class File(ExForm):
+class File(ExForm, ExText):
     def __file__(self):
         self.path = 'untitled.x'
         self.saved = False
         self.savedd = False
         self.ast = Auto_Save(self)
 
-<<<<<<< Updated upstream
-        self.listext = ['.txt', '.log', '.py', '.pyw', '.html', '.htm', '.php', '.ino', '.h', '.c', '.cpp', '.cc', '.bat', '.bas', '.ba', '.bf', '.f', '.f90', '.f95', '.eq', '.ini', '.inf']
-        self.listexta = ['.zip', '.PADS', '.form', '.dat', '.exe', '.7z', '.tar', '.gz', '.sqlite', '.mysql']
-        self.ttext = [(lg('Formf'), '*.form'),
-=======
         self.listext = ['.xml', '.mxml', '.txt', '.log', '.py', '.pyw', '.html', '.htm', '.php', '.ino', '.h', '.c', '.cpp', '.cc', '.bat', '.bas', '.ba', '.bf', '.f', '.f90', '.f95', '.eq', '.ini', '.inf', '.bu']
         self.listexta = ['.zip', '.PADS', '.form', '.dat', '.exe', '.7z', '.tar', '.gz', '.sqlite', '.mysql']
         self.ttext = [(lg('ttfpec'), '*.form *.bu *.txt *.log *.html *.htm *.xml *.mxml *.php *.ino *.c *.h *.cpp *.cc *.bat *.bas *.ba *.py *.pyw *.f *.f90 *.f95 *.bf *.eq *.ini *.inf'),
                       (lg('Formf'), '*.form'),
                       (lg('BU'), '*.bu'),
->>>>>>> Stashed changes
                       (lg('alf'), '*.*'),
                       (lg('TF'), '*.txt *.log *.dat'),
                       (lg('dbf'), '*.db *.sqlite *.mysql *.xml *.json'),
                       (lg('zipf'), '*.zip *.tar *.gz *.exe *.7z'),
                       (lg('exef'), '*.exe'),
                       (lg('HF'), '*.html *.htm *.php'),
+                      (lg('XMLF'), '*.xml *.mxml'),
                       (lg('AF'), '*.ino *.h *.c *.cpp'),
                       (lg('CF'), '*.cpp *.c *.h *.cc'),
                       (lg('PF'), '*.py *.pyw'),
@@ -70,6 +68,9 @@ class File(ExForm):
                       (lg('if'), '*.ini *.inf'),
                       (lg('floppyf'), '*.floppy'),
                       ]
+
+        self.meta = {}
+        self.begin_time = 0
 
     def open_recent(self, name):
         self.open(evt = None, name = name)
@@ -87,12 +88,6 @@ class File(ExForm):
         return name[i:]
 
     def askopen(self):
-<<<<<<< Updated upstream
-        return askopenfilename(title=lg('Open'), initialdir='.', filetypes=self.ttext)
-
-    def asksaveas(self):
-        return asksaveasfilename(title=lg('Save_as'), initialdir='.', filetypes=self.ttext)
-=======
         n = askopenfilename(title=lg('Open'), initialdir='.', filetypes=self.ttext, master = self.master)
         return n
 
@@ -209,7 +204,6 @@ class File(ExForm):
             self.dialoging = False
 
         zak.protocol('WM_DELETE_WINDOW', demander_fermeture)
->>>>>>> Stashed changes
         
     def open(self, evt=None, name = None, forcing = False):
         if not self.dialoging or forcing:
@@ -217,10 +211,23 @@ class File(ExForm):
             if not name:
                 name = self.askopen()
 
+            if self.savedd != False:
+                end = int(time.time())
+                temps = end - self.begin_time
+                try:
+                    self.meta['time'] = str(int(self.meta['time']) + temps)
+                    if self.ext(name) in self.listexta:
+                        ExForm.write_meta(self)
+                except KeyError:
+                    pass
+
             if name:
                 try:
+                    self.menufichier.entryconfig(lg('settings'), stat = 'disabled')
                     self.stat_text(True)
                     self.clear_text()
+                    self.meta = {}
+                    self.master.focus()
                     if self.ext(name) in self.listext:
                         ExText.open(self, name)
                         if self.ext(name) == '.bu':
@@ -230,33 +237,28 @@ class File(ExForm):
 
                     elif self.ext(name) in self.listexta:
                         ExForm.open(self, name)
-    
-                    self.saved = True
-                    self.savedd = True
-                    self.path = name
-                    self.add_f(self.path)
-                    self.dialoging = True
-                    self.autocolorwords()
-                    self.master.title(self.title + ' - ' + self.path)
-                    self.update_line_numbers(fforbid = True)
-                    self.dialoging = False
+                        self.begin_time = int(time.time())
 
                 except FileNotFoundError:
                     self.saved = False
                     self.savedd = False
                     self.path = 'untitled.x'
                     showerror(self.title, lg('FNF'))
+
             self.dialoging = False
 
     def save(self, evt=None, forcing = False):
         if not self.dialoging or forcing:
             if not self.savedd:
                 self.saveas()
+
             elif not self.saved:
                 if self.ext(self.path) not in self.listexta:
                     ExText.save(self, self.path, self.get_text())
                 else:
-                    ExForm.save(self, self.path, self.get_text())
+                    ExForm.save(self, self.path, self.get_text(), self.meta)
+                    
+
                 self.saved = True
                 self.master.title(self.title + ' - ' + self.path)
                 
@@ -267,11 +269,16 @@ class File(ExForm):
                 name = self.asksaveas()
 
             if name:
+                if '.' not in name:
+                    name += '.form'
                 self.path = name
+
                 if self.ext(self.path) not in self.listexta:
                     ExText.save(self, self.path, self.get_text())
                 else:
-                    ExForm.save(self, self.path, self.get_text())
+                    ExForm.save(self, self.path, self.get_text(), self.meta)
+                    self.menufichier.entryconfig(lg('settings'), stat = 'normal')
+
                 self.saved = True
                 self.savedd = True
                 self.add_f(self.path)
@@ -281,12 +288,8 @@ class File(ExForm):
                 self.saved = False
                 self.savedd = False
                 self.path = 'untitled.x'
-<<<<<<< Updated upstream
-            self.master.title(self.title + ' - ' + self.path)
-=======
                 self.master.title('* ' + self.title + ' - ' + self.path + ' *')
 
->>>>>>> Stashed changes
             self.dialoging = False
             
     def savecopyas(self, evt=None, forcing = False):
@@ -298,6 +301,7 @@ class File(ExForm):
                     ExText.save(self, self.path, self.get_text(), False)
                 else:
                     ExForm.save(self, self.path, self.get_text(), False)
+
             self.dialoging = False
             
     def new(self, evt=None, forcing = False, mode_clear = False):
@@ -312,6 +316,7 @@ class File(ExForm):
             self.path = 'Untitled.x'
             self.master.title(self.title + ' - ' + self.path)
             self.update_line_numbers()
+
 
 if __name__ == '__main__':
     from __init__ import *

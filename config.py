@@ -14,9 +14,6 @@ class Configurator:
     colors = {lg('black'): 'black', lg('white'): 'white', lg('blue'): 'blue', lg('green'): 'green', lg('yellow'): 'yellow', lg('red'): 'red', lg('pink'): 'pink', lg('orange'): 'orange', lg('grey'): 'grey', }
     colors_name = [v for v, _ in colors.items()]
     font_lst = ['Courier', 'Calibri', 'Arial']
-<<<<<<< Updated upstream
-    lgs = ['an', 'fr', 'al']
-=======
     #lgs = ['an', 'fr', 'al', 'es', 'it', 'ch']
     langs = {lg('anglais') : 'an',
              lg('francais') : 'fr',
@@ -25,7 +22,6 @@ class Configurator:
              lg('italien') : 'it',
              lg('chinois') : 'ch',}
 
->>>>>>> Stashed changes
     codages = ['UTF-8', 'UTF-16', 'UTF-4', 'ASCII']
     browsers = ['firefox']
     languages = ['Python', 'C++', 'C', 'Fortran', 'BASIC', 'Brain F', 'Cobol', 'Assembly']
@@ -57,12 +53,17 @@ class Configurator:
     
     def cancel(self):
         self.tk.destroy()
+        self.dialoging = False
         
     def info(self, _):
         showinfo(self.title, lg('MWSNS'))
         
     def IHM(self):
-        self.tk = Toplevel()
+        if self.dialoging:
+            return
+
+        self.dialoging = True
+        self.tk = Toplevel(self.master)
         self.tk.iconbitmap(self.ico['config'])
         self.tk.transient(self.master)
         self.tk.title(lg('Configurator'))
@@ -112,29 +113,33 @@ class Configurator:
 
         ## Cadre g pour les variables globales
 
-        self.mode_dark_ = IntVar()
+        self.mode_dark_ = IntVar(master = self.master)
         self.mode_dark = Checkbutton(g, text=lg('Dark_Mode'), variable=self.mode_dark_, onvalue=1, offvalue=0)
         self.mode_dark.grid(row=0, column=0, sticky='w')
         if read('global', 'mode_dark') == '1':self.mode_dark_.set(1)
-        self.line_number_ = IntVar()
+        self.line_number_ = IntVar(master = self.master)
         self.line_number = Checkbutton(g, text=lg('Line_Number'), variable=self.line_number_, onvalue=1, offvalue=0)
         self.line_number.grid(row=1, column=0, sticky='w')
         if read('global', 'line_number') == '1':self.line_number_.set(1)
-        self.enc_ = IntVar()
+        self.enc_ = IntVar(master = self.master)
         self.enc = Checkbutton(g, text=lg('Encrypting'), variable=self.enc_, onvalue=1, offvalue=0)
         self.enc.grid(row=2, column=0, sticky='w')
         if read('global', 'encrypt') == '1':self.enc_.set(1)
-        self.puc_ = IntVar()
+        self.puc_ = IntVar(master = self.master)
         self.puc = Checkbutton(g, text=lg('Puces'), variable=self.puc_, onvalue=1, offvalue=0)
         self.puc.grid(row=3, column=0, sticky='w')
         if read('text', 'puces') == '1':self.puc_.set(1)
-        self.update_ = IntVar()
+        self.update_ = IntVar(master = self.master)
         self.update = Checkbutton(g, text=lg('Update'), variable=self.update_, onvalue=1, offvalue=0)
         self.update.grid(row=4, column=0, sticky='w')
         if read('global', 'look_update') == '1':self.update_.set(1)
+        self.notifs_ = IntVar(master = self.master)
+        self.notifs = Checkbutton(g, text=lg('Notifs'), variable=self.notifs_, onvalue=1, offvalue=0)
+        self.notifs.grid(row=5, column=0, sticky='w')
+        if read('global', 'notifs') == '1':self.notifs_.set(1)
 
         minic = Frame(g)
-        minic.grid(row = 5, column = 0, sticky = 'e')
+        minic.grid(row = 6, column = 0, sticky = 'e')
 
         Label(minic, text = lg('Codage')).grid(row = 0, column = 0, sticky = 'w')
         self.coda = Combobox(minic, value=self.codages, width = 6)
@@ -150,92 +155,92 @@ class Configurator:
 
         ## Cadre m pour les menus
 
-        self.menufile_ = IntVar()
+        self.menufile_ = IntVar(master = self.master)
         self.menufile = Checkbutton(m, text=lg('File'), variable=self.menufile_, onvalue=1, offvalue=0)
         self.menufile.grid(row=0, column=0, sticky='w')
         if read('menu', 'file') == '1':self.menufile_.set(1)
-        self.menuedit_ = IntVar()
+        self.menuedit_ = IntVar(master = self.master)
         self.menuedit = Checkbutton(m, text=lg('Edit'), variable=self.menuedit_, onvalue=1, offvalue=0)
         self.menuedit.grid(row=1, column=0, sticky='w')
         if read('menu', 'edit') == '1':self.menuedit_.set(1)
-        self.menustyle_ = IntVar()
+        self.menustyle_ = IntVar(master = self.master)
         self.menustyle = Checkbutton(m, text=lg('Style'), variable=self.menustyle_, onvalue=1, offvalue=0)
         self.menustyle.grid(row=2, column=0, sticky='w')
         if read('menu', 'style') == '1':self.menustyle_.set(1)
-        self.menufor_ = IntVar()
+        self.menufor_ = IntVar(master = self.master)
         self.menufor = Checkbutton(m, text=lg('Format'), variable=self.menufor_, onvalue=1, offvalue=0)
         self.menufor.grid(row=3, column=0, sticky='w')
         if read('menu', 'format') == '1':self.menufor_.set(1)
-        self.menurun_ = IntVar()
+        self.menurun_ = IntVar(master = self.master)
         self.menurun = Checkbutton(m, text=lg('Run'), variable=self.menurun_, onvalue=1, offvalue=0)
         self.menurun.grid(row=4, column=0, sticky='w')
         if read('menu', 'run') == '1':self.menurun_.set(1)
-        self.menucrypt_ = IntVar()
+        self.menucrypt_ = IntVar(master = self.master)
         self.menucrypt = Checkbutton(m, text=lg('Crypt'), variable=self.menucrypt_, onvalue=1, offvalue=0)
         self.menucrypt.grid(row=5, column=0, sticky='w')
         if read('menu', 'crypt') == '1':self.menucrypt_.set(1)
-        self.menuexp_ = IntVar()
+        self.menuexp_ = IntVar(master = self.master)
         self.menuexp = Checkbutton(m, text=lg('Export'), variable=self.menuexp_, onvalue=1, offvalue=0)
         self.menuexp.grid(row=6, column=0, sticky='w')
         if read('menu', 'export') == '1':self.menuexp_.set(1)
-        self.menuarch_ = IntVar()
+        self.menuarch_ = IntVar(master = self.master)
         self.menuarch = Checkbutton(m, text=lg('Archive'), variable=self.menuarch_, onvalue=1, offvalue=0)
         self.menuarch.grid(row=7, column=0, sticky='w')
         if read('menu', 'arch') == '1':self.menuarch_.set(1)
-        self.menumin_ = IntVar()
+        self.menumin_ = IntVar(master = self.master)
         self.menumin = Checkbutton(m, text=lg('Minitel'), variable=self.menumin_, onvalue=1, offvalue=0)
         self.menumin.grid(row=8, column=0, sticky='w')
         if read('menu', 'minitel') == '1':self.menumin_.set(1)
-        self.menuupd_ = IntVar()
+        self.menuupd_ = IntVar(master = self.master)
         self.menuupd = Checkbutton(m, text=lg('Update'), variable=self.menuupd_, onvalue=1, offvalue=0)
         self.menuupd.grid(row=9, column=0, sticky='w')
         if read('menu', 'update') == '1':self.menuupd_.set(1)
-        self.menuex_ = IntVar()
+        self.menuex_ = IntVar(master = self.master)
         self.menuex = Checkbutton(m, text=lg('Extension'), variable=self.menuex_, onvalue=1, offvalue=0)
         self.menuex.grid(row=10, column=0, sticky='w')
         if read('menu', 'extension') == '1':self.menuex_.set(1)
-        self.menuopt_ = IntVar()
+        self.menuopt_ = IntVar(master = self.master)
         self.menuopt = Checkbutton(m, text=lg('Options'), variable=self.menuopt_, onvalue=1, offvalue=0, stat = 'disabled')
         self.menuopt.grid(row=11, column=0, sticky='w')
         if read('menu', 'opt') == '1':self.menuopt_.set(1)
-        self.menuhlp_ = IntVar()
+        self.menuhlp_ = IntVar(master = self.master)
         self.menuhlp = Checkbutton(m, text=lg('Help'), variable=self.menuhlp_, onvalue=1, offvalue=0)
         self.menuhlp.grid(row=12, column=0, sticky='w')
         if read('menu', 'help') == '1':self.menuhlp_.set(1)
-        self.menuvie_ = IntVar()
+        self.menuvie_ = IntVar(master = self.master)
         self.menuvie = Checkbutton(m, text=lg('View'), variable=self.menuvie_, onvalue=1, offvalue=0)
         self.menuvie.grid(row=13, column=0, sticky='w')
         if read('menu', 'view') == '1':self.menuvie_.set(1)
 
         ## Cadre s pour la sécurité
 
-        self.conn_ = IntVar()
+        self.conn_ = IntVar(master = self.master)
         self.conn = Checkbutton(s, text=lg('Connexion'), variable=self.conn_, onvalue=1, offvalue=0)
         self.conn.grid(row=0, column=0, sticky='w')
         if read('global', 'conn') == '1':self.conn_.set(1)
         Label(s, text=lg('Username')).grid(row=1, column=0, sticky='e')
         Label(s, text=lg('Password')).grid(row=2, column=0, sticky='e')
         Label(s, text=lg('Key')).grid(row=3, column=0, sticky='e')
-        self.usn_ = StringVar()
+        self.usn_ = StringVar(master = self.master)
         self.usn = Entry(s, textvariable=self.usn_, width=20)
         self.usn.grid(row=1, column=1, sticky='w')
         self.usn.delete('0', END)
         self.usn.insert(END, read('security', 'username'))
-        self.pwd_ = StringVar()
+        self.pwd_ = StringVar(master = self.master)
         self.pwd = Entry(s, textvariable=self.pwd_, show='*', width=20)
         self.pwd.grid(row=2, column=1, sticky='w')
         self.pwd.delete('0', END)
         self.pwd.insert(END, read('security', 'password'))
-        self.key_ = StringVar()
+        self.key_ = StringVar(master = self.master)
         self.key = Entry(s, textvariable=self.key_, show='*', width=5)
         self.key.grid(row=3, column=1, sticky='w')
         self.key.delete('0', END)
         self.key.insert(END, read('crypt', 'key'))
-        self.err_ = IntVar()
+        self.err_ = IntVar(master = self.master)
         self.err = Checkbutton(s, text=lg('Errors'), variable=self.err_, onvalue=1, offvalue=0)
         self.err.grid(row=4, column=0, sticky='w')
         if read('global', 'errors') == '1':self.err_.set(1)
-        self.ac_ = IntVar()
+        self.ac_ = IntVar(master = self.master)
         self.ac = Checkbutton(s, text=lg('AskC'), variable=self.ac_, onvalue=1, offvalue=0)
         self.ac.grid(row=5, column=0, sticky='w')
         if read('global', 'askclose') == '1':self.ac_.set(1)
@@ -251,7 +256,7 @@ class Configurator:
         Label(c, text='4800').grid(row=1, column=1, sticky='w')
         Label(c, text='7').grid(row=2, column=1, sticky='w')
         Label(c, text='2').grid(row=3, column=1, sticky='w')
-        self.min_al_ = IntVar()
+        self.min_al_ = IntVar(master = self.master)
         self.min_al = Checkbutton(c, text=lg('alertemin'), variable=self.min_al_, onvalue=1, offvalue=0)
         self.min_al.grid(row=4, column=1, sticky='w')
         if read('minitel', 'alerte') == '1':self.min_al_.set(1)
@@ -358,7 +363,7 @@ class Configurator:
         ToolTip(self.spn, text = lg('time_autosave'))
         mic = Frame(k)
         mic.grid(row=1, column=1)
-        self.path_ = StringVar()
+        self.path_ = StringVar(master = self.master)
         self.path_ihm = Entry(mic, textvariable=self.path_, width=18)
         self.path_ihm.grid(row=0, column=0, sticky='w')
         self.path_ihm.delete('0', END)
@@ -367,11 +372,11 @@ class Configurator:
 
         ## Cadre v pour l'affichage des barres
 
-        self.vbt_ = IntVar()
+        self.vbt_ = IntVar(master = self.master)
         self.vbt = Checkbutton(v, text=lg('buttonbar'), variable=self.vbt_, onvalue=1, offvalue=0)
         self.vbt.grid(row=0, column=0, sticky='w')
         if read('view', 'bar_buttons') == '1':self.vbt_.set(1)
-        self.vinf_ = IntVar()
+        self.vinf_ = IntVar(master = self.master)
         self.vinf = Checkbutton(v, text=lg('infobar'), variable=self.vinf_, onvalue=1, offvalue=0)
         self.vinf.grid(row=1, column=0, sticky='w')
         if read('view', 'bar_info') == '1':self.vinf_.set(1)
@@ -397,7 +402,7 @@ class Configurator:
         self.tree.place(x = 0, y = 0)
         self.tree.config(yscrollcommand = scroll.set)
         self.tree.heading(1, text = lg('event'))
-        self.tree.heading(2, text = lg('key'))
+        self.tree.heading(2, text = lg('key_t'))
         self.tree.heading(3, text = lg('action'))
         self.tree.column(1, width = 150)
         self.tree.column(2, width = 150)
@@ -525,11 +530,12 @@ class Configurator:
 
     def change_linkkey(self, evt):
         self.selected = self.tree.item(self.tree.selection())['values']
-        self.root = Tk()
+        self.root = Toplevel(self.tk)
+        self.root.transient(self.tk)
         self.root.title(lg('configurator'))
         Label(self.root, text = self.selected[2], font = ('Consolas', 12), wraplength = 175).place(x = 10, y = 10)
         Label(self.root, text = lg('newrac'), font = ('Consolas', 13, 'bold')).place(x = 10, y = 50)
-        e = StringVar()
+        e = StringVar(master = self.master)
         self.e = Entry(self.root, textvariable = e, font = ('Consolas', 13, 'italic'), width = 17)
         self.e.place(x = 10, y = 90)
         self.e.insert('end', self.selected[1])
@@ -700,7 +706,7 @@ class Configurator:
     def validate_choice(self):
         p = Progress(self.root, title = lg('Configurator'), maximum = 40, decimals = 0, oncolor = 'blue')
         self.tree.unbind('<Double-Button-1>')
-        log = open('log.txt', 'a')
+        log = open(self.path_prog + '/log.txt', 'a')
         try:
             p.step('mode_dark')
             write('global', 'mode_dark', self.mode_dark_.get())
@@ -728,6 +734,12 @@ class Configurator:
         try:
             p.step('language')
             write('global', 'lang', self.lang.get())
+        except Exception as e:
+            log.write(str(e) + '\n')
+
+        try:
+            p.step('notifications')
+            write('global', 'notifs', self.notifs_.get())
         except Exception as e:
             log.write(str(e) + '\n')
 
@@ -959,4 +971,5 @@ class Configurator:
 
 
 if __name__ == '__main__':
-    from __init__ import*
+    from __init__ import *
+

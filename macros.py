@@ -46,6 +46,7 @@ class Macro:
 
             # Export
             "export_word":[self.export_word],
+            "export_pdf":[self.export_pdf],
 
             # Extensions
 

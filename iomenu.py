@@ -5,52 +5,7 @@ from tree import *
 
 class IOMenu:
     def get_fnct(self, name):
-        if name == 'copy':
-            return self.copy
-        elif name == 'cut':
-            return self.cut
-        elif name == 'past':
-            return self.past
-        elif name == 'cstyle':
-            return self.add_tag_here
-        elif name == 'news':
-            return self.ask_new_tag
-        elif name == 'new':
-            return self.new
-        elif name == 'open':
-            return self.open
-        elif name == 'exit':
-            return self.Quitter
-        elif name == 'print':
-            return self.print_window
-        elif name == 'save':
-            return self.save
-        elif name == 'saveas':
-            return self.saveas
-        elif name == 'undo':
-            return self.undo
-        elif name == 'redo':
-            return self.redo
-        elif name == 'search':
-            return self.search
-        elif name == 'word':
-            return self.export_word
-        elif name == 'pdf':
-            return self.export_pdf
-        elif name == 'about':
-            return self.About
-        elif name == 'struct':
-            return Tkin
-        elif name == 'close':
-            return self.fermer
-        elif name == 'savecopyas':
-            return self.savecopyas
-        elif name == 'replace':
-            return self.replace
-        elif name == 'gotol':
-            return self.gotol
-        elif name == 'tasks':
-            return self.show
+        return self.actions[name][0]
 
     def __load_menus__(self):
         f = open(self.path_prog + '/menus.m', 'r')

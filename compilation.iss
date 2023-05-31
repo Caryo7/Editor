@@ -2,17 +2,11 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Editor"
-<<<<<<< Updated upstream
-#define MyAppVersion "0.31"
-#define MyAppPublisher "Benc Corp"
-#define MyAppURL "https://bgtarino.wixsite.com/Editor"
-=======
 #define MyAppVersion "35" ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
 #define Directory "G:\USB_TRANSFER_SAUVEGARDE\setup"
 
 #define MyAppPublisher "Tarino"
 #define MyAppURL "https://bgtarino.wixsite.com/editor"
->>>>>>> Stashed changes
 #define MyAppExeName "__init__.exe"
 #define MyAppAssocName MyAppName + " Documents"
 #define MyAppAssocExt ".form"
@@ -30,23 +24,13 @@ AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
-DisableDirPage=yes
 ChangesAssociations=yes
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=G:\Exe\Edit\license.txt
+LicenseFile=G:\Exe\Edit\LICENSE
 ; InfoAfterFile=G:\Exe\Edit\after.log
 ; InfoBeforeFile=
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
-<<<<<<< Updated upstream
-;PrivilegesRequired=lowest
-OutputDir=N:\setup
-OutputBaseFilename=setup_31_win
-SetupIconFile=G:\Exe\Edit\image\ico.ico
-Compression=lzma
-SolidCompression=yes
-WizardStyle=modern
-=======
 ; PrivilegesRequired=lowest
 OutputDir={#Directory}
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -69,7 +53,6 @@ DisableFinishedPage=yes
 ;DisableDirPage=yes
 DisableDirPage=no
 
->>>>>>> Stashed changes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -120,9 +103,4 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-<<<<<<< Updated upstream
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-
-=======
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait skipifsilent
->>>>>>> Stashed changes

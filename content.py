@@ -56,6 +56,7 @@ class Content:
                          insertwidth = read('text', 'insertwidth'),
                          selectbackground = read('text', 'selectbackground'),
                          selectborderwidth = read('text', 'selectborderwidth'),)
+
         self.text.focus()
         self.text.bind('<KeyPress>', self.unsave)
         self.text.bind('<KeyRelease>', self.infobar_changement)
@@ -124,8 +125,9 @@ class Content:
         self.height_boutons = self.old_height_boutons
         for i in range(row):
             self.height_boutons += self.size_images[1] + 5 + 11
+
         if typ == Button:
-            self.lst_bts.append(typ(self.frame_boutons, image = self.images[text], command = command))
+            self.lst_bts.append(typ(self.frame_boutons, image = self.images[text], command = command, relief = 'flat', borderwidth = 0, highlightthickness = 0))
             self.lst_bts[-1].grid(row = row, column = col, padx = 10, pady = 5)
             ToolTip(self.lst_bts[-1], text = lg(text))
 
