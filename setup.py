@@ -7,7 +7,7 @@ import os.path, sys, os, datetime
 modules = ['inspect', 'glob',
            'hashlib', 
            'docx', 'reportlab',
-           'serial',
+           'serial', 'PyTaskbar',
            ]
 
 def includefiles():

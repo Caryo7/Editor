@@ -301,20 +301,20 @@ class Export(AskMargins):
         zak.transient(self.master)
         zak.resizable(False, False)
         zak.title(lg('export_pdf'))
-        pb = ProgressBar(zak, orient='horizontal', mode='determinate', length = 300)
+        pb = Progressbar(zak, orient='horizontal', mode='determinate', length = 300)
         pb.place(x = 10, y = 50)
         zak.geometry("320x130")
         zak.update()
 
         nmax = len(self.get_text())
         def step():
-            pb.move((1 / nmax) * 100)
+            pb['value'] += (1 / nmax) * 100
             zak.update()
 
         def reset(maxi):
             global nmax
             nmax = maxi
-            pb.set(0)
+            pb['value'] = 0
             zak.update()
 
         enc = pdfencrypt.StandardEncryption(userPassword = self.pdf_password,

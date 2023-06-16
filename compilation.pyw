@@ -121,8 +121,8 @@ def start(cmd, wait = False):
     #return th
 
 def lancer():
-    start(erease, True)
     start(folder, True)
+    start(erease, True)
     start(_zip)
     os.chdir('G:/Exe/Edit')
     start(compil, True)

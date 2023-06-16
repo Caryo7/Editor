@@ -6,6 +6,7 @@ from tkinter.ttk import *
 from confr import *
 import time
 from threading import Thread
+import PyTaskbar
 
 class Compute(Thread):
     def __init__(self, lencnt, trace):
@@ -120,23 +121,24 @@ class Progress:
             self.zak.destroy()
         return
 
-class ProgressBar(Progressbar):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+"""class ProgressTask:
+    def __init__(self):
+        taskbar_progress = PyTaskbar.Progress(root.winfo_id()) # Instantiate a new progress object
+    taskbar_progress.init() # Initialize the progress bar
+    taskbar_progress.setState("normal") # Set the progress bar state to normal (Available: loading, normal, warning, error)
 
-    def set(self, value):
-        self.stop()
-        self.start()
-        
+    def step(self):
+        taskbar_progress.setProgress(i)"""
 
 if __name__ == '__main__':
     root = Tk()
     p = ProgressBar(root, orient = 'vertical', mode = 'indeterminate')#master = None, title = 'test1', maximum = 105, decimals = 2, oncolor = 'red')
     p.place(x = 0, y = 0)
-    p.start()
+    #p.start()
     for i in range(105):
         #p.step('blablabla', 'ablabla')
         #p.step()
+        p.step()
         time.sleep(0.1)
         root.update()
     #p.Generate()
