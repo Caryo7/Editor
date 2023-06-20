@@ -63,7 +63,6 @@ class Content:
         self.text.bind_all('<Button>', self.uln)
         self.text.bind_all('<MouseWheel>', self.uln)
 
-
         self.scroll.config(command=self.text.yview)
         self.scroll.bind('<ButtonRelease-1>', self.uln)
 
@@ -85,6 +84,8 @@ class Content:
         self.oldheight = self.master.winfo_height()
         self.oldwidth = self.master.winfo_width()
         self.master.bind('<Configure>', self.test_resize)
+
+        calltip = CallTip(self.text)
 
         self.conf_win(generate = True)
         self.__ac__()
@@ -276,7 +277,7 @@ class Content:
         r = []
         m = ''
         for i in value:
-            if i in [' ', '\n', '=', '(', ')', '[', ']', '{', '}']:
+            if i in [' ', ',', '\n', '=', '(', ')', '[', ']', '{', '}', ':']:
                 r.append(m)
                 m = ''
             else:
@@ -321,3 +322,6 @@ class Content:
 
 if __name__ == '__main__':
     from __init__ import *
+
+
+

@@ -6,8 +6,8 @@ import time
 
 class Python:
     modes = {'keyword':('orange', None), 'dem':('purple', None)}
-    colors = {'keyword':['await', 'async', 'nonlocal', 'and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'exec', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield'],
-              'dem':['open', 'isinstance', 'range', 'len', 'str', 'int', 'bool', 'float', 'char', 'method', 'type', 'print', 'input', 'eval', 'list', 'set', 'bin', 'bytes', 'exit', 'quit'],
+    colors = {'keyword':['await', 'async', 'nonlocal', 'and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'exec', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield', 'None'],
+              'dem':['open', 'isinstance', 'range', 'len', 'str', 'int', 'bool', 'float', 'char', 'method', 'type', 'print', 'input', 'eval', 'list', 'set', 'bin', 'bytes', 'exit', 'quit', 'Exception'],
               }
 
 class Cpp:
@@ -68,3 +68,5 @@ class AutoColor(Colors):
 
 if __name__ == '__main__':
     from __init__ import *
+
+

@@ -6,7 +6,7 @@ class ToolTip(object):
     id = None
     tw = None
 
-    def __init__(self, widget, text='widget info', color = '#FFFFEA', waittime = 500, wraplength = 270, relief = 'solid', borderwidth = 1, justify = 'left'):
+    def __init__(self, widget, text='', color = '#FFFFEA', waittime = 500, wraplength = 270, relief = 'solid', borderwidth = 1, justify = 'left'):
         self.relief = relief
         self.borderwidth = borderwidth
         self.justify = justify
@@ -53,11 +53,12 @@ class ToolTip(object):
         if tw:
             tw.destroy()
 
-"""class CallTip:
+class CallTip:
     id = None
+    endworld = (' ', ',', '\n', '\r', '\t', '/', '!', "'", '"')
     tw = None
 
-    def __init__(self, widget, text = 'widget prefixe auto completition', color = 'white', waittime = 500, wraplength = 180, relief = 'solid', borderwidth = 1, justify = 'left'):
+    def __init__(self, widget, text = 'widget prefixe auto completition', color = '#FFFFEA', waittime = 500, wraplength = 180, relief = 'solid', borderwidth = 1, justify = 'left'):
         self.relief = relief
         self.borderwidth = borderwidth
         self.justify = justify
@@ -66,7 +67,16 @@ class ToolTip(object):
         self.text = text
         self.waittime = waittime
         self.wraplength = wraplength
-        self.widget.bind("<Leave>", self.leave)
+        self.space = True
+        self.widget.bind('<KeyRelease>', self.check_key)
+        self.mots = []
+        self.mot_en_cours = ''
+
+    def check_key(self, evt):
+        if evt.char == ' ':
+            self.leave()
+        else:
+            self.showtip()
 
     def leave(self, event=None):
         self.unschedule()
@@ -79,25 +89,74 @@ class ToolTip(object):
             self.widget.after_cancel(id)
 
     def showtip(self, event=None):
-        x = y = 0
-        x, y, cx, cy = self.widget.bbox("insert")
-        x += self.widget.winfo_rootx() + 25
-        y += self.widget.winfo_rooty() + 20
-        self.tw = Toplevel(self.widget)
-        self.tw.wm_overrideredirect(True)
-        self.tw.wm_geometry("+%d+%d" % (x, y))
-        label = Label(self.tw, text=self.text, justify=self.justify, background=self.color, relief=self.relief, borderwidth=self.borderwidth, wraplength = self.wraplength)
-        label.pack(ipadx=1)
+        try:
+            self.lst.delete('0', 'end')
+        except Exception:
+            x = y = 0
+            x, y, cx, cy = self.widget.bbox("insert")
+            x += self.widget.winfo_rootx() + 25
+            y += self.widget.winfo_rooty() + 20
+            self.tw = Toplevel(self.widget)
+            self.tw.wm_attributes('-topmost', 1)
+            self.tw.wm_overrideredirect(True)
+            self.tw.wm_geometry("+%d+%d" % (x, y))
+            scroll = Scrollbar(self.tw)
+            scroll.pack(side = RIGHT, fill = BOTH)
+            self.lst = Listbox(self.tw, background = self.color, relief = self.relief, borderwidth = self.borderwidth, width=20, yscrollcommand = scroll.set)
+            scroll.config(command = self.lst.yview)
+            self.lst.pack(ipadx = 1)
+            self.lst.bind('<Return>', self.complete)
+            self.lst.bind('<Double-Button-1>', self.complete)
+
+        t = list(self.widget.get('0.0', 'end'))
+        mot = self.widget.get('insert -1c wordstart', 'insert wordend')
+
+        self.mots = self.widget.get('0.0', 'end').lower().split(' ')
+        n = 0
+        while True:
+            try:
+                m = self.mots[n]
+                if self.mots.count(m) > 1:
+                    self.mots.pop(n)
+                else:
+                    n += 1
+            except IndexError:
+                break
+
+        n = 0
+        mot = mot.replace('\n', '')
+        self.mots.sort()
+        for word in self.mots:
+            word = word.replace('\n', '')
+            if mot in word:
+                self.lst.insert('end', word)
+                n += 1
+
+        if n == 1:
+            self.leave()
+
+        self.mot_en_cours = mot
+
+    def complete(self, evt):
+        text = self.lst.get(self.lst.curselection())
+        ln = len(self.mot_en_cours)
+        for i in range(len(text)):
+            if i < ln:
+                pass
+            else:
+                self.widget.insert('insert', text[i])
+
+        self.leave()
 
     def hidetip(self):
         tw = self.tw
         self.tw= None
         if tw:
-            tw.destroy()"""
+            tw.destroy()
 
 if __name__ == '__main__':
     root = Tk()
-    btn1 = Button(root, text="button 1")
+    btn1 = Button(root, text="button 1", width = 20)
     btn1.pack(padx=10, pady=5)
     button1_ttp = ToolTip(btn1, \
     'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, '
@@ -105,12 +164,8 @@ if __name__ == '__main__':
     'quia dolor sit amet, consectetur, adipisci velit. Neque porro quisquam '
     'est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.', color = '#FFFFEA')
 
-    btn2 = Button(root, text="button 2")
-    btn2.pack(padx=10, pady=5)
-    button2_ttp = ToolTip(btn2, \
-    "First thing's first, I'm the realest. Drop this and let the whole world "
-    "feel it. And I'm still in the Murda Bizness. I could hold you down, like "
-    "I'm givin' lessons in  physics. You should want a bad Vic like this.", color = '#FFFFEA')
-    #CallTip(btn2)
+    tt = Text(root, width = 20, height = 3)
+    tt.pack(padx = 10, pady = 5)
+    CallTip(tt)
     root.mainloop()
 

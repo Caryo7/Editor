@@ -19,6 +19,18 @@ class help_:
 
         self.dialoging = True
         zak = Toplevel(self.master)
+        zak.overrideredirect(1)
+        zak.update()
+        zak.wm_attributes('-topmost', 1)
+        self.moving = IntVar(master = zak)
+        self.moving.set(0)
+        zak.bind('<ButtonPress-1>', lambda _: self.moving.set(1))
+        zak.bind('<ButtonRelease-1>', lambda _: self.moving.set(0))
+        def move(self, evt):
+            if self.moving.get():
+                zak.geometry('+' + str(evt.x_root) + '+' + str(evt.y_root))
+
+        zak.bind('<Motion>', lambda evt: move(self, evt))
         zak.transient(self.master)
         zak.iconbitmap(self.ico['help'])
         zak.resizable(False, False)

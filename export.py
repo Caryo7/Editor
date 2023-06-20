@@ -69,7 +69,7 @@ class AskMargins:
             c1.current(1)
             c2.current(0)
 
-            ch = IntVar()
+            ch = IntVar(master = z)
             Checkbutton(z, text = lg('nb_tt_pages'), onvalue = 1, offvalue = 0, variable = ch, stat = 'disabled').place(x = 10, y = 130)
             def valide(self):
                 if type_ == 'tete':
@@ -301,10 +301,13 @@ class Export(AskMargins):
         zak.transient(self.master)
         zak.resizable(False, False)
         zak.title(lg('export_pdf'))
+        Label(zak, text = 'Cette opération peut prendre quelques minutes...').place(x = 10, y = 25)
         pb = Progressbar(zak, orient='horizontal', mode='determinate', length = 300)
         pb.place(x = 10, y = 50)
         zak.geometry("320x130")
         zak.update()
+        traitement = Label(zak, text = 'Traitement du texte et des caractères...')
+        traitement.place(x = 10, y = 75, width = 300)
 
         nmax = len(self.get_text())
         def step():
@@ -314,6 +317,7 @@ class Export(AskMargins):
         def reset(maxi):
             global nmax
             nmax = maxi
+            traitement.config(text = 'Impression du contenu...')
             pb['value'] = 0
             zak.update()
 
@@ -322,8 +326,8 @@ class Export(AskMargins):
                                             canPrint = self.pdf_can_print.get(),
                                             canModify = self.pdf_can_modify.get(),
                                             canCopy = self.pdf_can_copy.get(),
-                                            canAnnotate = self.pdf_can_annotate.get(),)
-                                            #strength = self.pdf_strength)
+                                            canAnnotate = self.pdf_can_annotate.get(),
+                                            strength = self.pdf_strength)
 
         if self.orient_paper.get() == 'P':
             height, width = A4

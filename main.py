@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 ################## Fichiers à changer : v?? compilation.iss ####################
-__version__ = VERSION = '35' ###
-GUI_VERSION = '35' ###
+__version__ = VERSION = '35.3' ###
+GUI_VERSION = '36' ###
 FILE_VERSION = '1.8' ##
 FORM_VERSION = '2.2' ##
 

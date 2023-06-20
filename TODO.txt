@@ -3,7 +3,3 @@ Idée : changer le nom des fichier config.ini et keys.k en (par exemple) : confi
 Lors de l'installation, il faudrait, si c'est le premier démarrage, ouvrir le précédent config.ini si il existe,
 ainsi que config.preini. Ensuite, le programme comparerait les deux fichiers et rajouterai les lignes en plus de 
 config.preini dans config.ini. De même pour keys.k et keys.prek
-
-Voir et résoudre le problème d'un affichage python :
-""" Error : python_exe """
-Pourquoi et quand ça le fait (entre les importation globales de __keyb__ et __menu__ (apparait après GO sur breakpoint de __menu__)

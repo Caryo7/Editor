@@ -35,7 +35,6 @@ class API:
     def open_internet(self, url):
         os.system(self.cmd_nav + ' ' + url)
 
-    @classmethod
     def info_sys(self):
         pc = wmi.WMI()
         sm = pc.Win32_ComputerSystem()[0]
@@ -84,7 +83,5 @@ class API:
                  '\nNuméro de Série : ' + str(os_info.SerialNumber) + ' ')
                  #'\n : ' + str() + ' ' + 
 
-#API.info_sys()
-
-#if __name__ == '__main__':
-    #from __init__ import *
+if __name__ == '__main__':
+    API.info_sys(None)
