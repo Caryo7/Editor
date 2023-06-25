@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 ################## Fichiers à changer : v?? compilation.iss ####################
-__version__ = VERSION = '35.3' ###
-GUI_VERSION = '36' ###
-FILE_VERSION = '1.8' ##
+__version__ = VERSION = '36.1' ###
+GUI_VERSION = '37' ###
+FILE_VERSION = '2.0' ##
 FORM_VERSION = '2.2' ##
 
 # Partie 1 - Importation de tous les fichiers
@@ -72,6 +72,7 @@ Liste des fichiers demandant PATH_PROG :
  - ext_form.py
  - runner.py
  - startup.py (icon)
+ - progress.py (icon)
 '''
 
 wprint('Importing files : ')
@@ -99,6 +100,8 @@ wprint('minitel')
 from minitel import *
 wprint('config')
 from config import *
+wprint('OCR')
+from ocr import *
 wprint('export')
 from export import *
 wprint('update')
@@ -286,6 +289,8 @@ class Main(Win,
         self.__macro__()
         wprint('Loading python runner')
         self.__runner__()
+        wprint('Configuring OCR system protocol')
+        self.ocr_protocol = OCR(self.master, self.text)
 
         if self.configurating:
             wprint('Restart configurate window')

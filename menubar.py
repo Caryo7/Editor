@@ -28,6 +28,7 @@ class MenuBar:
             self.menufichier.add_command(label=lg('New'), accelerator=self.get_accelerator('new'), stat='normal', command=self.new, image = self.images['new'], compound='left')
             self.menufichier.add_separator()
             self.menufichier.add_command(label=lg('Open'), accelerator=self.get_accelerator('open'), stat='normal', command=self.open, image = self.images['open'], compound='left')
+            self.menufichier.add_command(label=lg('importer'), accelerator=self.get_accelerator('import'), stat='normal', command=self.importer, image = self.images['open'], compound='left')
             self.menurfl = Menu(self.menufichier, tearoff=0)
             self.menufichier.add_cascade(label=lg('RecentFile'), menu=self.menurfl)
             for k, n in self.get_rfl():
@@ -42,7 +43,7 @@ class MenuBar:
             self.menufichier.add_separator()
             self.menufichier.add_command(label=lg('settings'), accelerator=self.get_accelerator('settings'), stat = 'disabled', command = self.ask_settings, image = self.images['settings'], compound = 'left')
             self.menufichier.add_separator()
-            self.menufichier.add_command(label=lg('Print'), accelerator=self.get_accelerator('print'), stat='normal', command=self.print_window, image = self.images['print'], compound='left')
+            self.menufichier.add_command(label=lg('Print'), accelerator=self.get_accelerator('print'), stat='normal' if sys.platform == 'win32' else 'disabled', command=self.print_window, image = self.images['print'], compound='left')
             self.menufichier.add_separator()
             self.menufichier.add_command(label=lg('close'), accelerator=self.get_accelerator('close'), stat = 'normal', command=self.fermer, image = self.images['close'], compound='left')
             self.menufichier.add_command(label=lg('Exit'), accelerator=self.get_accelerator('quit'), stat='normal', command=self.Quitter, image = self.images['exit'], compound='left')

@@ -17,6 +17,7 @@ cstyle = <Control-C>
 comment = <Control-d>
 uncomment = <Control-D>
 run_python = 
+import = <Control-i>
 python = 
 solve = 
 check = 

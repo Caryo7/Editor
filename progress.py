@@ -8,6 +8,8 @@ import time
 from threading import Thread
 import PyTaskbar
 
+PATH_PROG = os.path.abspath(os.getcwd())
+
 class Compute(Thread):
     def __init__(self, lencnt, trace):
         Thread.__init__(self)
@@ -41,6 +43,83 @@ class Compute(Thread):
                 self.elapsed = 0
 
 
+class Waiter(Thread):
+    pos = 0
+    up = True
+    on = True
+    add = 1
+
+    def __init__(self, master = None, title = '', text = '', autostart = True, double = False):
+        Thread.__init__(self)
+        if master:
+            self.zak = Toplevel(master)
+            self.zak.transient(master)
+        else:
+            self.zak = Tk()
+
+        self.zak.title(title)
+        self.zak.resizable(False, False)
+        self.zak.iconbitmap(PATH_PROG + '/image/icons/progress.ico')
+        self.zak.protocol('WM_DELETE_WINDOW', lambda : None)
+        if double:
+            self.zak.geometry('300x110')
+        else:
+            self.zak.geometry('300x100')
+
+        Label(self.zak, text = text).place(x = 10, y = 10)
+        self.pb = ttk.Progressbar(self.zak, orient = 'horizontal', mode = 'indeterminate', length = 280)
+        self.pb.place(x = 10, y = 40)
+        if double:
+            self.prb = ttk.Progressbar(self.zak, orient = 'horizontal', mode = 'determinate', length = 280)
+            self.prb.place(x = 10, y = 70)
+        self.zak.update()
+
+        if autostart:
+            self.start()
+
+    def run(self):
+        while self.on:
+            try:
+                if self.up:
+                    self.pos += 1
+                else:
+                    self.pos -= 1
+    
+                if self.pos <= 0:
+                    self.up = True
+                elif self.pos >= 100:
+                    self.up = False
+    
+                self.pb['value'] = self.pos
+                self.zak.update()
+                time.sleep(0.05)
+            except:
+                break
+
+    def stop(self):
+        self.on = False
+        self.zak.destroy()
+
+    def set(self, maxi):
+        self.add = 100 / maxi
+
+    def step(self):
+        try:
+            self.prb['value'] += self.add
+            self.zak.update()
+        except:
+            pass
+
+if __name__ == '__main__':
+    w = Waiter()
+    time.sleep(2)
+    w.set(100)
+    for i in range(100):
+        w.step()
+        time.sleep(0.5)
+    w.stop()
+
+
 class Progress:
     oldpos = 0
 
@@ -52,7 +131,7 @@ class Progress:
             self.zak = Tk()
 
         self.zak.title(title)
-        self.zak.iconbitmap('image/progress.ico')
+        self.zak.iconbitmap(PATH_PROG + '/image/icons/progress.ico')
         self.zak.protocol('WM_DELETE_WINDOW', self.Quitter)
         self.lcounter = maximum
         self.decs = decimals
@@ -121,6 +200,7 @@ class Progress:
             self.zak.destroy()
         return
 
+
 """class ProgressTask:
     def __init__(self):
         taskbar_progress = PyTaskbar.Progress(root.winfo_id()) # Instantiate a new progress object
@@ -131,8 +211,8 @@ class Progress:
         taskbar_progress.setProgress(i)"""
 
 if __name__ == '__main__':
-    root = Tk()
-    p = ProgressBar(root, orient = 'vertical', mode = 'indeterminate')#master = None, title = 'test1', maximum = 105, decimals = 2, oncolor = 'red')
+    """root = Tk()
+    p = Progressbar(root, orient = 'vertical', mode = 'indeterminate')#master = None, title = 'test1', maximum = 105, decimals = 2, oncolor = 'red')
     p.place(x = 0, y = 0)
     #p.start()
     for i in range(105):
@@ -142,5 +222,5 @@ if __name__ == '__main__':
         time.sleep(0.1)
         root.update()
     #p.Generate()
-    root.mainloop()
+    root.mainloop()"""
 

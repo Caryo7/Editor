@@ -8,7 +8,7 @@
 #define MyAppPublisher "Tarino"
 #define MyAppURL "https://bgtarino.wixsite.com/editor"
 #define MyAppExeName "__init__.exe"
-#define MyAppAssocName MyAppName + " Documents"
+#define MyAppAssocName MyAppName + " Document"
 #define MyAppAssocExt ".form"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 

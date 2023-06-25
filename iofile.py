@@ -67,6 +67,7 @@ class File(ExForm, ExText):
                       (lg('sysf'), '*.PADS'),
                       (lg('if'), '*.ini *.inf'),
                       (lg('floppyf'), '*.floppy'),
+                      (lg('pdff'), '*.pdf *.pdff'),
                       ]
 
         self.meta = {}
@@ -94,6 +95,12 @@ class File(ExForm, ExText):
     def asksaveas(self):
         n = asksaveasfilename(title=lg('Save_as'), initialdir='.', filetypes=self.ttext, master = self.master)
         return n
+
+    def importer(self, file = None):
+        if not file:
+            file = askopenfilename(title = lg('importer'), initialdir = '.', filetypes = [(lg('pdff'), '*.pdf *.pdff')], master = self.master)
+
+        self.ocr_protocol.begin(file)
 
     def ask_settings(self):
         if self.dialoging:

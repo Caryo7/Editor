@@ -17,7 +17,8 @@ PATH_PROG = os.path.abspath(os.getcwd())
 
 class LgViewer:
     def __init__(self, master = None):
-        Password(self.create, tk = master)
+        #Password(self.create, tk = master)
+        self.create()
 
     def create(self):
         self.master = Tk()
@@ -80,7 +81,7 @@ class LgViewer:
         assert type in ('Change', 'Ajouter')
         self.mode = type
         self.root = Toplevel()
-        self.root.iconbitmap(PATH_PROG + '/image/lg.ico')
+        self.root.iconbitmap(PATH_PROG + '/image/icons/lg.ico')
         self.root.transient(master)
         self.root.title(type)
         self.root.resizable(False, False)
@@ -216,6 +217,7 @@ class LgViewer:
             caller = []
             for cmds in z.read(name).decode(get_encode()).replace('\r', '').split('\n'):
                 if cmds != '' and cmds.split(' = ')[0][0] != '[':
+                    print(name, ':', cmds)
                     value[-1].append(cmds.split(' = ')[1])
                     caller.append(cmds.split(' = ')[0].lower())
 

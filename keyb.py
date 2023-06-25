@@ -66,6 +66,7 @@ class KeyB:
                         'word':        [self.export_word, '', 'self.export_word()'],
                         'pdf':         [self.export_pdf, '', 'self.export_pdf()'],
                         'configs':     [self.config_tags, '', 'self.config_tags()'],
+                        'import':      [self.importer, '', 'self.importer()'],
 
                         '':            ['', '', ''],
                         }

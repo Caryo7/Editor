@@ -301,12 +301,12 @@ class Export(AskMargins):
         zak.transient(self.master)
         zak.resizable(False, False)
         zak.title(lg('export_pdf'))
-        Label(zak, text = 'Cette opération peut prendre quelques minutes...').place(x = 10, y = 25)
+        Label(zak, text = lg('can_take_time')).place(x = 10, y = 25)
         pb = Progressbar(zak, orient='horizontal', mode='determinate', length = 300)
         pb.place(x = 10, y = 50)
         zak.geometry("320x130")
         zak.update()
-        traitement = Label(zak, text = 'Traitement du texte et des caractères...')
+        traitement = Label(zak, text = lg('traits_chars'))
         traitement.place(x = 10, y = 75, width = 300)
 
         nmax = len(self.get_text())
@@ -317,7 +317,7 @@ class Export(AskMargins):
         def reset(maxi):
             global nmax
             nmax = maxi
-            traitement.config(text = 'Impression du contenu...')
+            traitement.config(text = lg('print_content'))
             pb['value'] = 0
             zak.update()
 

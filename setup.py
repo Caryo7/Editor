@@ -4,8 +4,8 @@ from main import *
 KillStartup()
 import os.path, sys, os, datetime
 
-modules = ['inspect', 'glob',
-           'hashlib', 
+modules = ['inspect', 'glob', 'PyPDF2',
+           'hashlib', 'keras_ocr',
            'docx', 'reportlab',
            'serial', 'PyTaskbar',
            ]
