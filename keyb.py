@@ -55,7 +55,7 @@ class KeyB:
                         'about' :      [self.About, '', 'self.About()'], # # -> A propos
                         'doc' :        [self.documentation, '', 'self.documentation()'], # # -> Documentation
                         'todo' :       [self.ToDo, '', 'self.ToDo()'], # # -> A Faire
-                        'lines' :      [lambda : act(self.master), '', 'act(self.master)'], # # -> Nombre de lignes
+                        'lines' :      [lambda : act(self), '', 'act(self.master)'], # # -> Nombre de lignes
                         'struct' :     [Tkin, '', 'Tkin()'], # # -> Structure du programme
                         'prog' :       [Code, '', 'Code()'], # # -> Programme
                         'clear_recent':[self.clear_recent, '', 'clear_recent()'], # # -> Effacement liste fichiers récents
@@ -67,6 +67,10 @@ class KeyB:
                         'pdf':         [self.export_pdf, '', 'self.export_pdf()'],
                         'configs':     [self.config_tags, '', 'self.config_tags()'],
                         'import':      [self.importer, '', 'self.importer()'],
+                        'meta_info':   [self.show_info, '', 'self.show_info()'],
+                        'lst_vars':    [lambda : self.start_vars(mode = 'gestion'), '', 'self.start_vars()'],
+                        'add_var':     [self.append_var, '', 'self.append_var()'],
+                        'place_var':   [self.place_variable, '', 'self.place_variable()'],
 
                         '':            ['', '', ''],
                         }

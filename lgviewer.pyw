@@ -99,6 +99,8 @@ class LgViewer:
             self.dic[name]['entry'].place(x = 100, y = 50 + (n * inter))
             self.dic[name]['entry'].config(textvariable = self.dic[name]['stringVar'])
             self.dic[name]['entry'].insert('0', self.dic[name]['text'])
+            if name == 'Caller' and type == 'Change':
+                self.dic[name]['entry'].config(stat = 'disabled')
             n += 1
 
         self.root.geometry(str(self.dic[name]['entry'].winfo_reqwidth() + 100 + 20) + 'x' + str(50 + (n * inter) + 50))
@@ -217,7 +219,6 @@ class LgViewer:
             caller = []
             for cmds in z.read(name).decode(get_encode()).replace('\r', '').split('\n'):
                 if cmds != '' and cmds.split(' = ')[0][0] != '[':
-                    print(name, ':', cmds)
                     value[-1].append(cmds.split(' = ')[1])
                     caller.append(cmds.split(' = ')[0].lower())
 

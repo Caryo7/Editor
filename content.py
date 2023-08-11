@@ -6,6 +6,7 @@ from tkinter.ttk import *
 from tkinter.messagebox import *
 from tkinter.filedialog import *
 from tkinter.simpledialog import *
+from tkinterdnd2 import *
 from confr import *
 from tooltip import *
 from tree import *
@@ -57,11 +58,14 @@ class Content:
                          selectbackground = read('text', 'selectbackground'),
                          selectborderwidth = read('text', 'selectborderwidth'),)
 
+        self.text.drop_target_register(DND_FILES)
+        self.text.dnd_bind('<<Drop>>', self.drag_drop)
         self.text.focus()
         self.text.bind('<KeyPress>', self.unsave)
         self.text.bind('<KeyRelease>', self.infobar_changement)
         self.text.bind_all('<Button>', self.uln)
         self.text.bind_all('<MouseWheel>', self.uln)
+        self.text.bind('<KeyRelease-Return>', self.act_puces)
 
         self.scroll.config(command=self.text.yview)
         self.scroll.bind('<ButtonRelease-1>', self.uln)
@@ -78,23 +82,33 @@ class Content:
         self.update_line_numbers()
         self.puces = IntVar()
         self.puces.set(1 if get_puces() else 0)
-        self.text.bind('<KeyRelease-Return>', self.act_puces)
         self.words = []
         self.texte = ''
         self.oldheight = self.master.winfo_height()
         self.oldwidth = self.master.winfo_width()
         self.master.bind('<Configure>', self.test_resize)
 
-        calltip = CallTip(self.text)
+        #calltip = CallTip(self.text)
 
         self.conf_win(generate = True)
         self.__ac__()
 
-    def get_text(self, begin = '0.0', finish = 'end'):
-        return self.text.get(begin, finish)
+    def drag_drop(self, event):
+        file = event.data
+        self.open(name = file)
+
+    def get_text(self, begin = '0.0', finish = 'end', save = False):
+        if save:
+            return self.getBrutValueVars(self.text.get(begin, finish))
+        else:
+            return self.text.get(begin, finish)
 
     def clear_text(self):
         self.text.delete('0.0', 'end')
+
+    def insert_text(self, data):
+        data = self.getTextValueVars(data)
+        self.text.insert(END, data)
 
     def stat_text(self, stat):
         if stat:
@@ -289,6 +303,7 @@ class Content:
             return
 
         if forcing:
+            self.nofileopened = False
             self.saved = False
             self.master.title('* ' + self.title + ' - ' + self.path + ' *')
             return
@@ -318,6 +333,7 @@ class Content:
             
             if evt.char.lower() in self.listchar or (evt.keysym in self.keycode_unsave) or (evt.keycode in self.keycode_unsave):
                 self.saved = False
+                self.nofileopened = False
                 self.master.title('* ' + self.title + ' - ' + self.path + ' *')
 
 if __name__ == '__main__':

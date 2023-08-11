@@ -34,6 +34,7 @@ class MenuBar:
             for k, n in self.get_rfl():
                 cmd = lambda : self.open_recent(n)
                 self.menurfl.add_command(label=str(k) + ' ' + n, command = cmd)
+
             self.menurfl.add_separator()
             self.menurfl.add_command(label = lg('clear_recent'), command = self.clear_recent, accelerator=self.get_accelerator('clear_recent'))
             self.menufichier.add_separator()
@@ -41,7 +42,8 @@ class MenuBar:
             self.menufichier.add_command(label=lg('Save_as'), accelerator=self.get_accelerator('saveas'), stat='normal', command=self.saveas, image = self.images['saveas'], compound='left')
             self.menufichier.add_command(label=lg('Save_copy_as'), accelerator=self.get_accelerator('savecopyas'), stat='normal', command=self.savecopyas, image = self.images['savecopyas'], compound='left')
             self.menufichier.add_separator()
-            self.menufichier.add_command(label=lg('settings'), accelerator=self.get_accelerator('settings'), stat = 'disabled', command = self.ask_settings, image = self.images['settings'], compound = 'left')
+            self.menufichier.add_command(label=lg('settings'), accelerator=self.get_accelerator('meta_infos'), stat = 'disabled', command = self.show_info, image = self.images['settings'], compound = 'left')
+            self.menufichier.add_command(label=lg('meta_informations'), accelerator=self.get_accelerator('settings'), stat = 'disabled', command = self.ask_settings, image = self.images['settings'], compound = 'left')
             self.menufichier.add_separator()
             self.menufichier.add_command(label=lg('Print'), accelerator=self.get_accelerator('print'), stat='normal' if sys.platform == 'win32' else 'disabled', command=self.print_window, image = self.images['print'], compound='left')
             self.menufichier.add_separator()
@@ -85,6 +87,13 @@ class MenuBar:
             self.menu_styles = []
             self.mls = Menu(menustyle, tearoff=0)
             menustyle.add_cascade(label=lg('Styles'), menu=self.mls)
+
+        if get_menuvars():
+            menuvars = Menu(menubar, tearoff = 0)
+            menubar.add_cascade(label = lg('Variables'), menu = menuvars)
+            menuvars.add_command(label = lg('lst_vars'), command = lambda : self.start_vars(mode = 'gestion'), accelerator = self.get_accelerator('lst_vars'), image = self.images['lst_vars'], compound = 'left')
+            menuvars.add_command(label = lg('add_var'), command = self.append_var, accelerator = self.get_accelerator('add_var'), image = self.images['add_var'], compound = 'left')
+            menuvars.add_command(label = lg('place_var'), command = self.place_variable, accelerator = self.get_accelerator('place_var'), image = self.images['place_var'], compound = 'left')
 
         if get_menuformat():
             menufor = Menu(menubar, tearoff=0)
@@ -175,7 +184,7 @@ class MenuBar:
             menuaide.add_command(label=lg('Documentation'), stat='normal', command=self.documentation, accelerator=self.get_accelerator('doc'), image = self.images['doc'], compound='left')
             menuaide.add_command(label=lg('todo'), stat = 'normal', command = self.ToDo, accelerator=self.get_accelerator('todo'), image = self.images['todo'], compound='left')
             menuaide.add_separator()
-            menuaide.add_command(label=lg('Lines'), stat='normal', command=lambda : act(self.master), accelerator=self.get_accelerator('lines'), image = self.images['lines'], compound='left')
+            menuaide.add_command(label=lg('Lines'), stat='normal', command=lambda : act(self), accelerator=self.get_accelerator('lines'), image = self.images['lines'], compound='left')
             menuaide.add_command(label=lg('struct'), stat = 'normal', command = Tkin, accelerator=self.get_accelerator('struct'), image = self.images['struct'], compound='left')
             menuaide.add_command(label=lg('program'), stat = 'normal', command = Code, accelerator=self.get_accelerator('prog'), image = self.images['prog'], compound='left')
             menuaide.add_separator()
@@ -184,6 +193,14 @@ class MenuBar:
             menuaide.add_cascade(label=lg('Sample'), menu=menusample)
 
         self.set_cmds()
+
+    def stat_form_infos(self, stat = False):
+        if stat:
+            self.menufichier.entryconfig(lg('meta_informations'), stat = 'normal')
+            self.menufichier.entryconfig(lg('settings'), stat = 'normal')
+        else:
+            self.menufichier.entryconfig(lg('meta_informations'), stat = 'disabled')
+            self.menufichier.entryconfig(lg('settings'), stat = 'disabled')
 
 if __name__ == '__main__':
     from __init__ import *

@@ -31,6 +31,10 @@ class Images:
                        'puces': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/puces.png'),
                        'news': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/style.png'),
                        'cstyle': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/cstyle.png'),
+
+                       'lst_vars': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/todo.png'),
+                       'add_var': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/plus.png'),
+                       'place_var': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/cursor.png'),
                        
                        'comment': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/comment.png'),
                        'uncomment': PhotoImage(master = self.master, file = ''),#self.path_prog + '/'),

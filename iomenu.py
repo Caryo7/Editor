@@ -33,7 +33,7 @@ class IOMenu:
                                             True if separator == '1' else False,
                                             True if search == '1' else False,
                                             True if puces == '1' else False))
-    
+
             elif remp == 'bts' and line != '':
                 line = line.split(',')
                 wid, name, separator = line

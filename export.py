@@ -296,30 +296,14 @@ class Export(AskMargins):
                 self.dialoging = False
 
     def begin_export_pdf(self, name):
-        zak = Toplevel(self.master)
-        zak.iconbitmap(self.ico['pdf'])
-        zak.transient(self.master)
-        zak.resizable(False, False)
-        zak.title(lg('export_pdf'))
-        Label(zak, text = lg('can_take_time')).place(x = 10, y = 25)
-        pb = Progressbar(zak, orient='horizontal', mode='determinate', length = 300)
-        pb.place(x = 10, y = 50)
-        zak.geometry("320x130")
-        zak.update()
-        traitement = Label(zak, text = lg('traits_chars'))
-        traitement.place(x = 10, y = 75, width = 300)
-
+        pb = Progress(self.master, self.tb, title = lg('export_pdf'), text = lg('can_take_time'))
         nmax = len(self.get_text())
+        pb.set(nmax)
         def step():
-            pb['value'] += (1 / nmax) * 100
-            zak.update()
+            pb.step()
 
         def reset(maxi):
-            global nmax
-            nmax = maxi
-            traitement.config(text = lg('print_content'))
-            pb['value'] = 0
-            zak.update()
+            pb.reset()
 
         enc = pdfencrypt.StandardEncryption(userPassword = self.pdf_password,
                                             ownerPassword = self.pdf_password,
@@ -351,8 +335,7 @@ class Export(AskMargins):
     
         fc = 'black'
         bc = 'white'
-    
-        c.translate(0, 0)
+
         c.setFont(police, size)
         chars = []
 
@@ -361,7 +344,7 @@ class Export(AskMargins):
 
         line = 0
         column = 0
-        text = self.get_text()
+        text = self.get_text().replace(self.spliter, '')
         len_line = [len(ln) for ln in text.split('\n')]
         list_styles = self.lst_tags.copy()
         list_styles.insert(0, ('normal', bc, fc, '0.0', '0.0'))
@@ -486,7 +469,8 @@ class Export(AskMargins):
         if self.mode_print:
             self.cmd_print()
 
-        zak.destroy()
+        pb.stop()
+
         os.popen(name)
         self.dialoging = False
 

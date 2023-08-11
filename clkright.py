@@ -20,7 +20,10 @@ class ClkRight:
             elif puces:
                 popup.add_checkbutton(label=lg('Puces'), onvalue=1, offvalue=0, variable=self.puces)
             else:
-                popup.add_command(label=lg(name), command=command, image = self.images[name if image == None else image], compound='left')
+                popup.add_command(label=lg(name),
+                                  command=command,
+                                  image = self.images[name if image == None else image],
+                                  compound='left')
 
         popup.tk_popup(evt.x_root, evt.y_root)
 

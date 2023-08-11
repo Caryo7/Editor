@@ -43,13 +43,47 @@ class Compute(Thread):
                 self.elapsed = 0
 
 
+class ProgressTask:
+    add = 1
+    prog = 0
+
+    def __init__(self, tb):
+        self.tb = tb
+        self.tb.setState("loading") # loading, normal, error, warning, done
+
+    def step(self, first = False):
+        if first:
+            self.tb.setState("normal")
+            self.prog += 1
+            self.tb.setProgress(self.prog)
+        else:
+            self.prog += self.add
+            self.prog = int(self.prog)
+            self.tb.setProgress(self.prog)
+
+    def stop(self):
+        self.tb.setState("done")
+
+    def reset(self):
+        self.prog = 0
+        self.tb.setProgress(0)
+
+    def set(self, value, with_first = False):
+        self.tb.setState("loading")
+        if with_first:
+            self.add = 99 / value
+        else:
+            self.add = 100 / value
+
+
 class Waiter(Thread):
     pos = 0
     up = True
     on = True
     add = 1
+    fpc = 0.0
 
-    def __init__(self, master = None, title = '', text = '', autostart = True, double = False):
+    def __init__(self, master = None, tb = None, title = '', text = '', decimals = 0, autostart = True, double = False):
         Thread.__init__(self)
         if master:
             self.zak = Toplevel(master)
@@ -57,25 +91,44 @@ class Waiter(Thread):
         else:
             self.zak = Tk()
 
+        self.ptb = ProgressTask(tb)
         self.zak.title(title)
+        self.decimals = decimals
+        self.title = title
         self.zak.resizable(False, False)
         self.zak.iconbitmap(PATH_PROG + '/image/icons/progress.ico')
         self.zak.protocol('WM_DELETE_WINDOW', lambda : None)
         if double:
-            self.zak.geometry('300x110')
+            self.zak.geometry('340x110')
         else:
-            self.zak.geometry('300x100')
+            self.zak.geometry('340x80')
 
         Label(self.zak, text = text).place(x = 10, y = 10)
         self.pb = ttk.Progressbar(self.zak, orient = 'horizontal', mode = 'indeterminate', length = 280)
         self.pb.place(x = 10, y = 40)
+        
         if double:
             self.prb = ttk.Progressbar(self.zak, orient = 'horizontal', mode = 'determinate', length = 280)
             self.prb.place(x = 10, y = 70)
+            self.pc = StringVar(master = self.zak)
+            self.update_numbers()
+            Label(self.zak, textvariable = self.pc).place(x = 295, y = 70)
         self.zak.update()
 
         if autostart:
             self.start()
+
+    def update_numbers(self):
+        self.pc.set(str(self.arond(self.fpc)) + ' %')
+
+    def arond(self, x):
+        a = x
+        for i in range(self.decimals):
+            a *= 10
+        a = int(a)
+        for i in range(self.decimals):
+            a /= 10
+        return a
 
     def run(self):
         while self.on:
@@ -98,32 +151,42 @@ class Waiter(Thread):
 
     def stop(self):
         self.on = False
+        self.ptb.stop()
         self.zak.destroy()
 
-    def set(self, maxi):
-        self.add = 100 / maxi
+    def set(self, maxi, with_first = True):
+        if with_first:
+            self.add = 99
+        else:
+            self.add = 100
+        self.add /= maxi
+        self.ptb.set(maxi, with_first)
 
-    def step(self):
+    def step(self, text = '', first = False):
         try:
-            self.prb['value'] += self.add
-            self.zak.update()
+            if first:
+                self.prb['value'] = 0.0
+                self.prb['value'] += 1.0
+                self.ptb.step(first)
+            else:
+                self.prb['value'] += self.add
+                self.fpc += self.add
+                self.ptb.step()
+                self.update_numbers()
+                if text != '':
+                    self.zak.title(self.title + ' - ' + text)
+                self.zak.update()
         except:
             pass
 
-if __name__ == '__main__':
-    w = Waiter()
-    time.sleep(2)
-    w.set(100)
-    for i in range(100):
-        w.step()
-        time.sleep(0.5)
-    w.stop()
-
 
 class Progress:
-    oldpos = 0
+    add1 = 0
+    add2 = 0
+    fpc1 = 0.0
+    fpc2 = 0.0
 
-    def __init__(self, master, title, maximum, decimals = 0, offcolor='white', oncolor = 'green', killable = False):
+    def __init__(self, master = None, tb = None, title = '', decimals = 0, double = False, text = '', **args):
         if master:
             self.zak = Toplevel(master)
             self.zak.transient(master)
@@ -131,96 +194,122 @@ class Progress:
             self.zak = Tk()
 
         self.zak.title(title)
-        self.zak.iconbitmap(PATH_PROG + '/image/icons/progress.ico')
-        self.zak.protocol('WM_DELETE_WINDOW', self.Quitter)
-        self.lcounter = maximum
-        self.decs = decimals
-        self.oncolor = oncolor
-        self.offcolor = offcolor
-        self.counter = 0
-        self.killable = killable
+        self.double = double
+        self.ptb = ProgressTask(tb)
+        self.decimals = decimals
         self.title = title
-        self.content()
-
-    def content(self):
-        self.canvas = Canvas(self.zak, width = 210, height = 30)
-        self.canvas.place(x = 25, y = 25)
-        self.pc = StringVar(master = self.zak)
-        self.time_elapsed = StringVar(master = self.zak)
-        self.time_stay = StringVar(master = self.zak)
-        self.pc.set('0 %')
-        self.time_elapsed.set(lg('tecc') + '0 s')
-        self.time_stay.set(lg('tere') + '0 s')
-        Label(self.zak, textvariable = self.pc).place(x = 235, y = 30)
-        Label(self.zak, textvariable = self.time_elapsed).place(x = 30, y = 60)
-        Label(self.zak, textvariable = self.time_stay).place(x = 30, y = 90)
-        Button(self.zak, text = lg('Abord'), command=None, stat = 'disabled').place(x = 30, y = 120)
-        Button(self.zak, text = lg('Stdbye'), command = None, stat = 'disabled').place(x = 150, y = 120)
-        self.zak.geometry(str(290 + (self.decs * 5)) + 'x175')
-        self.second = Compute(self.lcounter, self.trace)
-        self.second.start()
-        self.trace()
-
-    def decimales(self, nb):
-        a = nb / 2
-        """for i in range(self.decs):
-            a *= 10
-        a = int(a)
-        for i in range(self.decs):
-            a /= 10"""
-        return str(int(a)) + ' %'
-
-    def trace(self, pos = oldpos, name = ''):
-        self.canvas.delete('all')
-        self.zak.title(self.title + ' ' + name)
-        self.canvas.create_rectangle(5, 5, 205, 25, fill = self.offcolor)
-        x = pos
-        self.oldpos = pos
-        self.canvas.create_rectangle(5, 5, x + 5, 25, fill = self.oncolor)
-        self.pc.set(self.decimales(pos))
-        self.second.append()
-        self.time_elapsed.set(lg('tecc') + str(self.second.elapsed) + ' ' + lg('second'))
-        self.time_stay.set(lg('tere') + str(self.second.time) + ' ' + lg('second'))
+        self.zak.resizable(False, False)
+        self.zak.iconbitmap(PATH_PROG + '/image/icons/progress.ico')
+        self.zak.protocol('WM_DELETE_WINDOW', lambda : None)
+        Label(self.zak, text = text).place(x = 10, y = 10)
+        self.add1 = 100 / 100
+        self.pb1 = Progressbar(self.zak, orient = 'horizontal', mode = 'determinate', length = 280)
+        self.pb1.place(x = 10, y = 40)
+        self.pc1 = StringVar(master = self.zak)
+        self.update_numbers()
+        Label(self.zak, textvariable = self.pc1).place(x = 295, y = 40)
+        if double:
+            self.pb2 = Progressbar(self.zak, orient = 'horizontal', mode = 'determinate', length = 280)
+            self.pb2.place(x = 10, y = 70)
+            self.pc2 = StringVar(master = self.zak)
+            self.update_numbers()
+            Label(self.zak, textvariable = self.pc2).place(x = 295, y = 70)
+            self.zak.geometry('340x110')
+        else:
+            self.zak.geometry('340x80')
         self.zak.update()
 
-    def step(self, *args):
-        self.counter += 1
-        self.trace((self.counter / self.lcounter) * 200, ' '.join(args))
-        if self.counter == self.lcounter:
-            self.second.breaker = True
+    def update_numbers(self):
+        self.pc1.set(str(self.arond(self.fpc1)) + ' %')
+        try:
+            self.pc2.set(str(self.arond(self.fpc2)) + ' %')
+        except AttributeError:
+            pass
 
-    def Generate(self):
-        self.zak.mainloop()
+    def arond(self, x):
+        a = x
+        for i in range(self.decimals):
+            a *= 10
+        a = int(a)
+        for i in range(self.decimals):
+            a /= 10
+        return a
 
-    def Quitter(self):
-        if not self.killable:
-            showwarning(self.title, lg('ycstp'))
-        else:
-            self.second.breaker = True
-            self.zak.destroy()
-        return
+    def set(self, value = 1, bar = 0, with_first = False):
+        assert value > 0
+        with_first = 99 if with_first else 100
+        if bar == 0:
+            if not self.double:
+                self.ptb.set(value, True if with_first == 99 else False)
+            self.add1 = with_first / value
+        elif bar == 1:
+            if self.double:
+                self.ptb.set(value, True if with_first == 99 else False)
+            self.add2 = with_first / value
 
+    def step(self, text = '', bar = 0, first = False):
+        if bar == 0:
+            if not self.double:
+                self.ptb.step(first)
+            self.pb1['value'] += self.add1
+            self.fpc1 += self.add1
+        elif bar == 1:
+            if self.double:
+                self.ptb.step(first)
+            self.pb2['value'] += self.add2
+            self.fpc2 += self.add2
 
-"""class ProgressTask:
-    def __init__(self):
-        taskbar_progress = PyTaskbar.Progress(root.winfo_id()) # Instantiate a new progress object
-    taskbar_progress.init() # Initialize the progress bar
-    taskbar_progress.setState("normal") # Set the progress bar state to normal (Available: loading, normal, warning, error)
+        if text != '':
+            self.zak.title(self.title + ' - ' + text)
+        self.update_numbers()
+        self.zak.update()
 
-    def step(self):
-        taskbar_progress.setProgress(i)"""
+    def reset(self, bar = 0):
+        if bar == 0:
+            self.pb1['value'] = 0
+            self.fpc1 = 0.0
+        elif bar == 1:
+            self.pb2['value'] = 0
+            self.fpc2 = 0.0
+            
+        self.update_numbers()
+        self.zak.update()
+        self.ptb.reset()
+
+    def stop(self):
+        self.ptb.stop()
+        self.zak.destroy()
+
 
 if __name__ == '__main__':
-    """root = Tk()
-    p = Progressbar(root, orient = 'vertical', mode = 'indeterminate')#master = None, title = 'test1', maximum = 105, decimals = 2, oncolor = 'red')
-    p.place(x = 0, y = 0)
-    #p.start()
-    for i in range(105):
-        #p.step('blablabla', 'ablabla')
-        #p.step()
-        p.step()
-        time.sleep(0.1)
-        root.update()
-    #p.Generate()
-    root.mainloop()"""
+    while True:
+        a = input('Progress/Waiter > [p/w] : ')
+        if a == 'p':
+            p = Progress(double = False)
+            p.set(3)
+            time.sleep(0.5)
+            p.step('Bonjour')
+            time.sleep(0.5)
+            p.step('Hello')
+            time.sleep(0.5)
+            p.step('Allo')
+            time.sleep(1)
+            p.stop()
+
+        elif a == 'w':
+            w = Waiter(double = True)
+            w.set(3, with_first = False)
+            time.sleep(0.5)
+            w.step(first = True)
+            time.sleep(0.5)
+            w.step('Bonjour')
+            time.sleep(0.5)
+            w.step('Hello')
+            time.sleep(0.5)
+            w.step('Allo')
+            time.sleep(0.5)
+            w.stop()
+
+        else:
+            print('Mauvais choix !')
 

@@ -72,6 +72,10 @@ def get_menuformat():
     if p.get('menu', 'format') == '1':return True
     else:return False
 
+def get_menuvars():
+    if p.get('menu', 'vars') == '1':return True
+    else:return False
+
 def get_menurun():
     if p.get('menu', 'run') == '1':return True
     else:return False

@@ -11,6 +11,8 @@ from tooltip import *
 try:
     import win32api
     import win32print
+    import pyinsane2 as sane
+    sane.init()
 except ImportError:
     from errors import *
     ERROR(2)
@@ -94,6 +96,16 @@ class Printer:
 
         self.root.destroy()
 
+    @classmethod
+    def start_scan(self, device):
+        try:
+            device = sane.get_devices()
+            print(device)
+            #sane.open(device)
+        except Exception:
+            showerror(lg('sane'), lg('no_scanners'))
+
 
 if __name__ == '__main__':
     from __init__ import *
+    #Printer.start_scan(None)

@@ -6,6 +6,7 @@ from tkinter.ttk import *
 from tkinter.messagebox import *
 from tkinter.filedialog import *
 from tkinter.simpledialog import *
+from tkinterdnd2 import *
 from threading import *
 import time
 import os
@@ -55,7 +56,7 @@ class notif_destroy(Thread):
                     self.EOP()
 
             def clique(nid): # nid pour notification ID
-                os.system('taskmgr')
+                os.popen('taskmgr')
                 self.EOP()
 
             def onDismissHandler(nid, reason):
@@ -68,16 +69,17 @@ class notif_destroy(Thread):
 
             zroya.show(t, on_action=button, on_fail=onFailHandler, on_dismiss = onDismissHandler, on_click = clique)
 
-        time.sleep(60)
-        self.EOP()
+        else:
+            self.EOP()
 
 
 class Win:
     def __win__(self):
         try:
-            self.master = Tk()
+            self.master = TkinterDnD.Tk()
         except TclError:
             os.system('cls' if sys.platform == 'Win32' else 'clear')
+            os.system('color a' if sys.platform == 'Win32' else '')
             print("##########################################################################################")
             print('##                                                                                      ##')
             print("## Problème de niveau 1 : Le système opérant ne propose pas d'environnement graphique ! ##")
@@ -97,18 +99,27 @@ class Win:
         return True
 
     def fermer(self, evt = None):
-        if (self.saved == False or self.saved == None) and get_askclose:
+        if (self.saved == False or self.saved == None) and get_askclose():
             dem = askyesnocancel(self.title, lg('DYWTS'))
             if dem == True:
                 self.save()
             elif dem == None:
-                return
-    
-            self.clear_text()
-            self.stat_text(False)
-            self.update_line_numbers()
-            self.menufichier.entryconfig(lg('settings'), stat = 'disabled')
-            self.master.title(self.title + ' - ' + lg('NFO'))
+                return 'cancel'
+
+        self.update_time()
+
+        self.clear_text()
+        self.stat_text(False)
+        self.update_line_numbers()
+        self.stat_form_infos(False)
+        self.path = ''
+        self.master.title(self.title + ' - ' + lg('NFO'))
+        self.saved = None
+        self.savedd = False
+        self.nofileopened = True
+        self.meta = {}
+        self.variables = {}
+        return 'exit'
 
     def bloc_try(self, ifnormal, exception = Exception, iferror = None):
         try:
@@ -129,32 +140,15 @@ class Win:
                               self.path_prog,
                               self.VERSION,
                               self.URL)
-            #i.start()
-            i.EOP()
+            i.start()
+            #i.EOP()
 
-        if self.dialoging:
-            return
-
-        if (self.saved == False or self.saved == None) and get_askclose:
-            self.dialoging = True
-            dem = askyesnocancel(self.title, lg('DYWTS'), master = self.master)
-            if dem == True:
-                self.save()
-                destroy()
-                self.programme_termine = True
-                # raise KeyboardInterrupt
-                # exit(code='ClosedByUserWithSave')
-
-            elif dem == False:
-                destroy()
-                self.programme_termine = True
-                # raise KeyboardInterrupt
-                # exit(code='ClosedByUserWithoutSave')
-
-        else:
+        f = self.fermer()
+        if f == 'exit':
             destroy()
+            self.programme_termine = True
             # raise KeyboardInterrupt
-            # exit(code='ClosedByUserWithAutoSave')
+            # exit(code='ClosedByUserWithoutSave')
 
         self.dialoging = False
         

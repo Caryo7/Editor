@@ -211,6 +211,10 @@ class Configurator:
         self.menuvie = Checkbutton(m, text=lg('View'), variable=self.menuvie_, onvalue=1, offvalue=0)
         self.menuvie.grid(row=13, column=0, sticky='w')
         if read('menu', 'view') == '1':self.menuvie_.set(1)
+        self.menuvars_ = IntVar(master = self.master)
+        self.menuvars = Checkbutton(m, text=lg('View'), variable=self.menuvars_, onvalue=1, offvalue=0)
+        self.menuvars.grid(row=14, column=0, sticky='w')
+        if read('menu', 'vars') == '1':self.menuvars_.set(1)
 
         ## Cadre s pour la sécurité
 
@@ -704,256 +708,68 @@ class Configurator:
             pass
         
     def validate_choice(self):
-        p = Progress(self.root, title = lg('Configurator'), maximum = 40, decimals = 0, oncolor = 'blue')
+        p = Progress(self.tk, self.tb, title = lg('Configurator'))
+        p.set(40)
         self.tree.unbind('<Double-Button-1>')
         log = open(self.path_prog + '/log.txt', 'a')
-        try:
-            p.step('mode_dark')
-            write('global', 'mode_dark', self.mode_dark_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
 
-        try:
-            p.step('line_number')
-            write('global', 'line_number', self.line_number_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('encrypt')
-            write('global', 'encrypt', self.enc_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('puces')
-            write('text', 'puces', self.puc_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('language')
-            write('global', 'lang', self.lang.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('notifications')
-            write('global', 'notifs', self.notifs_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
+        def optim(txt, section, option, value):
+            try:
+                p.step(txt)
+                write(section, option, value)
+            except Exception as e:
+                log.write(str(e) + '\n')
 
 
-        try:
-            p.step('file')
-            write('menu', 'file', self.menufile_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
+        optim('mode_dark', 'global', 'mode_dark', self.mode_dark_.get())
+        optim('line_number', 'global', 'line_number', self.line_number_.get())
+        optim('encrypt', 'global', 'encrypt', self.enc_.get())
+        optim('puces', 'text', 'puces', self.puc_.get())
+        optim('language', 'global', 'lang', self.lang.get())
+        optim('notifications', 'global', 'notifs', self.notifs_.get())
 
-        try:
-            p.step('edit')
-            write('menu', 'edit', self.menuedit_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
+        optim('file', 'menu', 'file', self.menufile_.get())
+        optim('edit', 'menu', 'edit', self.menuedit_.get())
+        optim('format', 'menu', 'format', self.menufor_.get())
+        optim('run', 'menu', 'run', self.menurun_.get())
+        optim('crypt', 'menu', 'crypt', self.menucrypt_.get())
+        optim('export', 'menu', 'export', self.menuexp_.get())
+        optim('arch', 'menu', 'arch', self.menuarch_.get())
+        optim('minitel', 'menu', 'minitel', self.menumin_.get())
+        optim('opt', 'menu', 'opt', self.menuopt_.get())
+        optim('help', 'menu', 'help', self.menuhlp_.get())
+        optim('update', 'menu', 'update', self.menuupd_.get())
+        optim('extension', 'menu', 'extension', self.menuex_.get())
+        optim('style', 'menu', 'style', self.menustyle_.get())
+        optim('view', 'menu', 'view', self.menuvie_.get())
+        optim('vars', 'menu', 'vars', self.menuvars_.get())
 
-        try:
-            p.step('format')
-            write('menu', 'format', self.menufor_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
+        optim('conn', 'global', 'conn', self.conn_.get())
+        optim('username', 'security', 'username', self.usn_.get())
+        optim('password', 'security', 'password', self.pwd_.get())
+        optim('errors', 'global', 'errors', self.err_.get())
+        optim('askclose', 'global', 'askclose', self.ac_.get())
+        optim('browser', 'global', 'browser', self.bro.get())
+        
+        optim('bgd', 'text', 'bgd', self.bgd.get())
+        optim('fgd', 'text', 'fgd', self.fgd.get())
+        optim('bgl', 'text', 'bgl', self.bgl.get())
+        optim('fgl', 'text', 'fgl', self.fgl.get())
+        optim('font', 'text', 'font', self.font.get())
+        optim('tabs', 'text', 'tab', str(self.tabs.get()))
+        
+        optim('check updates', 'global', 'look_update', str(self.update_.get()))
+        optim('Info bar', 'view', 'bar_info', self.vinf_.get())
+        optim('Button bar', 'view', 'bar_buttons', self.vbt_.get())
 
-        try:
-            p.step('run')
-            write('menu', 'run', self.menurun_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
+        optim('size - CANCELED', 'text', 'size', self.size.get())
+        p.step('codage', 'CANCELED')
 
-        try:
-            p.step('crypt')
-            write('menu', 'crypt', self.menucrypt_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
+        ## Chemin minitel ! (minitel / [dev, speed = 4800, bytesize = 7, timeout = 2]
+        optim('minitel\'s alertes', 'minitel', 'alerte', self.min_al_.get())
 
-        try:
-            p.step('export')
-            write('menu', 'export', self.menuexp_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('arch')
-            write('menu', 'arch', self.menuarch_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('minitel')
-            write('menu', 'minitel', self.menumin_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('opt')
-            write('menu', 'opt', self.menuopt_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('help')
-            write('menu', 'help', self.menuhlp_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('update')
-            write('menu', 'update', self.menuupd_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('extension')
-            write('menu', 'extension', self.menuex_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('style')
-            write('menu', 'style', self.menustyle_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('view')
-            write('menu', 'view', self.menuvie_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-
-        try:
-            p.step('conn')
-            write('global', 'conn', self.conn_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('username')
-            write('security', 'username', self.usn_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('password')
-            write('security', 'password', self.pwd_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('errors')
-            write('global', 'errors', self.err_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('askclose')
-            write('global', 'askclose', self.ac_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('browser')
-            write('global', 'browser', self.bro.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-
-        try:
-            p.step('bgd')
-            write('text', 'bgd', self.bgd.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('fgd')
-            write('text', 'fgd', self.fgd.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('bgl')
-            write('text', 'bgl', self.bgl.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('fgl')
-            write('text', 'fgl', self.fgl.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('font')
-            write('text', 'font', self.font.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('tabs')
-            write('text', 'tab', str(self.tabs.get()))
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-
-        try:
-            p.step('check updates')
-            write('global', 'look_update', str(self.update_.get()))
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('Info bar')
-            write('view', 'bar_info', self.vinf_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('Button bar')
-            write('view', 'bar_buttons', self.vbt_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-
-        try:
-            p.step('size', 'CANCELED')
-            write('text', 'size', self.size.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('codage', 'CANCELED')
-            #write('crypt', 'code', self.coda.get())
-
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            ## Chemin minitel ! (minitel / [dev, speed = 4800, bytesize = 7, timeout = 2]
-            p.step('minitel\'s alertes')
-            write('minitel', 'alerte', self.min_al_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-
-        try:
-            p.step('delay')
-            write('auto_save', 'delay', str(int(self.spn.get())*60))
-        except Exception as e:
-            log.write(str(e) + '\n')
-
-        try:
-            p.step('path')
-            write('auto_save', 'path', self.path_.get())
-        except Exception as e:
-            log.write(str(e) + '\n')
+        optim('delay', 'auto_save', 'delay', str(int(self.spn.get())*60))
+        optim('path', 'auto_save', 'path', self.path_.get())
 
         log.close()
 
@@ -961,6 +777,7 @@ class Configurator:
         set_n_lg(self.langs[self.lg.get()])
 
         print('Restarting...')
+        p.stop()
         self.cancel()
         self.master.destroy()
         self.__start__()
@@ -972,4 +789,3 @@ class Configurator:
 
 if __name__ == '__main__':
     from __init__ import *
-

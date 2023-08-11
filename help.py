@@ -19,18 +19,6 @@ class help_:
 
         self.dialoging = True
         zak = Toplevel(self.master)
-        zak.overrideredirect(1)
-        zak.update()
-        zak.wm_attributes('-topmost', 1)
-        self.moving = IntVar(master = zak)
-        self.moving.set(0)
-        zak.bind('<ButtonPress-1>', lambda _: self.moving.set(1))
-        zak.bind('<ButtonRelease-1>', lambda _: self.moving.set(0))
-        def move(self, evt):
-            if self.moving.get():
-                zak.geometry('+' + str(evt.x_root) + '+' + str(evt.y_root))
-
-        zak.bind('<Motion>', lambda evt: move(self, evt))
         zak.transient(self.master)
         zak.iconbitmap(self.ico['help'])
         zak.resizable(False, False)
@@ -55,56 +43,44 @@ class help_:
 
         Label(logo, text = f'{self.title}', fg = '#000000', bg = '#bbbbbb', font = ('Courier', 20, 'bold')).grid(row = 0, column = 1, sticky = E, padx = 10, pady = 0)
 
-        Label(cad, text = 'Version :',       justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 1, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = f'{self.version}', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 1, column = 1, sticky = W, padx = 10, pady = 5)
-        
-        Label(cad, text = lg('writeby'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 2, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = self.AUTHOR,   justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 2, column = 1, sticky = W, padx = 10, pady = 5)
-        
-        #Label(cad, text = lg('email'),                       justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 3, column = 0, sticky = E, padx = padx, pady = 5)
-        #s1 = Label(cad, text = 'bravocharlie1273@orange.fr', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 3, column = 1, sticky = W, padx = 10, pady = 5)
-        
-        #Label(cad, text = lg('phone'),       justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 4, column = 0, sticky = E, padx = padx, pady = 5)
-        #s2 = Label(cad, text = '07.87.25.46.41', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 4, column = 1, sticky = W, padx = 10, pady = 5)
+        dic = {'Version :': f'{self.version}',
+               lg('writeby'): self.AUTHOR,
+               lg('email'): 'bravocharlie1273@orange.fr',
+               lg('phone'): '07.87.25.46.41',
+               lg('site'): self.URL.replace('https://', ''),
+               lg('copyright'): 'All Right Reserved',
+               'separator1': None,
+               'Python :': self.PYTHON_VERSION,
+               'Arduino :': self.ARDUINO_VERSION,
+               'separator2': None,
+               lg('GUI'): self.GUI_VERSION,
+               lg('compilator'): self.COMPILATOR_VERSION,
+               lg('langs'): self.LANGS_VERSION,
+               lg('flm'): self.FILE_VERSION,
+               lg('formf'): self.FORM_VERSION,
+               'separator3': None,}
 
-        Label(cad, text = lg('site'),       justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 3, column = 0, sticky = E, padx = padx, pady = 5)
-        s3 = Label(cad, text = self.URL.replace('https://', ''), justify = LEFT, fg = 'blue', bg = '#bbbbbb', font = ('Courier', 11, 'underline'), cursor = 'hand2')
-        s3.grid(row = 3, column = 1, sticky = W, padx = 10, pady = 5)
-        s3.bind('<Button-1>', lambda evt: self.open_internet(self.URL))
-        
-        Label(cad, text = lg('copyright'),      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 4, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = 'All Right Reserved', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 4, column = 1, sticky = W, padx = 10, pady = 5)
+        row = 1
+        for k, v in dic.items():
+            if not v:
+                Frame(cad, borderwidth = 1, relief = SUNKEN, height = 2, bg = '#bbbbbb').grid(row=row, column=0, sticky=EW, columnspan=3, padx=5, pady=5)
 
-        Frame(cad, borderwidth = 1, relief = SUNKEN, height = 2, bg = '#bbbbbb').grid(row=5, column=0, sticky=EW, columnspan=3, padx=5, pady=5)
+            else:
+                Label(cad, text = k, justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = row, column = 0, sticky = E, padx = 0, pady = 5)
+                l = Label(cad, text = v, justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, ''))
+                l.grid(row = row, column = 1, sticky = W, padx = 10, pady = 5)
+                if k == lg('site'):
+                    l.bind('<Button-1>', lambda evt: self.open_internet(self.URL))
+                    l.config(fg = 'blue', bg = '#bbbbbb', font = ('Courier', 11, 'underline'), cursor = 'hand2')
+                elif k == lg('email'):
+                    l.bind('<Button-1>', lambda evt: self.open_internet('bravocharlie1273@orange.fr'))
+                    l.config(fg = 'blue', bg = '#bbbbbb', font = ('Courier', 11, 'underline'), cursor = 'hand2')
 
-        Label(cad, text = 'Python :', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 6, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = self.PYTHON_VERSION,      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 6, column = 1, sticky = W, padx = 10, pady = 5)
-        
-        Label(cad, text = 'Arduino :', justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 7, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = self.ARDUINO_VERSION,      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 7, column = 1, sticky = W, padx = 10, pady = 5)
+            row += 1
 
-        Frame(cad, borderwidth = 1, relief = SUNKEN, height = 2, bg = '#bbbbbb').grid(row=8, column=0, sticky=EW, columnspan=3, padx=5, pady=5)
-
-        Label(cad, text = lg('GUI'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 9, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = self.GUI_VERSION,      justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 9, column = 1, sticky = W, padx = 10, pady = 5)
-
-        Label(cad, text = lg('compilator'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 10, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = self.COMPILATOR_VERSION,              justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 10, column = 1, sticky = W, padx = 10, pady = 5)
-
-        Label(cad, text = lg('langs'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 11, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = self.LANGS_VERSION,       justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 11, column = 1, sticky = W, padx = 10, pady = 5)
-
-        Label(cad, text = lg('flm'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 12, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = self.FILE_VERSION,     justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 12, column = 1, sticky = W, padx = 10, pady = 5)
-
-        Label(cad, text = lg('formf'), justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 13, column = 0, sticky = E, padx = padx, pady = 5)
-        Label(cad, text = self.FORM_VERSION,     justify = LEFT, fg = '#000000', bg = '#bbbbbb', font = ('Courier', 11, '')).grid(row = 13, column = 1, sticky = W, padx = 10, pady = 5)
-
-        Frame(cad, borderwidth = 1, relief = SUNKEN, height = 2, bg = '#bbbbbb').grid(row=14, column=0, sticky=EW, columnspan=3, padx=5, pady=5)
-
-        Button(cad, text = lg('copyright'), justify = CENTER, relief = GROOVE, bd = 3, command = None        ).grid(row = 15, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
-        Button(cad, text = lg('License'),   justify = CENTER, relief = GROOVE, bd = 3, command = self.License).grid(row = 16, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
-        Button(cad, text = lg('autors'),    justify = CENTER, relief = GROOVE, bd = 3, command = self.Authors).grid(row = 17, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
+        Button(cad, text = lg('copyright'), justify = CENTER, relief = GROOVE, bd = 3, command = None        ).grid(row = row, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
+        Button(cad, text = lg('License'),   justify = CENTER, relief = GROOVE, bd = 3, command = self.License).grid(row = row + 1, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
+        Button(cad, text = lg('autors'),    justify = CENTER, relief = GROOVE, bd = 3, command = self.Authors).grid(row = row + 2, column = 0, sticky = EW, padx = 10, pady = 10, columnspan = 2)
 
         def close():
             zak.destroy()

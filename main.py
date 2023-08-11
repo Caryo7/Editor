@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-################## Fichiers à changer : v?? compilation.iss ####################
-__version__ = VERSION = '36.1' ###
-GUI_VERSION = '37' ###
-FILE_VERSION = '2.0' ##
-FORM_VERSION = '2.2' ##
+################## Fichiers à changer : compilation.iss ####################
+__version__ = VERSION = '37.0' ###
+GUI_VERSION = '38' ###
+FILE_VERSION = '2.2' ##
+FORM_VERSION = '4.1' ##
+LANGS_VERSION = '1.6' ##
 
 # Partie 1 - Importation de tous les fichiers
 
@@ -37,7 +38,7 @@ if True:
     startup.nb = 100 # Nombre de wprint
 else:
     startup = StartUp_Console()
-    startup.nb = 100
+    startup.nb = 100 # Nombre de wprint
 
 def wprint(*args):
     global startup
@@ -45,7 +46,7 @@ def wprint(*args):
         startup.add(*args)
     except TclError:
         startup = StartUp_Console()
-        startup.nb = 100
+        startup.nb = 100 # Nombre de wprint
         startup.add(*args)
 
 import time, inspect, os
@@ -56,23 +57,25 @@ URL = 'https://bgtarino.wixsite.com/Editor'
 PYTHON_VERSION = '3.10'
 ARDUINO_VERSION = '1.16'
 COMPILATOR_VERSION = '0.1 - PYTHON BETA'
-LANGS_VERSION = '1.5'
 AUTHOR = 'Benoit CHARREYRON'
 
 PATH_PROG = os.path.abspath(os.getcwd())
 '''
 Liste des fichiers demandant PATH_PROG :
- - main.py
- - confr.py
- - lgviewer.py
- - pswd.py
- - update.py
- - tree.py
- - counter.py
- - ext_form.py
- - runner.py
+ - main.py (path)
+ - confr.py (path)
+ - lgviewer.py (path)
+ - pswd.py (path)
+ - update.py (path)
+ - tree.py (path)
+ - counter.py (path)
+ - ext_form.py (path)
+ - runner.py (path)
  - startup.py (icon)
  - progress.py (icon)
+ - pdfviewer.py (icon + path)
+ - counter.py (icon)
+ - variables.py (icon)
 '''
 
 wprint('Importing files : ')
@@ -100,8 +103,6 @@ wprint('minitel')
 from minitel import *
 wprint('config')
 from config import *
-wprint('OCR')
-from ocr import *
 wprint('export')
 from export import *
 wprint('update')
@@ -138,6 +139,10 @@ wprint('Menus')
 from iomenu import *
 wprint('Python interpreter')
 from runner import *
+wprint('Importation of PyTaskBar')
+import PyTaskbar
+wprint('Importation of Variables system')
+from variables import *
 wprint('End of importation')
 
 # 2 - Création de la class et importation de toute la hiérarchie
@@ -171,6 +176,8 @@ class Main(Win,
            Images,
            IOMenu,
            RunPython,
+           PDFTraitement,
+           TableGUI,
            ):
     
 # Partie 3 - Informations de base du logiciel
@@ -289,8 +296,6 @@ class Main(Win,
         self.__macro__()
         wprint('Loading python runner')
         self.__runner__()
-        wprint('Configuring OCR system protocol')
-        self.ocr_protocol = OCR(self.master, self.text)
 
         if self.configurating:
             wprint('Restart configurate window')
@@ -327,6 +332,10 @@ class Main(Win,
 
         wprint('Raising errors of initialing stat')
         self.runErrors()
+        wprint('Iconning in task bar')
+        self.tb = PyTaskbar.Progress(self.master.winfo_id())
+        self.tb.init()
+        self.tb.setState("normal")
         wprint('Begin the main process of the window')
         startup.finish()
         print('Démarrage fini avec succès !')

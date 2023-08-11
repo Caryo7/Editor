@@ -16,7 +16,7 @@ class Check(Thread):
         self.main_self = main_self
         
     def run(self):
-        self.main_self.add_task('CheckUpdate', time.time(), desc='MAIN_LOOP\nTo inform you when a new update is available, this task was built. It is reading every 10 min on the net if a new version is not available. If that is, a massage is showing to yourself to inform you the news device. You can\'t stop this task.', killable = False)
+        self.main_self.add_task('CheckUpdate', time.time(), desc='MAIN_LOOP\nTo inform you when a new update is available, this task was built. It is reading every 10 min on the net if a new version is not available. If that is, a massage is showing to yourself to inform you the news device. You can\'t stop this task.', killable = True)
         while True:
             try:
                 if self.main_self.programme_termine:

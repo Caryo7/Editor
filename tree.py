@@ -12,6 +12,8 @@ class Struct:
         p = Path(PATH_PROG)
         lst = list(p.glob('**/*.py'))
         lst += list(p.glob('**/*.pyw'))
+        lst_all_files = list(p.glob('**/*.*'))
+        self.files = len(lst_all_files)
 
         for i in range(len(lst)):
             lst[i] = str(lst[i])
@@ -61,6 +63,9 @@ class Struct:
     def getClasses(self):
         return self.classes
 
+    def getFiles(self):
+        return self.files
+
 def code():
     text = ''
     p = Path(PATH_PROG)
@@ -89,6 +94,9 @@ def nbFncts():
 
 def nbClasses():
     return Struct().getClasses()
+
+def nbFiles():
+    return Struct().getFiles()
 
 class Code:
     def __init__(self):

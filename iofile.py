@@ -15,6 +15,7 @@ import hashlib
 
 from ext_form import *
 from ext_file import *
+from ocr import *
 
 class Auto_Save(Thread):
     def __init__(self, main_self):
@@ -41,11 +42,12 @@ class File(ExForm, ExText):
         self.path = 'untitled.x'
         self.saved = False
         self.savedd = False
+        self.nofileopened = True
         self.ast = Auto_Save(self)
 
         self.listext = ['.xml', '.mxml', '.txt', '.log', '.py', '.pyw', '.html', '.htm', '.php', '.ino', '.h', '.c', '.cpp', '.cc', '.bat', '.bas', '.ba', '.bf', '.f', '.f90', '.f95', '.eq', '.ini', '.inf', '.bu']
         self.listexta = ['.zip', '.PADS', '.form', '.dat', '.exe', '.7z', '.tar', '.gz', '.sqlite', '.mysql']
-        self.ttext = [(lg('ttfpec'), '*.form *.bu *.txt *.log *.html *.htm *.xml *.mxml *.php *.ino *.c *.h *.cpp *.cc *.bat *.bas *.ba *.py *.pyw *.f *.f90 *.f95 *.bf *.eq *.ini *.inf'),
+        self.ttext = [(lg('ttfpec'), '*.form *.bu *.txt *.log *.html *.htm *.xml *.mxml *.php *.ino *.c *.h *.cpp *.cc *.bat *.bas *.ba *.py *.pyw *.f *.f90 *.f95 *.bf *.eq *.ini *.inf *.pdf *.jpg *.png'),
                       (lg('Formf'), '*.form'),
                       (lg('BU'), '*.bu'),
                       (lg('alf'), '*.*'),
@@ -68,10 +70,12 @@ class File(ExForm, ExText):
                       (lg('if'), '*.ini *.inf'),
                       (lg('floppyf'), '*.floppy'),
                       (lg('pdff'), '*.pdf *.pdff'),
+                      (lg('imgf'), '*.jpg *.png'),
                       ]
 
         self.meta = {}
-        self.begin_time = 0
+        self.variables = {}
+        self.begin_time = time.time()
 
     def open_recent(self, name):
         self.open(evt = None, name = name)
@@ -92,15 +96,16 @@ class File(ExForm, ExText):
         n = askopenfilename(title=lg('Open'), initialdir='.', filetypes=self.ttext, master = self.master)
         return n
 
-    def asksaveas(self):
+    def asksaveas(self, path = ''):
+        #n = len(path) - 1
+        #while path[n] != '.':
+            #n -= 1
+
+        #if 7 > len(path) - 1 - n > 0:
+            #path = path[:n]
+
         n = asksaveasfilename(title=lg('Save_as'), initialdir='.', filetypes=self.ttext, master = self.master)
         return n
-
-    def importer(self, file = None):
-        if not file:
-            file = askopenfilename(title = lg('importer'), initialdir = '.', filetypes = [(lg('pdff'), '*.pdf *.pdff')], master = self.master)
-
-        self.ocr_protocol.begin(file)
 
     def ask_settings(self):
         if self.dialoging:
@@ -110,7 +115,7 @@ class File(ExForm, ExText):
         zak = Tk()
         zak.iconbitmap(self.ico['config'])
         zak.transient()
-        zak.title(lg('Settings'))
+        zak.title(lg('meta_informations'))
         zak.resizable(False, False)
 
         tree = ttk.Treeview(zak, columns = (1, 2), show = 'headings')
@@ -211,29 +216,107 @@ class File(ExForm, ExText):
             self.dialoging = False
 
         zak.protocol('WM_DELETE_WINDOW', demander_fermeture)
-        
-    def open(self, evt=None, name = None, forcing = False):
+
+    def show_info(self):
+        zak = Toplevel(self.master)
+        zak.transient(self.master)
+        zak.iconbitmap(self.ico['config'])
+        zak.title(lg('Settings'))
+        zak.resizable(False, False)
+        fnt = ('Consolas', 12)
+
+        Label(zak, text = 'Informations du fichier', font = ('Consolas', 16)).grid(row = 0, column = 0, columnspan = 2, pady = 12, padx = 20)
+
+        dic =  {'Type de fichier :': '',
+                'Créateur :': self.title,
+                'Mots clé :': '',
+                'Variables :': len(self.variables)}
+
+        def tryer(dic, k, v):
+            try:
+                dic[k] = self.meta[v]
+                return dic
+            except:
+                return dic
+
+        dic = tryer(dic, 'Auteur :', 'author')
+        dic = tryer(dic, 'Sujet', 'subject')
+        t = ''
+        try:
+            tps = int(self.meta['time'])
+            hours = int(tps // 3600)
+            tps -= hours * 3600
+            minutes = int(tps // 60)
+            tps -= minutes * 60
+            secondes = tps
+            t = ''
+            if hours > 0:
+                t += str(hours) + ' Heures '
+            if minutes > 0:
+                t += str(minutes) + ' Minutes '
+            if secondes > 0:
+                t += str(secondes) + ' Secondes'
+
+            dic['Temps de travail :'] = t
+        except:
+            pass
+
+        row = 1
+        for k, v in dic.items():
+            if v != '':
+                Label(zak, text = k, font = fnt).grid(row = row, column = 0, padx = 5, pady = 5, sticky = 'e')
+                Label(zak, text = v, font = fnt).grid(row = row, column = 1, padx = 5, pady = 5, sticky = 'w')
+                row += 1
+
+    def importer(self, file = None, ask_info = True, forcing = False):
+        if not self.dialoging or forcing:
+            self.dialoging = True
+            if not file:
+                file = askopenfilename(title = lg('import_pdf'), initialdir = '.', filetypes = [(lg('pdff'), '*.pdf *.pdff'), (lg('imgf'), '*.jpg *.png')], master = self.master)
+
+            if file:
+                if ask_info:
+                    if askyesno(lg('import_pdf'), lg('warn_import_pdf')):
+                        lunch_ocr(self.master, self.text, file)
+                    else:
+                        self.open(name = file, forcing = True, ask_info = False)
+                        return
+                else:
+                    lunch_ocr(self.master, self.text, file)
+
+            self.dialoging = False
+
+    def update_time(self, name = None):
+        if not name:
+            name = self.path
+
+        end = int(time.time())
+        temps = end - self.begin_time
+        try:
+            self.meta['time'] = str(int(self.meta['time']) + temps)
+            if self.ext(name) in self.listexta:
+                ExForm.write_meta(self)
+
+        except KeyError:
+            pass
+
+    def open(self, evt=None, name = None, forcing = False, ask_info = True):
         if not self.dialoging or forcing:
             self.dialoging = True
             if not name:
                 name = self.askopen()
 
-            if self.savedd != False:
-                end = int(time.time())
-                temps = end - self.begin_time
-                try:
-                    self.meta['time'] = str(int(self.meta['time']) + temps)
-                    if self.ext(name) in self.listexta:
-                        ExForm.write_meta(self)
-                except KeyError:
-                    pass
+            if not self.nofileopened:
+                self.fermer()
 
             if name:
                 try:
-                    self.menufichier.entryconfig(lg('settings'), stat = 'disabled')
+                    self.update_time()
+                    self.stat_form_infos(False)
                     self.stat_text(True)
                     self.clear_text()
                     self.meta = {}
+                    self.variables = {}
                     self.master.focus()
                     if self.ext(name) in self.listext:
                         ExText.open(self, name)
@@ -245,6 +328,18 @@ class File(ExForm, ExText):
                     elif self.ext(name) in self.listexta:
                         ExForm.open(self, name)
                         self.begin_time = int(time.time())
+
+                    elif self.ext(name) == '.pdf':
+                        if ask_info:
+                            if askyesno(lg('import_pdf'), lg('warn_open_pdf')):
+                                self.begin_pdf_analyse(name)
+                            else:
+                                self.importer(name, ask_info = False, forcing = True)
+                        else:
+                            self.begin_pdf_analyse(name)
+
+                    elif self.ext(name) in ('.jpg', '.png'):
+                        self.importer(name)
 
                 except FileNotFoundError:
                     self.saved = False
@@ -261,19 +356,18 @@ class File(ExForm, ExText):
 
             elif not self.saved:
                 if self.ext(self.path) not in self.listexta:
-                    ExText.save(self, self.path, self.get_text())
+                    ExText.save(self, self.path, self.get_text(save = True))
                 else:
-                    ExForm.save(self, self.path, self.get_text(), self.meta)
-                    
+                    ExForm.save(self, self.path, self.get_text(save = True), self.meta, self.variables)
 
                 self.saved = True
                 self.master.title(self.title + ' - ' + self.path)
                 
-    def saveas(self, evt=None, name = None, forcing = False):
+    def saveas(self, evt = None, name = None, forcing = False, path = ''):
         if not self.dialoging or forcing:
             self.dialoging = True
             if not name:
-                name = self.asksaveas()
+                name = self.asksaveas(path = path)
 
             if name:
                 if '.' not in name:
@@ -281,9 +375,9 @@ class File(ExForm, ExText):
                 self.path = name
 
                 if self.ext(self.path) not in self.listexta:
-                    ExText.save(self, self.path, self.get_text())
+                    ExText.save(self, self.path, self.get_text(save = True))
                 else:
-                    ExForm.save(self, self.path, self.get_text(), self.meta)
+                    ExForm.save(self, self.path, self.get_text(save = True), self.meta, self.variables)
                     self.menufichier.entryconfig(lg('settings'), stat = 'normal')
 
                 self.saved = True
@@ -307,7 +401,7 @@ class File(ExForm, ExText):
                 if self.ext(self.path) not in self.listexta:
                     ExText.save(self, self.path, self.get_text(), False)
                 else:
-                    ExForm.save(self, self.path, self.get_text(), False)
+                    ExForm.save(self, self.path, self.get_text(), False, self.variables)
 
             self.dialoging = False
             
@@ -319,10 +413,14 @@ class File(ExForm, ExText):
                 self.text.delete('0.0', END)
 
             self.saved = False
+            self.begin_time = int(time.time())
             self.savedd = False
+            self.nofileopened = False
             self.path = 'Untitled.x'
             self.master.title(self.title + ' - ' + self.path)
             self.update_line_numbers()
+            self.meta = {}
+            self.variables = {}
 
 
 if __name__ == '__main__':
