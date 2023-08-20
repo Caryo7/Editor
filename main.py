@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 ################## Fichiers à changer : compilation.iss ####################
-__version__ = VERSION = '37.0' ###
+__version__ = VERSION = '37.1' ###
 GUI_VERSION = '38' ###
-FILE_VERSION = '2.2' ##
-FORM_VERSION = '4.1' ##
+FILE_VERSION = '2.3' ##
+FORM_VERSION = '4.2' ##
 LANGS_VERSION = '1.6' ##
 
 # Partie 1 - Importation de tous les fichiers
@@ -76,6 +76,7 @@ Liste des fichiers demandant PATH_PROG :
  - pdfviewer.py (icon + path)
  - counter.py (icon)
  - variables.py (icon)
+ - config_v2.py (path)
 '''
 
 wprint('Importing files : ')
@@ -83,7 +84,7 @@ wprint('content')
 from content import *
 wprint('help')
 from help import *
-wprint('iofile')
+wprint('iofile, this can take several minutes...')
 from iofile import *
 wprint('menubar')
 from menubar import *
@@ -196,6 +197,7 @@ class Main(Win,
         self.FORM_VERSION = FORM_VERSION
         self.AUTHOR = AUTHOR
         self.programme_termine = False
+        self.mode_record = False
         self.sys_args = sys_args
         wprint('Définition du répertoire de travail...')
         self.path_prog = PATH_PROG
@@ -308,8 +310,10 @@ class Main(Win,
 
         wprint('End of generating')
         self.generating = False
-        wprint('Begining of the AutoSave protocol')
-        self.ast.start()
+        if get_autosave():
+            wprint('Begining of the AutoSave protocol')
+            self.ast.start()
+
         wprint('Run macro')
 
         try:

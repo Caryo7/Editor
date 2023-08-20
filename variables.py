@@ -12,6 +12,9 @@ class TableGUI:
         assert mode in ('gestion', 'choix')
         self.mode = mode
 
+        if self.mode_record and mode == 'gestion':
+            self.events.append({'command': 'lst_vars'})
+
         self.tvars = Toplevel(self.master)
         self.tvars.transient(self.master)
         self.tvars.title('Table des variables') ###############################
@@ -52,6 +55,7 @@ class TableGUI:
         valeur = self.tree.item(self.tree.selection())['values'][1]
         self.text.insert('insert', b'\x01'.decode(get_encode()) + valeur + b'\x01'.decode(get_encode()))
         self.tvars.destroy()
+        self.unsave(forcing = True, evt = None)
 
     def append(self):
         zak = Toplevel(self.tvars)
@@ -74,6 +78,7 @@ class TableGUI:
                 self.update()
                 last = self.tree.get_children()[-1]
                 self.tree.selection_add(last)
+                self.unsave(forcing = True, evt = None)
 
             else:
                 showerror('', 'Merci de mettre un nom pour la variable !') #############################
@@ -99,13 +104,16 @@ class TableGUI:
     def getBrutValueVars(self, text):
         data = text.split(self.spliter)
         i = 1
+        if self.variables == {}:
+            return text
+
         while True:
             try:
                 for k, v in self.variables.items():
                     if data[i] == v:
                         data[i] = k
                         break
-
+    
             except IndexError:
                 break
 
@@ -114,11 +122,17 @@ class TableGUI:
         return self.spliter.join(data)
 
     def append_var(self):
+        if self.mode_record:
+            self.events.append({'command': 'add_var'})
+
         self.start_vars(mode = 'choix')
         self.append()
 
     def place_variable(self):
         if self.variables != {}:
+            if self.mode_record:
+                self.events.append({'command': 'place_var'})
+
             self.start_vars(mode = 'choix')
         else:
             showinfo('', 'No variables created !') ###################
@@ -129,6 +143,7 @@ class TableGUI:
         self.variables.pop(selected[0])
 
         self.tree.delete(index)
+        self.unsave(forcing = True, evt = None)
 
     def config(self):
         index = self.tree.selection()
@@ -137,6 +152,7 @@ class TableGUI:
         self.variables[selected[0]] = new_data
 
         self.update()
+        self.unsave(forcing = True, evt = None)
 
     def itemSelected(self, evt = None):
         if self.tree.selection():

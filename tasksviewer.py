@@ -13,6 +13,9 @@ class TasksViewer:
         self.nb = 1
         
     def show(self):
+        if self.mode_record:
+            self.events.append({'command': 'visut'})
+
         self.zak = Toplevel(self.master)
         self.zak.iconbitmap(self.ico['task'])
         self.zak.title(lg('TaV'))

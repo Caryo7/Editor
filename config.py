@@ -9,11 +9,12 @@ from tkinter.colorchooser import *
 from confr import *
 from progress import *
 from tooltip import *
+from config_v2 import *
 
-class Configurator:
+class Configurator1:
     colors = {lg('black'): 'black', lg('white'): 'white', lg('blue'): 'blue', lg('green'): 'green', lg('yellow'): 'yellow', lg('red'): 'red', lg('pink'): 'pink', lg('orange'): 'orange', lg('grey'): 'grey', }
     colors_name = [v for v, _ in colors.items()]
-    font_lst = ['Courier', 'Calibri', 'Arial']
+    #font_lst = ['Courier', 'Calibri', 'Arial']
     #lgs = ['an', 'fr', 'al', 'es', 'it', 'ch']
     langs = {lg('anglais') : 'an',
              lg('francais') : 'fr',
@@ -49,7 +50,9 @@ class Configurator:
                'gotol':     lg('gotol'),
                'tasks':     lg('tasks'),
                'puces':     lg('puces'),
-               'research':  lg('research'),}
+               'research':  lg('research'),
+               'add_var':   lg('add_var'),
+               'place_var': lg('place_var'),}
     
     def cancel(self):
         self.tk.destroy()
@@ -63,6 +66,10 @@ class Configurator:
             return
 
         self.dialoging = True
+
+        if self.mode_record:
+            self.events.append({'command': 'IHM'})
+
         self.tk = Toplevel(self.master)
         self.tk.iconbitmap(self.ico['config'])
         self.tk.transient(self.master)
@@ -212,7 +219,7 @@ class Configurator:
         self.menuvie.grid(row=13, column=0, sticky='w')
         if read('menu', 'view') == '1':self.menuvie_.set(1)
         self.menuvars_ = IntVar(master = self.master)
-        self.menuvars = Checkbutton(m, text=lg('View'), variable=self.menuvars_, onvalue=1, offvalue=0)
+        self.menuvars = Checkbutton(m, text=lg('variables'), variable=self.menuvars_, onvalue=1, offvalue=0)
         self.menuvars.grid(row=14, column=0, sticky='w')
         if read('menu', 'vars') == '1':self.menuvars_.set(1)
 
@@ -327,9 +334,9 @@ class Configurator:
             val3 = vt
         Button(t, text=lg('...'), command = lambda : self.askcolor('dfc', val3)).grid(row=3, column = 2, sticky = 'w')
 
-        self.font = Combobox(t, value=self.font_lst)
-        self.font.grid(row=4, column=1, sticky='w')
-        self.font.current(self.get_font_pos(read('text', 'font')))
+        self.font_ = Combobox(t, value=self.fonts)
+        self.font_.grid(row=4, column=1, sticky='w')
+        self.font_.current(self.get_font_pos(read('text', 'font')))
         self.size = Combobox(t, value=[i for i in range(6, 73)])
         self.size.grid(row=5, column=1, sticky='w')
         self.size.current(int(read('text', 'size'))-6)
@@ -355,6 +362,11 @@ class Configurator:
             self.bro.set(ind)
 
         self.bro.bind('<<ComboboxSelected>>', self.info)
+
+        self.new_conf_ = IntVar(master = self.master)
+        self.new_conf = Checkbutton(l, text=lg('new_ihm_config'), variable=self.new_conf_, onvalue=1, offvalue=0)
+        self.new_conf.grid(row=2, column=0, sticky='w', columnspan = 2)
+        if read('global', 'version_config') == '1':self.new_conf_.set(1)
 
         ## Cadre k pour l'enregistrement
 
@@ -679,7 +691,7 @@ class Configurator:
         
     def get_font_pos(self, data):
         try:
-            return self.font_lst.index(data)
+            return self.font.index(data)
         except:
             pass
 
@@ -755,12 +767,13 @@ class Configurator:
         optim('fgd', 'text', 'fgd', self.fgd.get())
         optim('bgl', 'text', 'bgl', self.bgl.get())
         optim('fgl', 'text', 'fgl', self.fgl.get())
-        optim('font', 'text', 'font', self.font.get())
+        optim('font', 'text', 'font', self.font_.get())
         optim('tabs', 'text', 'tab', str(self.tabs.get()))
         
         optim('check updates', 'global', 'look_update', str(self.update_.get()))
         optim('Info bar', 'view', 'bar_info', self.vinf_.get())
         optim('Button bar', 'view', 'bar_buttons', self.vbt_.get())
+        optim('IHM Configuration', 'global', 'version_config', self.new_conf_.get())
 
         optim('size - CANCELED', 'text', 'size', self.size.get())
         p.step('codage', 'CANCELED')
@@ -785,6 +798,11 @@ class Configurator:
     def apply(self):
         self.configurating = True
         self.validate_choice()
+
+
+objet = Configurator1 if get_version_config() == 0 else Configurator2
+class Configurator(objet):
+    pass
 
 
 if __name__ == '__main__':

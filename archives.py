@@ -11,10 +11,16 @@ class Archives:
         ""
         
     def create_a(self):
+        if self.mode_record:
+            self.events.append({'command': 'archive'})
+
         z = zipfile.ZipFile(self.path + '.zip', 'w')
         z.close()
         
     def add_new_version(self):
+        if self.mode_record:
+            self.events.append({'command': 'append'})
+
         if self.path != 'untitled.x':
             try:    
                 z = zipfile.ZipFile(self.path + '.zip', mode='a')
@@ -70,6 +76,10 @@ class Archives:
             return
 
         self.dialoging = True
+
+        if self.mode_record:
+            self.events.append({'command': 'compare'})
+
         if os.path.exists(self.path + '.zip'):
             z = zipfile.ZipFile(self.path + '.zip', mode='r')
             l = z.namelist()

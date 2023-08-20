@@ -7,3 +7,5 @@ Finir la table des variables
 Ajouter le convertisseur texte codé variable -> texte variables remplacées
 Voir pour la sauvegarde automatique et pour le changement d'une variable en cours de route...
 Refaire le système de configuration du logiciel plus graphique
+
+Utiliser la table de fonction de keyb.py pour les macros !!!!!

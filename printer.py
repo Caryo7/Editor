@@ -24,6 +24,9 @@ class Printer:
         ""
         
     def print_window(self, evt=None):
+        if self.mode_record:
+            self.events.append({'command': 'print', 'evt': evt})
+
         self.askprinter()
 
     def askprinter(self):

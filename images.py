@@ -63,6 +63,10 @@ class Images:
                        'upgrade': PhotoImage(master = self.master, file = ''),#self.path_prog + '/'),
 
                        'load': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/load.png'),
+                       'rec': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/load.png'),
+                       'pause': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/load.png'),
+                       'play': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/load.png'),
+                       'carre': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/load.png'),
 
                        'ihm': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/config.png'),
                        'lnb': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/line.png'),

@@ -251,6 +251,9 @@ class RunPython:
         pass
 
     def run_python(self):
+        if self.mode_record:
+            self.events.append({'command': 'run_python'})
+
         root = Tk()
         root.iconbitmap(self.ico['python'])
         root.title(lg('run_python'))
@@ -258,6 +261,9 @@ class RunPython:
         console.pack(fill = BOTH, expand = True)
 
     def python_exe(self):
+        if self.mode_record:
+            self.events.append({'command': 'python'})
+
         prog = self.get_text()
         print(prog)
 

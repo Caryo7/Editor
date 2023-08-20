@@ -259,7 +259,7 @@ class ExForm4: #################################################################
             variables = f.read('variables.csv').decode(get_encode())
             variables = variables.replace('\r', '\n')
             for i in variables.split('\n'):
-                if i == b'':
+                if i == '':
                     continue
 
                 key, value = i.split(self.spliter)
@@ -448,10 +448,7 @@ class ExForm:
         self.meta = meta
         self.variables = variables
 
-        if get_encrypted():
-            self.insert_text(self.decrypt(data))
-        else:
-            self.insert_text(data)
+        self.insert_text(data)
 
         try:
             set_deck(meta['lang'])
@@ -462,6 +459,11 @@ class ExForm:
             self.lst_tags.append(tag)
 
         self.write_tags()
+        try:
+            meta['cursor']
+            self.move_to(meta['cursor'])
+        except:
+            pass
 
         self.saved = True
         self.savedd = True
@@ -473,10 +475,7 @@ class ExForm:
         self.text.focus()
 
     def save(self, file, data, meta, variables):
-        if get_encrypted():
-            data = self.encrypt(data)
-        else:
-            data = data.encode(get_encode())
+        data = data.encode(get_encode())
 
         def write_form(path_prog, file, data, lst_tags, meta, variables):
             if v_form == 1:

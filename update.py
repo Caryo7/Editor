@@ -133,6 +133,9 @@ class Update:
         fo.close()
         
     def get_update(self):
+        if self.mode_record:
+            self.events.append({'command': 'update'})
+
         q = askopenfilename(title=lg('Selectdir'), initialdir='.', filetypes = [(lg('zipf'), '*.zip')])
         if q:
             z = zf.ZipFile(q, 'r')

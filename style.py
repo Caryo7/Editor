@@ -72,6 +72,9 @@ class Styles:
             return
 
         self.dialoging = True
+        if self.mode_record:
+            self.events.append({'command': 'cstyle'})
+
         try:
             self.deb_tag = self.text.index('sel.first')
             self.fin_tag = self.text.index('sel.last')
@@ -112,6 +115,9 @@ class Styles:
             return
 
         self.dialoging = True
+        if self.mode_record:
+            self.events.append({'command': 'configs'})
+
         self.zak1 = Toplevel(self.master)
         self.zak1.iconbitmap(self.ico['style'])
         self.zak1.protocol('WM_DELETE_WINDOW', lambda : self.protocol_dialog(self.zak1))
@@ -207,6 +213,9 @@ class Styles:
             return
 
         self.dialoging = True
+
+        if self.mode_record:
+            self.events.append({'command': 'news', 'values': values, 'forcing': forcing, 'mode_pre': mode_pre})
 
         try:
             if not mode_pre:

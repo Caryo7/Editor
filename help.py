@@ -18,6 +18,10 @@ class help_:
             return
 
         self.dialoging = True
+
+        if self.mode_record:
+            self.events.append({'command': 'about'})
+
         zak = Toplevel(self.master)
         zak.transient(self.master)
         zak.iconbitmap(self.ico['help'])
@@ -92,6 +96,9 @@ class help_:
         zak.update()
 
     def ToDo(self):
+        if self.mode_record:
+            self.events.append({'command': 'todo'})
+
         f = open(self.path_prog + '/TODO.txt', 'r', encoding = get_encode())
         SimpleDialog(self.master,
                      text=f.read(),
@@ -138,6 +145,9 @@ class help_:
 
     def documentation(self):
         if not(self.dialoging):
+            if self.mode_record:
+                self.events.append({'command': 'doc'})
+
             f = open(self.path_prog + '/help.hlp', 'r', encoding = get_encode())
             self.insert('Documentation', f.read())
             f.close()

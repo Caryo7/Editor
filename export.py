@@ -268,6 +268,9 @@ class Export(AskMargins):
     def export_word(self):
         if not(self.dialoging):
             self.dialoging = True
+            if self.mode_record:
+                self.events.append({'command': 'word'})
+
             name = asksaveasfilename(title=lg('Export_Word'), filetypes=[(lg('WF'), '*.docx *.doc')])
             self.dialoging = False
             if name and export_word:
@@ -281,6 +284,9 @@ class Export(AskMargins):
     def export_pdf(self, mode_print = False, cmd_print = None):
         if not self.dialoging or mode_print:
             self.dialoging = True
+            if self.mode_record:
+                self.events.append({'command': 'pdf', 'mode_print': mode_print, 'cmd_print': cmd_print})
+
             if not mode_print:
                 name = asksaveasfilename(title=lg('Export_PDF'), filetypes=[(lg('pdff'), '*.pdf *.pdff')])
             else:

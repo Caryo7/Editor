@@ -102,8 +102,8 @@ class MenuBar:
             menufor.add_command(label=lg('Uncomment'), stat='disabled', accelerator=self.get_accelerator('uncomment'), image = self.images['uncomment'], compound='left')
 
         if get_menurun():
-            menurun = Menu(menubar, tearoff=0)                #    |
-            menubar.add_cascade(label=lg('Run'), menu=menurun)#### V ########
+            menurun = Menu(menubar, tearoff=0)
+            menubar.add_cascade(label=lg('Run'), menu=menurun)
             menurun.add_command(label=lg('Run_python'), stat = 'normal', accelerator = self.get_accelerator('run_python'), image = self.images['run_python'], compound = 'left', command = self.run_python)
             menurun.add_command(label=lg('python'), stat = 'normal', accelerator = self.get_accelerator('python'), image = self.images['run_python'], compound = 'left', command = self.python_exe)
             menurun.add_command(label=lg('Compile'), stat='disabled', accelerator=self.get_accelerator('compile'), image = self.images['compile'], compound='left')
@@ -161,9 +161,13 @@ class MenuBar:
             self.load_ext(True)
 
         if get_menumacro():
-            menumacro = Menu(menubar, tearoff=0)
-            menubar.add_cascade(label=lg('Macro'), menu=menumacro)
-            menumacro.add_command(label=lg('Load'), command=self.load_macro, accelerator=self.get_accelerator('macro'), image = self.images['load'], compound='left')
+            self.menumacro = Menu(menubar, tearoff=0)
+            menubar.add_cascade(label=lg('Macro'), menu = self.menumacro)
+            self.menumacro.add_command(label=lg('Load'), command=self.load_macro, accelerator=self.get_accelerator('macro'), image = self.images['load'], compound='left')
+            self.menumacro.add_separator()
+            self.menumacro.add_command(label = 'Record Macro', stat = 'normal', command = self.record_macro, accelerator=self.get_accelerator('record_macro'), image = self.images['rec'], compound='left') ################
+            self.menumacro.add_command(label = 'Switch Record', stat = 'disabled', command = self.switch_record, accelerator=self.get_accelerator('switch_record'), image = self.images['pause'], compound='left') ################
+            self.menumacro.add_command(label = 'Finish Record', stat = 'disabled', command = self.finish_record, accelerator=self.get_accelerator('finish_record'), image = self.images['carre'], compound='left') ################
 
         if get_menuopt():
             menuopt = Menu(menubar, tearoff=0)

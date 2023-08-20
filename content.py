@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from tkinter import *
 from tkinter import ttk
+from tkinter import font
 from tkinter.ttk import *
 from tkinter.messagebox import *
 from tkinter.filedialog import *
@@ -67,6 +68,9 @@ class Content:
         self.text.bind_all('<MouseWheel>', self.uln)
         self.text.bind('<KeyRelease-Return>', self.act_puces)
 
+        self.fonts = list(font.families())
+        self.fonts.sort()
+
         self.scroll.config(command=self.text.yview)
         self.scroll.bind('<ButtonRelease-1>', self.uln)
 
@@ -93,20 +97,35 @@ class Content:
         self.conf_win(generate = True)
         self.__ac__()
 
+    def get_index(self):
+        return str(self.text.index('insert'))
+
+    def move_to(self, index):
+        self.text.see(index)
+        self.text.mark_set('insert', index)
+
     def drag_drop(self, event):
         file = event.data
         self.open(name = file)
 
     def get_text(self, begin = '0.0', finish = 'end', save = False):
         if save:
-            return self.getBrutValueVars(self.text.get(begin, finish))
+            data = self.getBrutValueVars(self.text.get(begin, finish))
         else:
-            return self.text.get(begin, finish)
+            data = self.text.get(begin, finish)
+
+        if get_encrypted():
+            data = self.encrypt(data)
+
+        return data
 
     def clear_text(self):
         self.text.delete('0.0', 'end')
 
     def insert_text(self, data):
+        if get_encrypted():
+            data = self.decrypt(data)
+
         data = self.getTextValueVars(data)
         self.text.insert(END, data)
 
@@ -125,7 +144,7 @@ class Content:
     def changebars(self):
         if self.ruban.get():
             self.boutons.set(0)
-        elif self.boutons.get():
+        if self.boutons.get():
             self.ruban.set(0)
         self.conf_win(generate = True)
         
@@ -242,6 +261,10 @@ class Content:
         if self.lst_fnct['autoinvert']:
             return
         if not(self.dialoging):
+
+            if self.mode_record:
+                self.events.append({'command': 'lnb'})
+
             self.lns = not(self.lns)
             if self.lns:
                 self.text.place(x=self.width_linenb, width = self.master.winfo_width() - self.width_scroll - self.width_linenb)
@@ -252,6 +275,7 @@ class Content:
                                                   highlightbackground='#555555',
                                                   highlightthickness=0,
                                                   yscrollcommand=self.scroll.set)
+
                 self.line_numbers_canvas.place(x=0, y = 0 if not self.boutons.get() else self.height_boutons)
             else:
                 self.text.place(x=0, width = self.master.winfo_width() - self.width_scroll)
@@ -261,6 +285,10 @@ class Content:
 
     def act_color_theme(self):
         if not(self.dialoging):
+
+            if self.mode_record:
+                self.events.append({'command': 'dark'})
+
             self.dark = not(self.dark)
             self.text.config(bg=get_bgd() if self.dark else get_bgl(), fg=get_fgd() if self.dark else get_fgl())
 
@@ -280,7 +308,8 @@ class Content:
                         linenum = str(int(float(i.replace('.0', ''))%10000))
                         self.line_numbers_canvas.create_text(1, y, anchor='nw', text=linenum, fill='#ffffff', font=(fnt, size))
                         i = self.text.index('{0}+1line'.format(i))
-                    else:break
+                    else:
+                        break
 
     def test_lnu(self, evt):
         if not(self.dialoging):

@@ -17,8 +17,8 @@ PATH_PROG = os.path.abspath(os.getcwd())
 
 class LgViewer:
     def __init__(self, master = None):
-        #Password(self.create, tk = master)
-        self.create()
+        Password(self.create, tk = master)
+        #self.create()
 
     def create(self):
         self.master = Tk()
@@ -51,7 +51,7 @@ class LgViewer:
             except AttributeError:
                 pass
 
-            self.tree = ttk.Treeview(self.master, show = 'headings', columns = self.columns, height = 30)
+            self.tree = ttk.Treeview(self.master, show = 'headings', columns = self.columns, height = 30, selectmode = 'browse')
             scroll = ttk.Scrollbar(self.master, orient = 'vertical', command = self.tree.yview)
             self.tree.place(x = 0, y = 0)
             self.tree.configure(yscrollcommand=scroll.set)

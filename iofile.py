@@ -96,7 +96,10 @@ class File(ExForm, ExText):
         n = askopenfilename(title=lg('Open'), initialdir='.', filetypes=self.ttext, master = self.master)
         return n
 
-    def asksaveas(self, path = ''):
+    def asksaveas(self, path = '', exts = None):
+        if not exts:
+            exts = self.ttext.copy()
+
         #n = len(path) - 1
         #while path[n] != '.':
             #n -= 1
@@ -104,7 +107,7 @@ class File(ExForm, ExText):
         #if 7 > len(path) - 1 - n > 0:
             #path = path[:n]
 
-        n = asksaveasfilename(title=lg('Save_as'), initialdir='.', filetypes=self.ttext, master = self.master)
+        n = asksaveasfilename(title=lg('Save_as'), initialdir='.', filetypes=exts, master = self.master)
         return n
 
     def ask_settings(self):
@@ -112,6 +115,10 @@ class File(ExForm, ExText):
             return
 
         self.dialoging = True
+
+        if self.mode_record:
+            self.events.append({'command': 'settings'})
+
         zak = Tk()
         zak.iconbitmap(self.ico['config'])
         zak.transient()
@@ -218,6 +225,9 @@ class File(ExForm, ExText):
         zak.protocol('WM_DELETE_WINDOW', demander_fermeture)
 
     def show_info(self):
+        if self.mode_record:
+            self.events.append({'command': 'meta_info'})
+
         zak = Toplevel(self.master)
         zak.transient(self.master)
         zak.iconbitmap(self.ico['config'])
@@ -271,6 +281,9 @@ class File(ExForm, ExText):
     def importer(self, file = None, ask_info = True, forcing = False):
         if not self.dialoging or forcing:
             self.dialoging = True
+            if self.mode_record:
+                self.events.append({'command': 'import', 'file': file, 'forcing': forcing, 'ask_info': ask_info})
+
             if not file:
                 file = askopenfilename(title = lg('import_pdf'), initialdir = '.', filetypes = [(lg('pdff'), '*.pdf *.pdff'), (lg('imgf'), '*.jpg *.png')], master = self.master)
 
@@ -294,6 +307,7 @@ class File(ExForm, ExText):
         temps = end - self.begin_time
         try:
             self.meta['time'] = str(int(self.meta['time']) + temps)
+            self.meta['cursor'] = str(self.get_index())
             if self.ext(name) in self.listexta:
                 ExForm.write_meta(self)
 
@@ -303,6 +317,9 @@ class File(ExForm, ExText):
     def open(self, evt=None, name = None, forcing = False, ask_info = True):
         if not self.dialoging or forcing:
             self.dialoging = True
+            if self.mode_record:
+                self.events.append({'command': 'open', 'evt': evt, 'name': name, 'forcing': forcing, 'ask_info': ask_info})
+
             if not name:
                 name = self.askopen()
 
@@ -351,6 +368,9 @@ class File(ExForm, ExText):
 
     def save(self, evt=None, forcing = False):
         if not self.dialoging or forcing:
+            if self.mode_record:
+                self.events.append({'command': 'save', 'evt': evt, 'forcing': forcing})
+
             if not self.savedd:
                 self.saveas()
 
@@ -366,6 +386,9 @@ class File(ExForm, ExText):
     def saveas(self, evt = None, name = None, forcing = False, path = ''):
         if not self.dialoging or forcing:
             self.dialoging = True
+            if self.mode_record:
+                self.events.append({'command': 'saveas', 'evt': evt, 'name': name, 'forcing': forcing, 'path': path})
+
             if not name:
                 name = self.asksaveas(path = path)
 
@@ -396,6 +419,9 @@ class File(ExForm, ExText):
     def savecopyas(self, evt=None, forcing = False):
         if not self.dialoging or forcing:
             self.dialoging = True
+            if self.mode_record:
+                self.events.append({'command': 'savecopyas', 'evt': evt, 'forcing': forcing})
+
             name = asksaveasfilename(title=lg('Save_copy_as'), initialdir='.', filetypes=self.ttext)
             if name:
                 if self.ext(self.path) not in self.listexta:
@@ -407,6 +433,9 @@ class File(ExForm, ExText):
             
     def new(self, evt=None, forcing = False, mode_clear = False):
         if not self.dialoging or forcing:
+            if self.mode_record:
+                self.events.append({'command': 'new', 'evt': evt, 'forcing': forcing, 'mode_clear': mode_clear})
+
             if not mode_clear:
                 self.fermer()
                 self.stat_text(True)

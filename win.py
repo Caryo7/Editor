@@ -106,6 +106,9 @@ class Win:
             elif dem == None:
                 return 'cancel'
 
+        if self.mode_record:
+            self.events.append({'command': 'close', 'evt': evt})
+
         self.update_time()
 
         self.clear_text()
@@ -144,6 +147,10 @@ class Win:
             #i.EOP()
 
         f = self.fermer()
+        
+        if self.mode_record:
+            self.events.append({'command': 'quit', 'evt': evt})
+
         if f == 'exit':
             destroy()
             self.programme_termine = True

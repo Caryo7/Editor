@@ -67,6 +67,9 @@ class Pynitel:
             self.conn.recv(10000)
 
     def home(self):
+        if self.mode_record:
+            self.events.append({'command': 'clear'})
+
         if self.conn is not None:
             self._del(0, 1)
             self.sendchr(12)
@@ -233,11 +236,14 @@ class Pynitel:
     
     def key(self):return self.lastkey
     
-    def scale(self, taille):self.sendesc(chr(76+taille))
+    def scale(self, taille):
+        self.sendesc(chr(76+taille))
     
-    def notrace(self):self.sendesc(chr(89))
+    def notrace(self):
+        self.sendesc(chr(89))
     
-    def trace(self):self.sendesc(chr(90))
+    def trace(self):
+        self.sendesc(chr(90))
     
     def plot(self, car, nombre):
         if nombre > 1:self._print(car)
@@ -283,7 +289,11 @@ class Pynitel:
         self.sendchr(27)
         self.send(text)
         
-    def bip(self):self.sendchr(7)
+    def bip(self):
+        if self.mode_record:
+            self.events.append({'command': 'bip'})
+
+        self.sendchr(7)
     
     def accents(self, text):
         text = text.replace('à', '\x19\x41a')
@@ -326,9 +336,15 @@ class Pynitel:
 class Minitel(Pynitel, Ulla):
     def __min__(self):
         inf = get_min_info()
-        self.__pynitel__(port=inf['dev'], vitesse=inf['speed'], bytesize=inf['bs'], timeout=inf['to'])
+        self.__pynitel__(port=inf['dev'],
+                         vitesse=inf['speed'],
+                         bytesize=inf['bs'],
+                         timeout=inf['to'])
         
     def send_file(self):
+        if self.mode_record:
+            self.events.append({'command': 'send'})
+
         self._print(self.text.get('0.0', END))
 
 if __name__ == '__main__':

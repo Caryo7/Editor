@@ -176,6 +176,9 @@ def get_spacing2():
 def get_spacing3():
     return int(p.get('text', 'spacing3'))
 
+def get_version_config():
+    return int(p.get('global', 'version_config'))
+
 def get_pwd():
     return p.get('security', 'password')
 
@@ -187,6 +190,10 @@ def get_inter_time():
 
 def get_autosave_path():
     return p.get('auto_save', 'path')
+
+def get_autosave():
+    if p.get('auto_save', 'active') == '1':return True
+    else:return False
 
 def get_mode():
     return get_deck()
@@ -220,7 +227,7 @@ def get_encrypted():
 def write_key(key):
     f = open(PATH_PROG + '/config.ini', 'r+', encoding = get_encode())
     p.read(PATH_PROG + '/config.ini', encoding = get_encode())
-    print(str(key))
+    #print(str(key))
     p.set('crypt', 'key', str(key))
     p.write(f)
     f.close()

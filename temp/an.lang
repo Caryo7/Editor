@@ -310,3 +310,7 @@ variables = Variables
 lst_vars = See list of variables
 add_var = Create a variable
 place_var = Place a variable
+active = Active
+langue_pa = Spoken Language
+nb_varia = Number of Variables :
+new_ihm_config = New Configurator

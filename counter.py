@@ -25,6 +25,9 @@ def lines():
     return s
 
 def act(main_self):
+    if main_self.mode_record:
+        main_self.events.append({'command': 'lines'})
+
     zak = Toplevel(main_self.master)
     zak.transient(main_self.master)
     zak.title(lg('Info_log'))
@@ -34,7 +37,8 @@ def act(main_self):
     dic = {lg("Nb_Lines"): str(lines()),
            lg("Nb_Fncts"): str(nbFncts()),
            lg("Nb_Class"): str(nbClasses()),
-           lg("Nb_Files"): str(nbFiles())}
+           lg("Nb_Files"): str(nbFiles()),
+           lg("Nb_Varia"): str(nbVariables())}
 
     row = 0
     for k, v in dic.items():
@@ -42,7 +46,9 @@ def act(main_self):
         Label(zak, text = v, font = ('Consolas', 12)).grid(row = row, column = 1, padx = 2, pady = 5, sticky = 'w')
         row += 1
 
-    Button(zak, text = lg('OK'), command = zak.destroy).grid(row = row, column = 0, padx = 10, pady = 5, columnspan = 2)
+    Button(zak, text = lg('OK'), command = zak.destroy, width = 25).grid(row = row, column = 0, padx = 10, pady = 5, columnspan = 2)
 
 if __name__ == '__main__':
     from __init__ import *
+
+

@@ -16,6 +16,9 @@ class Search:
     def search(self, evt=None):
         if not(self.dialoging):
             self.dialoging = True
+            if self.mode_record:
+                self.events.append({'command': 'search', 'evt': evt})
+
             zak = Toplevel(self.master)
             zak.iconbitmap(self.ico['search'])
             zak.protocol('WM_DELETE_WINDOW', lambda : self.end_dialoging(zak))
@@ -50,6 +53,9 @@ class Search:
     def replace(self, evt=None):
         if not(self.dialoging):
             self.dialoging = True
+            if self.mode_record:
+                self.events.append({'command': 'replace', 'evt': evt})
+
             zak = Toplevel(self.master)
             zak.iconbitmap(self.ico['replace'])
             zak.protocol('WM_DELETE_WINDOW', lambda : self.end_dialoging(zak))
@@ -73,10 +79,17 @@ class Search:
             Button(zak, text=lg('Replace')).grid(row=1, column=2, sticky='e')
             Button(zak, text=lg('Close'), command=zak.destroy).grid(row=2, column=2, sticky='e')
 
-    def gotol(self, evt=None):
+    def gotol(self, evt=None, line = None):
         if not(self.dialoging):
             self.dialoging = True
-            nb = askinteger(self.title, lg('WLDYWTG'))
+            if self.mode_record:
+                self.events.append({'command': 'gotol', 'evt': evt, 'line': line})
+
+            if line:
+                nb = line
+            else:
+                nb = askinteger(self.title, lg('WLDYWTG'))
+
             self.text.tag_add(SEL, str(nb) + ".0", str(nb) + ".100000")
             self.text.mark_set(INSERT, str(nb) + ".0")
             self.text.focus_set()
@@ -84,10 +97,16 @@ class Search:
 
     def comment(self):
         if not(self.dialoging):
+            if self.mode_record:
+                self.events.append({'command': 'comment'})
+
             self.text.insert(INSERT, '# ')
 
     def copy(self):
         if not(self.dialoging):
+            if self.mode_record:
+                self.events.append({'command': 'copy'})
+
             self.text.clipboard_clear()
             try:
                 self.text.clipboard_append(self.text.selection_get())
@@ -96,6 +115,9 @@ class Search:
 
     def past(self):
         if not(self.dialoging):
+            if self.mode_record:
+                self.events.append({'command': 'past'})
+
             try:
                 self.text.insert(INSERT, self.text.clipboard_get())
                 self.texte += self.text.clipboard_get()
@@ -104,18 +126,31 @@ class Search:
 
     def cut(self):
         if not(self.dialoging):
+            if self.mode_record:
+                self.events.append({'command': 'cut'})
+
             self.copy()
             self.text.delete('sel.first', 'sel.last')
 
     def undo(self, evt=None):
         if not(self.dialoging):
-            try:self.text.edit_undo()
-            except TclError:"ne rien faire"
+            if self.mode_record:
+                self.events.append({'command': 'undo', 'evt': evt})
+
+            try:
+                self.text.edit_undo()
+            except TclError:
+                pass
 
     def redo(self, evt=None):
         if not(self.dialoging):
-            try:self.text.edit_redo()
-            except TclError:"ne rien faire"
+            if self.mode_record:
+                self.events.append({'command': 'redo', 'evt': evt})
+
+            try:
+                self.text.edit_redo()
+            except TclError:
+                pass
 
 if __name__ == '__main__':
     from main import *

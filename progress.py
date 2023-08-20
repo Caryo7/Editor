@@ -91,7 +91,10 @@ class Waiter(Thread):
         else:
             self.zak = Tk()
 
-        self.ptb = ProgressTask(tb)
+        self.tb = tb
+        if tb:
+            self.ptb = ProgressTask(tb)
+
         self.zak.title(title)
         self.decimals = decimals
         self.title = title
@@ -113,6 +116,7 @@ class Waiter(Thread):
             self.pc = StringVar(master = self.zak)
             self.update_numbers()
             Label(self.zak, textvariable = self.pc).place(x = 295, y = 70)
+
         self.zak.update()
 
         if autostart:
@@ -151,7 +155,8 @@ class Waiter(Thread):
 
     def stop(self):
         self.on = False
-        self.ptb.stop()
+        if self.tb:
+            self.ptb.stop()
         self.zak.destroy()
 
     def set(self, maxi, with_first = True):
@@ -160,18 +165,21 @@ class Waiter(Thread):
         else:
             self.add = 100
         self.add /= maxi
-        self.ptb.set(maxi, with_first)
+        if self.tb:
+            self.ptb.set(maxi, with_first)
 
     def step(self, text = '', first = False):
         try:
             if first:
                 self.prb['value'] = 0.0
                 self.prb['value'] += 1.0
-                self.ptb.step(first)
+                if self.tb:
+                    self.ptb.step(first)
             else:
                 self.prb['value'] += self.add
                 self.fpc += self.add
-                self.ptb.step()
+                if self.tb:
+                    self.ptb.step()
                 self.update_numbers()
                 if text != '':
                     self.zak.title(self.title + ' - ' + text)
@@ -195,7 +203,9 @@ class Progress:
 
         self.zak.title(title)
         self.double = double
-        self.ptb = ProgressTask(tb)
+        self.tb = tb
+        if self.tb:
+            self.ptb = ProgressTask(tb)
         self.decimals = decimals
         self.title = title
         self.zak.resizable(False, False)
@@ -240,22 +250,26 @@ class Progress:
         with_first = 99 if with_first else 100
         if bar == 0:
             if not self.double:
-                self.ptb.set(value, True if with_first == 99 else False)
+                if self.tb:
+                    self.ptb.set(value, True if with_first == 99 else False)
             self.add1 = with_first / value
         elif bar == 1:
             if self.double:
-                self.ptb.set(value, True if with_first == 99 else False)
+                if self.tb:
+                    self.ptb.set(value, True if with_first == 99 else False)
             self.add2 = with_first / value
 
     def step(self, text = '', bar = 0, first = False):
         if bar == 0:
             if not self.double:
-                self.ptb.step(first)
+                if self.tb:
+                    self.ptb.step(first)
             self.pb1['value'] += self.add1
             self.fpc1 += self.add1
         elif bar == 1:
             if self.double:
-                self.ptb.step(first)
+                if self.tb:
+                    self.ptb.step(first)
             self.pb2['value'] += self.add2
             self.fpc2 += self.add2
 
@@ -277,7 +291,8 @@ class Progress:
         self.ptb.reset()
 
     def stop(self):
-        self.ptb.stop()
+        if self.tb:
+            self.ptb.stop()
         self.zak.destroy()
 
 

@@ -21,15 +21,27 @@ class Struct:
         self.bal = []
         self.fncts = 0
         self.classes = 0
+        self.variables = 0
         for file in lst:
             try:
                 f = open(file, 'r', encoding = get_encode())
                 self.bal.append(lg('File') + ' : ' + file)
                 tab = ' | '
+                r = f.read()
+                self.variables += r.count(' = ')
 
-                for line in f.readlines():
+                for line in r.split('\n'):
+                    if not line:
+                        continue
+
+                    #print(line.encode())
                     line = list(line)
-                    while line[0] == ' ':line.pop(0)
+                    try:
+                        while line[0] == ' ':
+                            line.pop(0)
+                    except:
+                        pass
+
                     line = ''.join(line)
                     if line == '':
                         continue
@@ -66,6 +78,10 @@ class Struct:
     def getFiles(self):
         return self.files
 
+    def getVariables(self):
+        return self.variables
+
+
 def code():
     text = ''
     p = Path(PATH_PROG)
@@ -97,6 +113,10 @@ def nbClasses():
 
 def nbFiles():
     return Struct().getFiles()
+
+def nbVariables():
+    return Struct().getVariables()
+
 
 class Code:
     def __init__(self):
@@ -193,5 +213,9 @@ class Tkin:
         self.master.mainloop()
 
 if __name__ == '__main__':
+    print(nbFncts())
+    print(nbClasses())
+    print(nbFiles())
+    print(nbVariables())
     t = Tkin()#Tkin()
     t.Generate()

@@ -45,10 +45,13 @@ class Crypt:
         else:
             return ''
 
-    def decrypt(self, data):
-        pass
+    #def decrypt(self, data):
+        #pass
     
     def generate_key(self):
+        if self.mode_record:
+            self.events.append({'command': 'key'})
+
         if askyesno(self.title, lg('YAGTCK')):
             write_key(random.randint(10 ** (random.randint(1, 2)), 10 ** (random.randint(2, 6))))
             self.key = get_key()

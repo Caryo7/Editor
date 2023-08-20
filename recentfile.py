@@ -25,6 +25,9 @@ class RecentFileList:
         f.close()
 
     def clear_recent(self):
+        if self.mode_record:
+            self.events.append({'command': 'clear_recent'})
+
         f = open(self.path_prog + '/recent_file_list.log', 'w', encoding = get_encode())
         f.close()
 
