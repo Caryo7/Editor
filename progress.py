@@ -8,7 +8,7 @@ import time
 from threading import Thread
 import PyTaskbar
 
-PATH_PROG = os.path.abspath(os.getcwd())
+PATH_PROG = '.'#os.path.abspath(os.getcwd())
 
 class Compute(Thread):
     def __init__(self, lencnt, trace):
@@ -206,6 +206,7 @@ class Progress:
         self.tb = tb
         if self.tb:
             self.ptb = ProgressTask(tb)
+
         self.decimals = decimals
         self.title = title
         self.zak.resizable(False, False)
@@ -288,7 +289,10 @@ class Progress:
             
         self.update_numbers()
         self.zak.update()
-        self.ptb.reset()
+        try:
+            self.ptb.reset()
+        except:
+            pass
 
     def stop(self):
         if self.tb:

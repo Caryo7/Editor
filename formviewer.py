@@ -6,7 +6,7 @@ from tkinter.filedialog import *
 from tkinter.messagebox import *
 import os
 
-PATH_PROG = os.getcwd()
+PATH_PROG = '.'#os.getcwd()
 
 class Main:
     file = ''

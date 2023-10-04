@@ -8,7 +8,6 @@ import traceback
 from tkinter.scrolledtext import ScrolledText
 from confr import *
 
-
 class Pipe:
     """mock stdin stdout or stderr"""
 

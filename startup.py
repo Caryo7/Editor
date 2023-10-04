@@ -7,7 +7,7 @@ from confr import *
 from pathlib import Path
 import time, random, os
 
-PATH_PROG = os.path.abspath(os.getcwd())
+PATH_PROG = '.'#os.path.abspath(os.getcwd())
 
 class Startup:
     nb = 0
@@ -36,11 +36,11 @@ class Startup:
         self.image = PhotoImage(master = self.top, file = PATH_PROG + '/image/icons/TarinoMark.png')
 
     def finish(self):
-        time.sleep(2)
+        #time.sleep(2)
         self.pb['value'] = 100.0
         self.pc.set('100 %')
         self.top.update()
-        time.sleep(0.5)
+        #time.sleep(0.5)
         try:
             self.t.active(self.top)
         except AttributeError:

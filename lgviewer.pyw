@@ -13,7 +13,7 @@ import os
 from pswd import *
 from confr import *
 
-PATH_PROG = os.path.abspath(os.getcwd())
+PATH_PROG = '.'#os.path.abspath(os.getcwd())
 
 class LgViewer:
     def __init__(self, master = None):

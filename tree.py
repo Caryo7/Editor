@@ -5,7 +5,7 @@ from confr import *
 from pathlib import Path
 import os
 
-PATH_PROG = os.path.abspath(os.getcwd())
+PATH_PROG = '.'#os.path.abspath(os.getcwd())
 
 class Struct:
     def __init__(self):
@@ -82,9 +82,9 @@ class Struct:
         return self.variables
 
 
-def code():
+def code(path_prog):
     text = ''
-    p = Path(PATH_PROG)
+    p = Path(path_prog)
     tt = list(p.glob('**/*.py')) + list(p.glob('**/*.pyw'))
     for fl in tt:
         file = str(fl)
@@ -119,9 +119,11 @@ def nbVariables():
 
 
 class Code:
-    def __init__(self):
-        self.master = Tk()
-        self.master.iconbitmap(PATH_PROG + '/image/icons/tree.ico')
+    def __init__(self, master, path_prog):
+        self.path_prog = path_prog
+        self.master = Toplevel(master)
+        self.master.transient(master)
+        self.master.iconbitmap(self.path_prog + '/image/icons/tree.ico')
         self.master.title(lg('program'))
         self.master.resizable(False, False)
         
@@ -139,7 +141,7 @@ class Code:
         self.insert()
 
     def insert(self):
-        self.text.insert('0.0', code())
+        self.text.insert('0.0', code(self.path_prog))
         self.text.config(stat = 'disabled')
 
     def Generate(self):
@@ -147,9 +149,11 @@ class Code:
 
 
 class Tkin:
-    def __init__(self):
-        self.master = Tk()
-        self.master.iconbitmap(PATH_PROG + '/image/icons/tree.ico')
+    def __init__(self, master, path_prog):
+        self.path_prog = path_prog
+        self.master = Toplevel(master)
+        self.master.transient(master)
+        self.master.iconbitmap(self.path_prog + '/image/icons/tree.ico')
         self.master.title(lg('Struct'))
         self.master.resizable(False, False)
         
@@ -213,9 +217,4 @@ class Tkin:
         self.master.mainloop()
 
 if __name__ == '__main__':
-    print(nbFncts())
-    print(nbClasses())
-    print(nbFiles())
-    print(nbVariables())
-    t = Tkin()#Tkin()
-    t.Generate()
+    from __init__ import *

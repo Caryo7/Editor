@@ -222,6 +222,10 @@ class Configurator1:
         self.menuvars = Checkbutton(m, text=lg('variables'), variable=self.menuvars_, onvalue=1, offvalue=0)
         self.menuvars.grid(row=14, column=0, sticky='w')
         if read('menu', 'vars') == '1':self.menuvars_.set(1)
+        self.menuai_ = IntVar(master = self.master)
+        self.menuai = Checkbutton(m, text='AI', variable=self.menuai_, onvalue=1, offvalue=0)
+        self.menuai.grid(row=14, column=0, sticky='w')
+        if read('menu', 'ai') == '1':self.menuai_.set(1)
 
         ## Cadre s pour la sécurité
 
@@ -755,6 +759,7 @@ class Configurator1:
         optim('style', 'menu', 'style', self.menustyle_.get())
         optim('view', 'menu', 'view', self.menuvie_.get())
         optim('vars', 'menu', 'vars', self.menuvars_.get())
+        optim('vars', 'menu', 'ai', self.menuai_.get())
 
         optim('conn', 'global', 'conn', self.conn_.get())
         optim('username', 'security', 'username', self.usn_.get())

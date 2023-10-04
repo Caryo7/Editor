@@ -4,10 +4,7 @@ from main import *
 KillStartup()
 import os.path, sys, os, datetime
 
-modules = [#'inspect', 'glob',
-           #'hashlib', 'keras_ocr',
-           #'docx', 'reportlab',
-           #'serial', 'PyTaskbar', tkinderdnd2
+modules = [#'inspect', 'glob', 'hashlib', 'docx', 'reportlab', 'serial', 'PyTaskbar', 'tkinderdnd2', 'pyserial', 'openpyxl'
            ]
 
 def includefiles():
@@ -27,7 +24,6 @@ def includefiles():
     return files
 
 
-
 PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
 os.environ['TCL_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tcl8.6')
 os.environ['TK_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tk8.6')
@@ -43,7 +39,7 @@ options = {'build_exe': options_exe,
            }
 
 target = Executable(script = 'G:\\Exe\\Edit\\__init__.pyw',
-                    copyright= 'Copyright © ' + str(datetime.datetime.now().year) + ' ' + AUTHOR,
+                    copyright= 'Copyright © ' + str(datetime.datetime.now().year) + ' Aaron Caryo, Tarino Inc',
                     icon = 'image/icons/ico.ico',
                     base = 'Win32GUI' if sys.platform == 'win32' else 'Console',
                     shortcut_name = 'Editor',

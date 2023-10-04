@@ -80,5 +80,6 @@ class TasksViewer:
     def set_taskstat(self, code, stat):
         self.finish_task(code = code, nom = stat)
 
+
 if __name__ == '__main__':
     from __init__ import *

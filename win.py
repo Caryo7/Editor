@@ -91,7 +91,9 @@ class Win:
 
         self.master.title(self.title + ' - Untitled.x')
         self.master.protocol('WM_DELETE_WINDOW', self.Quitter)
-        self.master.iconbitmap(self.ico['win'])
+        if sys.platform == 'win32':
+            self.master.iconbitmap(self.ico['win'])
+
         self.lns = get_ln()
         self.dark = get_dark()
         self.dialoging = False
@@ -115,6 +117,7 @@ class Win:
         self.stat_text(False)
         self.update_line_numbers()
         self.stat_form_infos(False)
+        self.act_color = None
         self.path = ''
         self.master.title(self.title + ' - ' + lg('NFO'))
         self.saved = None
@@ -160,10 +163,14 @@ class Win:
         self.dialoging = False
         
     def Generate(self):
-        self.master.focus_force()
-        self.text.focus()
-        self.conf_win(generate = True)
-        self.master.mainloop()
+        if not self.mainlooped:
+            self.mainlooped = True
+            self.master.focus_force()
+            self.text.focus()
+            self.conf_win(generate = True)
+            self.master.mainloop()
+
 
 if __name__ == '__main__':
     from __init__ import *
+

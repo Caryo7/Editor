@@ -1,7 +1,9 @@
+
 print('MERCI DE SUIVRE LES INDICATIONS !')
 print('\n\n\n\n')
 print('Récupérarion des méta données')
-import os, datetime, time, keyboard
+import os, datetime, time
+import keyboard as kb
 from main import VERSION, KillStartup
 KillStartup()
 
@@ -21,6 +23,14 @@ today = str(now.year)
 today += '0' + str(now.month) if len(str(now.month)) == 1 else '' + str(now.month)
 today += '0' + str(now.day) if len(str(now.day)) == 1 else '' + str(now.day)
 
+
+print('1. Compilation complète')
+print('2. Sauvegarde ZIP')
+mode = int(input('> '))
+if mode == 2:
+    print('Enregistrement sous fichier ZIP de la version actuelle...')
+    os.popen(f'"{dir_7zip}" a "{chemin}/source/Edit_' + version_zip + '_' + today + '.zip" "G:/Exe/Editor"')
+    quit()
 
 
 print('Mise à jour du dossier de sortie')
@@ -46,6 +56,7 @@ print('Date :', today)
 print('Version :', version_zip)
 print('N° de version :', version)
 
+kb.write('setup.py build')
 os.system('cmd /K "cd /d G:\Exe\Edit"')
 
 print('version mobile')

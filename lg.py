@@ -28,7 +28,7 @@ class Zip:
             self.f.close()
 
 class Lg(Zip):
-    def __init__(self, langue = 'fr', code = 'utf-8', path_prog = ''):
+    def __init__(self, langue = 'fr', code = 'utf-8', path_prog = '.'):
         Zip.__init__(self, path_prog + '/lang.lg')
         self.langue = langue
         self.code = code
@@ -37,7 +37,10 @@ class Lg(Zip):
         data = self.data.split('\n')
         self.dic = {}
         for value in data:
-            if value == '[' + langue + ']' or value == '':
+            if value == '':
+                continue
+
+            if value[0] == '[':
                 continue
 
             spl = value.split(' = ')
@@ -52,6 +55,7 @@ class Lg(Zip):
 
 if __name__ == '__main__':
     l = Lg('an', 'utf-8')
-    k = str(input('Nom option : '))
-    v = str(input('Valeur par défaut : '))
-    l.set(k, v)
+    print(l.get())
+    #k = str(input('Nom option : '))
+    #v = str(input('Valeur par défaut : '))
+    #l.set(k, v)

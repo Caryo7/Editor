@@ -6,7 +6,7 @@ import math
 import fitz
 from tkinter import PhotoImage
 
-PATH_PROG = os.path.abspath(os.getcwd())
+PATH_PROG = '.'#os.path.abspath(os.getcwd())
 
 class PDFMiner:
     def __init__(self, filepath):

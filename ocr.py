@@ -8,13 +8,14 @@ from zipfile import *
 from PyPDF2 import PdfReader
 import os
 
-try:
-    print('Importing Keras OCR')
-    import keras_ocr
-except:
-    print('no module keras_ocr !')
+#try:
+#    print('Importing Keras OCR')
+#    import keras_ocr
+#    print('End importing')
+#except:
+#    print('no module keras_ocr !')
 
-PATH_PROG = os.path.abspath(os.getcwd())
+#PATH_PROG = os.path.abspath(os.getcwd())
 
 class Fichier:
     def __init__(self, name):
@@ -59,6 +60,9 @@ class Traitement:
     words = []
     words_sa = []
 
+    def __init__(self, path_prog):
+        self.path_prog = path_prog
+
     def set(self, lang, keyboard):
         if lang == lg('francais'):
             lf = 'fr_words.txt'
@@ -73,7 +77,7 @@ class Traitement:
         else:
             return
 
-        z_path = os.path.join(PATH_PROG, 'dicos.zip')
+        z_path = os.path.join(self.path_prog, 'dicos.zip')
         z = ZipFile(z_path, 'r')
         f = z.open(lf, 'r')
         self.words = f.read().decode('utf-8').lower().split('\n')
@@ -164,13 +168,14 @@ class Traitement:
 class OCR(Thread):
     MARGE_DESSUS = 10
     MARGE_DESSOUS = 20
-    outputdir = PATH_PROG + '/temp/'
 
-    def __init__(self, master, widget, lang, keyboard):
+    def __init__(self, master, widget, lang, keyboard, path_prog):
+        self.path_prog = path_prog
+        self.outputdir = self.path_prog + '/temp/'
         Thread.__init__(self)
         self.master = master
         self.widget = widget
-        self.t = Traitement()
+        self.t = Traitement(path_prog)
         self.t.set(lang, keyboard)
 
     def run(self):
@@ -338,11 +343,11 @@ class AskParaOCR:
            lg('espagnol') : 'es',
            lg('italien') : 'it',}
 
-    def __init__(self, master, text, file):
+    def __init__(self, master, text, file, path_prog):
         for i in range(len(self.kbt)):
             self.kbt[i] = self.kbt[i].upper()
 
-        self.root, self.text, self.file = master, text, file
+        self.root, self.text, self.file, self.path_prog = master, text, file, path_prog
         self.master = Toplevel(master)
         self.master.transient(master)
         self.master.iconbitmap(PATH_PROG + '/image/icons/pdf.ico')
@@ -364,12 +369,12 @@ class AskParaOCR:
     def lunch(self):
         lgs, kbs = self.lg.get(), self.kb.get()
         self.master.destroy()
-        o = OCR(self.root, self.text, lgs, kbs)
+        o = OCR(self.root, self.text, lgs, kbs, self.path_prog)
         o.begin(self.file)
 
 
-def lunch_ocr(root, text, file):
-    a = AskParaOCR(root, text, file)
+def lunch_ocr(root, text, file, path_prog):
+    a = AskParaOCR(root, text, file, path_prog)
 
 
 class PDFTraitement:
@@ -404,7 +409,7 @@ class PDFTraitement:
 if __name__ == '__main__':
     from tkinter.filedialog import *
     root = Tk()
-    root.iconbitmap(PATH_PROG + '/image/icons/file.ico')
+    root.iconbitmap('./image/icons/file.ico')
     text = Text(root)
     text.pack()
     def beg(file = None):
@@ -415,5 +420,5 @@ if __name__ == '__main__':
         
     b = Button(root, command = beg, text = 'Démarrer le test')
     b.pack()
-    beg(file = PATH_PROG + '\\temp\\Obj97.jpg')
+    beg(file = '.\\temp\\Obj97.jpg')
     root.mainloop()

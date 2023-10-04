@@ -1,11 +1,11 @@
 Liste des choses à faire :
+--------------------------
+
 Idée : changer le nom des fichier config.ini et keys.k en (par exemple) : config.preini et keys.prek
 Lors de l'installation, il faudrait, si c'est le premier démarrage, ouvrir le précédent config.ini si il existe,
 ainsi que config.preini. Ensuite, le programme comparerait les deux fichiers et rajouterai les lignes en plus de 
 config.preini dans config.ini. De même pour keys.k et keys.prek
-Finir la table des variables
-Ajouter le convertisseur texte codé variable -> texte variables remplacées
-Voir pour la sauvegarde automatique et pour le changement d'une variable en cours de route...
-Refaire le système de configuration du logiciel plus graphique
 
-Utiliser la table de fonction de keyb.py pour les macros !!!!!
+Finir le système de remplacement
+
+Ajouter le traitement des images

@@ -55,8 +55,8 @@ class KeyB:
                         'doc' :         [self.documentation, '', 'self.documentation()', {}], # # -> Documentation
                         'todo' :        [self.ToDo, '', 'self.ToDo()', {}], # # -> A Faire
                         'lines' :       [lambda : act(self), '', 'act(self.master)', {}], # # -> Nombre de lignes
-                        'struct' :      [Tkin, '', 'Tkin()', {}], # # -> Structure du programme
-                        'prog' :        [Code, '', 'Code()', {}], # # -> Programme
+                        'struct' :      [lambda : Tkin(self.master, self.path_prog), '', 'Tkin()', {}], # # -> Structure du programme
+                        'prog' :        [lambda : Code(self.master, self.path_prog), '', 'Code()', {}], # # -> Programme
                         'clear_recent': [self.clear_recent, '', 'clear_recent()', {}], # # -> Effacement liste fichiers récents
                         'copy':         [self.copy, '', 'copy', {}],
                         'cut':          [self.cut, '', 'cut', {}],
@@ -73,6 +73,8 @@ class KeyB:
                         'record_macro': [self.record_macro, '', 'self.record_macro()', {}],
                         'switch_record':[self.switch_record, '', 'self.switch_macro()', {}],
                         'finish_record':[self.finish_record, '', 'self.finish_macro()', {}],
+                        'write_next':   [self.invente_fin, '', 'self.invente_fin()', {}],
+                        'set_ia':       [self.askModel, '', 'self.askModel()', {}],
 
                         '':             ['', '', '', {}],
                         }

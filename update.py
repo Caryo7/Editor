@@ -8,8 +8,6 @@ from confr import *
 import urllib.request as url
 import os, inspect, zipfile as zf, time
 
-PATH_PROG = os.path.abspath(os.getcwd())
-
 class Check(Thread):
     def __init__(self, main_self):
         Thread.__init__(self)
@@ -17,39 +15,34 @@ class Check(Thread):
         
     def run(self):
         self.main_self.add_task('CheckUpdate', time.time(), desc='MAIN_LOOP\nTo inform you when a new update is available, this task was built. It is reading every 10 min on the net if a new version is not available. If that is, a massage is showing to yourself to inform you the news device. You can\'t stop this task.', killable = True)
-        while True:
-            try:
-                if self.main_self.programme_termine:
-                    break
-
-                f = url.urlopen('https://bgtarino.wixsite.com/editor')
-                r = f.read().decode()
-                f.close()
-                index = r.index('version ')
-                n = index + 8
-                while r[n] != ' ':
-                    n += 1
-                if float(r[index + 8: n]) > float(self.main_self.version):
-                    print('Nouvelle version !!! :', r[index + 8: n])
-                    self.main_self.ask_install(old = False)
+        try:
+            f = url.urlopen('https://bgtarino.wixsite.com/editor')
+            r = f.read().decode()
+            f.close()
+            index = r.index('version ')
+            n = index + 8
+            while r[n] != ' ':
+                n += 1
+            if float(r[index + 8: n]) > float(self.main_self.version):
+                print('Nouvelle version !!! :', r[index + 8: n])
+                self.main_self.ask_install(old = False)
     
-                elif float(r[index + 8: n]) == float(self.main_self.version):
-                    pass
-    
-                else:
-                    print('Ancienne version sur le site !')
-                    #self.main_self.ask_install(old = True)
-
-            except Exception:
+            elif float(r[index + 8: n]) == float(self.main_self.version):
                 pass
 
-            time.sleep(600)
+            else:
+                print('Ancienne version sur le site !')
+                #self.main_self.ask_install(old = True)
+
+        except Exception:
+            pass
 
 
 class Installer(Thread):
-    def __init__(self, old):
+    def __init__(self, old, path_prog):
         Thread.__init__(self)
         self.old = old
+        self.path_prog = path_prog
 
     def run(self):
         f = url.urlopen('https://bgtarino.wixsite.com/editor/t%C3%A9l%C3%A9chargement')
@@ -70,7 +63,7 @@ class Installer(Thread):
         f = url.urlopen(file)
         r = f.read()
         f.close()
-        f = open(PATH_PROG + '/temp/last_update.zip', 'wb')
+        f = open(self.path_prog + '/temp/last_update.zip', 'wb')
         f.write(r)
         f.close()
         if not self.old:
@@ -79,7 +72,7 @@ class Installer(Thread):
                 fle = file.replace('Edit/', '')
                 if '.' in fle:
                     if 'config.ini' in fle:
-                        f = open(PATH_PROG + '/' + fle, 'rb')
+                        f = open(self.path_prog + '/' + fle, 'rb')
                         l = f.read().decode(get_encode()).split('\n')
                         f.close()
                         rl = []
@@ -94,23 +87,23 @@ class Installer(Thread):
                             else:
                                 l.append(ln[0] + ' = ' + ln[1])
 
-                        f = open(PATH_PROG + '/' + fle, 'wb')
+                        f = open(self.path_prog + '/' + fle, 'wb')
                         for i in l:
                             f.write(i + '\n')
                         f.close()
 
                     else:
                         try:
-                            f = open(PATH_PROG + '/' + fle, 'rb')
+                            f = open(self.path_prog + '/' + fle, 'rb')
                             l = len(f.read())
                             f.close()
                             if len(z.read(file)) != l:
-                                f = open(PATH_PROG + '/' + fle, 'wb')
+                                f = open(self.path_prog + '/' + fle, 'wb')
                                 f.write(z.read(file))
                                 f.close()
     
                         except FileNotFoundError:
-                            f = open(PATH_PROG + '/' + fle, 'wb')
+                            f = open(self.path_prog + '/' + fle, 'wb')
                             f.write(z.read(file))
                             f.close()
             z.close()
@@ -143,16 +136,16 @@ class Update:
                 fle = file.replace('Edit/', '')
                 if '.' in fle:
                     try:
-                        f = open(PATH_PROG + '/' + fle, 'rb')
+                        f = open(self.path_prog + '/' + fle, 'rb')
                         l = len(f.read())
                         f.close()
                         if len(z.read(file)) != l:
-                            f = open(PATH_PROG + '/' + fle, 'wb')
+                            f = open(self.path_prog + '/' + fle, 'wb')
                             f.write(z.read(file))
                             f.close()
 
                     except FileNotFoundError:
-                        f = open(PATH_PROG + '/' + fle, 'wb')
+                        f = open(self.path_prog + '/' + fle, 'wb')
                         f.write(z.read(file))
                         f.close()
             z.close()
@@ -161,7 +154,7 @@ class Update:
         if self.checkupdate.get():
             dem = askyesno(self.title, lg('nva'))
             if dem and self.checkupdate.get():
-                th = Installer(old)
+                th = Installer(old, self.path_prog)
                 th.start()
 
         

@@ -1,25 +1,23 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import zipfile as zipfile
 import os, time
 from confr import *
 from tkinter import *
 from tkinter.messagebox import *
 
-class Archives:
+class Archives: # Classe de l'archivage :
     def __arch__(self):
         ""
         
-    def create_a(self):
+    def create_a(self): # Crée une archive du fichier en cours pour y ranger les différentes versions
         if self.mode_record:
-            self.events.append({'command': 'archive'})
+            self.events.append({'command': 'archive'}) # Pour l'enregistreur de macros
 
         z = zipfile.ZipFile(self.path + '.zip', 'w')
         z.close()
         
-    def add_new_version(self):
+    def add_new_version(self): # Ajoute une version à l'archive
         if self.mode_record:
-            self.events.append({'command': 'append'})
+            self.events.append({'command': 'append'}) # Pour l'enregistreur de macros
 
         if self.path != 'untitled.x':
             try:    
@@ -28,17 +26,17 @@ class Archives:
                 nb = len(self.path) - 1
                 while self.path[nb] != '/':nb -= 1
                 nb += 1
-                self.vername = 'Version ' + str(hex(int(time.time())))
-                r = z.open(self.vername + '/' + self.path[nb:], mode='w')
+                self.vername = 'Version ' + str(hex(int(time.time()))) # Donne un nom de version selon l'heure
+                r = z.open(self.vername + '/' + self.path[nb:], mode='w') # Crée un fichier dans un dossier portant le nom de la version
                 r.write(f.read())
                 r.close()
                 f.close()
                 z.close()
-            except:
-                self.create_a()
-                self.add_new_version()
+            except: # Si le fichier archive n'existe pas, 
+                self.create_a() # Crée un fichier archive
+                self.add_new_version() # Ajoute la version (fonction récursive ?)
 
-    def start_analyse(self):
+    def start_analyse(self): # Analyse deux versions entre elles et donne les différences
             z = zipfile.ZipFile(self.path + '.zip', mode='r')
             if int(self.cpl1.get())-1 > len(self.lv) and int(self.cpl2.get())-1 > len(self.lv):
                 showerror(lg('Archive'), lg('BI'))
@@ -62,23 +60,24 @@ class Archives:
                     try:
                         if r1[i] != r2[i]:
                             showwarning(lg('Archive'), lg("DAC") + str(i))
-                            t += 1
+                            t += 1 # Retrouve les différences
                     except IndexError:
                         break
+
                 if t == 0:
                     showinfo(lg('Archive'), lg('VI'))
                 else:
                     showwarning(lg('Archive'), lg('NDD') + ' : ' + str(t))
                 z.close()
 
-    def compare(self):
+    def compare(self): # Affiche une fenêtre de comparaison
         if self.dialoging:
             return
 
         self.dialoging = True
 
         if self.mode_record:
-            self.events.append({'command': 'compare'})
+            self.events.append({'command': 'compare'}) # Pour l'enregistreur de macros
 
         if os.path.exists(self.path + '.zip'):
             z = zipfile.ZipFile(self.path + '.zip', mode='r')

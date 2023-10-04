@@ -77,6 +77,7 @@ class Content:
         self.master.geometry(str(get_dims()[0]) + 'x' + str(get_dims()[1]))
 
         self.listchar = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ',', ';', '!', '?', '.', '/', '§', '&', 'é', '"', '\'', '(', '-', 'è', '_', 'ç', 'à', ')', '=', '~', '#', '{', '[', '|', '`', '\\', '^', '@', ']', '}', '$', '£', '¤', '*', 'µ', '%', 'ù', ' ']
+        self.letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'é', 'è', 'ç', 'à', '~', '#', '`', '^', '@', '$', '£', '¤', '*', 'µ', '%', 'ù', '_']
         self.lns = not(self.lns)
         self.act_widget_ln()
 
@@ -122,12 +123,21 @@ class Content:
     def clear_text(self):
         self.text.delete('0.0', 'end')
 
-    def insert_text(self, data):
+    def insert_text(self, data, with_vars = True):
         if get_encrypted():
             data = self.decrypt(data)
 
-        data = self.getTextValueVars(data)
+        if with_vars:
+            data = self.getTextValueVars(data)
+
         self.text.insert(END, data)
+
+    def insert_image(self, file, index):
+        try:
+            self.photos.append(PhotoImage(master = self.master, file=file))
+            self.text.image_create(index, image=self.photos[-1])
+        except:
+            pass
 
     def stat_text(self, stat):
         if stat:
@@ -160,10 +170,22 @@ class Content:
         for i in range(row):
             self.height_boutons += self.size_images[1] + 5 + 11
 
+        if text:
+            txt = lg(text)
+            if text == 'exit':
+                accelerator = self.get_accelerator('quit')
+            else:
+                accelerator = self.get_accelerator(text)
+
+            if accelerator:
+                txt += '\n(' + accelerator + ')'
+        else:
+            txt = ''
+
         if typ == Button:
             self.lst_bts.append(typ(self.frame_boutons, image = self.images[text], command = command, relief = 'flat', borderwidth = 0, highlightthickness = 0))
             self.lst_bts[-1].grid(row = row, column = col, padx = 10, pady = 5)
-            ToolTip(self.lst_bts[-1], text = lg(text))
+            ToolTip(self.lst_bts[-1], text = txt)
 
         elif typ == 'separator':
             self.lst_bts.append(Frame(self.frame_boutons, relief = SUNKEN, bd = 3, width = 4, height = self.size_images[1] + 5))
@@ -172,7 +194,7 @@ class Content:
         else:
             self.lst_bts.append(typ(self.frame_boutons, text = '', **args))
             self.lst_bts[-1].grid(row = row, column = col, padx = 10, pady = 5)
-            ToolTip(self.lst_bts[-1], text = lg(text))
+            ToolTip(self.lst_bts[-1], text = txt)
 
     def conf_win(self, evt=None, generate = False):
         try:
@@ -234,6 +256,7 @@ class Content:
                     self.infobar_changement()
 
                 self.label_infobar.place(x = 0, y = y, height = self.height_infobar, width = w)
+
             else:
                 try:
                     self.label_infobar.destroy()
@@ -242,14 +265,19 @@ class Content:
 
             self.update_line_numbers()
 
-    def infobar_changement(self, evt = None):
+    def infobar_changement(self, evt = None, no_colors = False):
+        if not no_colors:
+            self.autocolorwords()
+
         if self.info_bar.get():
             lines = self.text.get('0.0', 'end').split('\n')
             (line, column) = self.text.index('insert').split('.')
             line, column = int(line), int(column)
             len_line = len(lines) - 1
             len_col = len(lines[line - 1])
-            self.label_infobar.config(text = lg('Encodage') + str(get_encode()) + '  ' + lg('Line') + str(line) + '/' + str(len_line) + '  ' + lg('Column') + str(column) + '/' + str(len_col) + '  ' + lg('Position') + str(self.text.index('insert')))
+
+            #self.label_infobar.config(text = lg('Encodage') + str(get_encode()) + '  ' + lg('Line') + str(line) + '/' + str(len_line) + '  ' + lg('Column') + str(column) + '/' + str(len_col) + '  ' + lg('Position') + str(self.text.index('insert')))
+            self.label_infobar.config(text = lg('Line') + str(line) + '/' + str(len_line) + '  ' + lg('Column') + str(column))
 
     def uln(self, evt):
         if self.lst_fnct['autoline']:
@@ -294,7 +322,7 @@ class Content:
 
     def update_line_numbers(self, evt=None, fforbid = False):
         if not(self.dialoging) or fforbid:
-            self.infobar_changement()
+            self.infobar_changement(no_colors = True)
             if self.lns:
                 fnt = get_font()
                 size = get_font_size()
@@ -337,28 +365,12 @@ class Content:
             self.master.title('* ' + self.title + ' - ' + self.path + ' *')
             return
 
-        if not(self.dialoging):
+        if not self.dialoging:
             self.texte += evt.char
             self.text.edit_separator()
             self.test_lnu(evt)
 
             self.key_press_test(evt)
-            
-            self.words = self.split(self.text.get('0.0', END))
-            o = self.text.index(INSERT)
-            n = self.text.index('@0,0')
-            i = -1
-            while n != o:
-                i += 1
-                n = self.text.index('{0}+1char'.format(n))
-            n = 0
-            for j in self.words:
-                n += len(j) + 1
-                if n > i:
-                    break
-            self.word = j
-            self.wordi = self.text.index('@0,0+{0}char'.format(str(n - 1 - len(j))))
-            self.tryword()
             
             if evt.char.lower() in self.listchar or (evt.keysym in self.keycode_unsave) or (evt.keycode in self.keycode_unsave):
                 self.saved = False

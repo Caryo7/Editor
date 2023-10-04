@@ -1,88 +1,138 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from tkinter import *
+from PIL import Image, ImageTk
+from pathlib import Path
+import os
+
+class IconImage:
+    def __init__(self, master, file, path_prog):
+        if not file:
+            self.icon = PhotoImage(master = master, file = '')
+            self.img = PhotoImage(master = master, file = '')
+            return
+
+        self.icon = PhotoImage(master = master, file = path_prog + '/image/16x16/' + file + '.png')
+        #self.bt = PhotoImage(master = master, file = path_prog + '/image/48x48/' + file + '.png')
+        #self.img = PhotoImage(master = master, file = path_prog + '/image/512x512/' + file + '.png')
+
 
 class Images:
     def __images__(self):
-        self.images = {'new' : PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/plus.png'),
-                       'open' : PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/open.png'),
-                       'save' : PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/save.png'),
-                       'saveas' : PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/saveas.png'),
-                       'savecopyas' : PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/savecopyas.png'),
-                       'settings' : PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/config.png'),
-                       'print': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/printer.png'),
-                       'close': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/close.png'),
-                       'exit': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/fermer.png'),
+        self.images = {'logo': self.path_prog + '/image/icons/icone',
+                       'new' : IconImage(master = self.master, path_prog = self.path_prog, file = 'plus').icon,
+                       'open' : IconImage(master = self.master, path_prog = self.path_prog, file = 'open').icon,
+                       'save' : IconImage(master = self.master, path_prog = self.path_prog, file = 'save').icon,
+                       'saveas' : IconImage(master = self.master, path_prog = self.path_prog, file = 'saveas').icon,
+                       'savecopyas' : IconImage(master = self.master, path_prog = self.path_prog, file = 'savecopyas').icon,
+                       'settings' : IconImage(master = self.master, path_prog = self.path_prog, file = 'config').icon,
+                       'print': IconImage(master = self.master, path_prog = self.path_prog, file = 'printer').icon,
+                       'close': IconImage(master = self.master, path_prog = self.path_prog, file = 'close').icon,
+                       'exit': IconImage(master = self.master, path_prog = self.path_prog, file = 'fermer').icon,
 
-                       'undo': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/undo.png'),
-                       'redo': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/redo.png'),
-                       'cut': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/cut.png'),
-                       'copy': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/copy.png'),
-                       'past': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/past.png'),
-                       'gotol': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/gotol.png'),
-                       'select': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/selectall.png'),
-                       'search' : PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/find.png'),
-                       'replace': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/replace.png'),
+                       'undo': IconImage(master = self.master, path_prog = self.path_prog, file = 'undo').icon,
+                       'redo': IconImage(master = self.master, path_prog = self.path_prog, file = 'redo').icon,
+                       'cut': IconImage(master = self.master, path_prog = self.path_prog, file = 'cut').icon,
+                       'copy': IconImage(master = self.master, path_prog = self.path_prog, file = 'copy').icon,
+                       'past': IconImage(master = self.master, path_prog = self.path_prog, file = 'past').icon,
+                       'gotol': IconImage(master = self.master, path_prog = self.path_prog, file = 'gotol').icon,
+                       'select': IconImage(master = self.master, path_prog = self.path_prog, file = 'selectall').icon,
+                       'search' : IconImage(master = self.master, path_prog = self.path_prog, file = 'find').icon,
+                       'replace': IconImage(master = self.master, path_prog = self.path_prog, file = 'replace').icon,
 
-                       'infobar': PhotoImage(master = self.master, file = ''),#self.path_prog + '/'),
-                       'ruban': PhotoImage(master = self.master, file = ''),#self.path_prog + '/'),
-                       'buttonbar': PhotoImage(master = self.master, file = ''),#self.path_prog + '/'),
+                       'infobar': IconImage(master = self.master, path_prog = self.path_prog, file = '').icon,###################################
+                       'ruban': IconImage(master = self.master, path_prog = self.path_prog, file = '').icon,###################################
+                       'buttonbar': IconImage(master = self.master, path_prog = self.path_prog, file = '').icon,###################################
+
+                       'ai': IconImage(master = self.master, path_prog = self.path_prog, file = 'ai').icon,
                        
-                       'puces': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/puces.png'),
-                       'news': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/style.png'),
-                       'cstyle': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/cstyle.png'),
+                       'puces': IconImage(master = self.master, path_prog = self.path_prog, file = 'puces').icon,
+                       'news': IconImage(master = self.master, path_prog = self.path_prog, file = 'style').icon,
+                       'cstyle': IconImage(master = self.master, path_prog = self.path_prog, file = 'cstyle').icon,
 
-                       'lst_vars': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/todo.png'),
-                       'add_var': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/plus.png'),
-                       'place_var': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/cursor.png'),
+                       'lst_vars': IconImage(master = self.master, path_prog = self.path_prog, file = 'todo').icon,
+                       'add_var': IconImage(master = self.master, path_prog = self.path_prog, file = 'plus').icon,
+                       'place_var': IconImage(master = self.master, path_prog = self.path_prog, file = 'cursor').icon,
                        
-                       'comment': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/comment.png'),
-                       'uncomment': PhotoImage(master = self.master, file = ''),#self.path_prog + '/'),
+                       'comment': IconImage(master = self.master, path_prog = self.path_prog, file = 'comment').icon,
+                       'uncomment': IconImage(master = self.master, path_prog = self.path_prog, file = '').icon,###################################
 
-                       'run_python': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/python.png'),
-                       'solve': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/solve.png'),
-                       'compile': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/compile.png'),
-                       'check': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/check.png'),
-                       'run': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/run.png'),
+                       'run_python': IconImage(master = self.master, path_prog = self.path_prog, file = 'python').icon,
+                       'solve': IconImage(master = self.master, path_prog = self.path_prog, file = 'solve').icon,
+                       'compile': IconImage(master = self.master, path_prog = self.path_prog, file = 'compile').icon,
+                       'check': IconImage(master = self.master, path_prog = self.path_prog, file = 'check').icon,
+                       'run': IconImage(master = self.master, path_prog = self.path_prog, file = 'run').icon,
 
-                       'word': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/word.png'),
-                       'pdf': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/pdf.png'),
+                       'word': IconImage(master = self.master, path_prog = self.path_prog, file = 'word').icon,
+                       'pdf': IconImage(master = self.master, path_prog = self.path_prog, file = 'pdf').icon,
 
-                       'key': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/password.png'),
+                       'key': IconImage(master = self.master, path_prog = self.path_prog, file = 'password').icon,
                        
-                       'archive' : PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/zip.png'),
-                       'append': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/plus.png'),
-                       'compare': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/compare.png'),
+                       'archive' : IconImage(master = self.master, path_prog = self.path_prog, file = 'zip').icon,
+                       'append': IconImage(master = self.master, path_prog = self.path_prog, file = 'plus').icon,
+                       'compare': IconImage(master = self.master, path_prog = self.path_prog, file = 'compare').icon,
 
-                       'send': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/send.png'),
-                       'clear': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/clear.png'),
-                       'bip': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/bip.png'),
-                       'ulla': PhotoImage(master = self.master, file = ''),#self.path_prog + '/'),
+                       'send': IconImage(master = self.master, path_prog = self.path_prog, file = 'send').icon,
+                       'clear': IconImage(master = self.master, path_prog = self.path_prog, file = 'clear').icon,
+                       'bip': IconImage(master = self.master, path_prog = self.path_prog, file = 'bip').icon,
+                       'ulla': IconImage(master = self.master, path_prog = self.path_prog, file = 'minitel').icon,
 
-                       'update': PhotoImage(master = self.master, file = ''),#self.path_prog + '/'),
-                       'upgrade': PhotoImage(master = self.master, file = ''),#self.path_prog + '/'),
+                       'update': IconImage(master = self.master, path_prog = self.path_prog, file = '').icon,###################################
+                       'upgrade': IconImage(master = self.master, path_prog = self.path_prog, file = '').icon,###################################
 
-                       'load': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/load.png'),
-                       'rec': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/load.png'),
-                       'pause': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/load.png'),
-                       'play': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/load.png'),
-                       'carre': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/load.png'),
+                       'load': IconImage(master = self.master, path_prog = self.path_prog, file = 'load').icon,
+                       'rec': IconImage(master = self.master, path_prog = self.path_prog, file = 'rec').icon,
+##                       'play': IconImage(master = self.master, path_prog = self.path_prog, file = 'switch').icon,
+                       'pause': IconImage(master = self.master, path_prog = self.path_prog, file = 'switch').icon,
+                       'carre': IconImage(master = self.master, path_prog = self.path_prog, file = 'stop').icon,
 
-                       'ihm': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/config.png'),
-                       'lnb': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/line.png'),
-                       'dark': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/dark.png'),
-                       'visut': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/task.png'),
-                       'win': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/windows.png'),
-                       'lgv': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/lg.png'),
+                       'ihm': IconImage(master = self.master, path_prog = self.path_prog, file = 'config').icon,
+                       'lnb': IconImage(master = self.master, path_prog = self.path_prog, file = 'line').icon,
+                       'dark': IconImage(master = self.master, path_prog = self.path_prog, file = 'dark').icon,
+                       'visut': IconImage(master = self.master, path_prog = self.path_prog, file = 'task').icon,
+                       'win': IconImage(master = self.master, path_prog = self.path_prog, file = 'windows').icon,
+                       'lgv': IconImage(master = self.master, path_prog = self.path_prog, file = 'lg').icon,
 
-                       'about': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/help.png'),
-                       'doc': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/doc.png'),
-                       'todo': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/todo.png'),
-                       'lines': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/line.png'),
-                       'struct': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/tree.png'),
-                       'prog': PhotoImage(master = self.master, file = self.path_prog + '/image/16x16/prog.png'),
+                       'about': IconImage(master = self.master, path_prog = self.path_prog, file = 'help').icon,
+                       'doc': IconImage(master = self.master, path_prog = self.path_prog, file = 'doc').icon,
+                       'todo': IconImage(master = self.master, path_prog = self.path_prog, file = 'todo').icon,
+                       'lines': IconImage(master = self.master, path_prog = self.path_prog, file = 'line').icon,
+                       'struct': IconImage(master = self.master, path_prog = self.path_prog, file = 'tree').icon,
+                       'prog': IconImage(master = self.master, path_prog = self.path_prog, file = 'prog').icon,
                        }
-        self.size_images = (15, 15)
+
+        self.size_images = (16, 16)
+        self.size_2 = (48, 48)
+        self.size_3 = (512, 512)
+
+
+def convert_size():
+    print("Définition des chemins d'adresse...")
+    pathinput = './image/512x512/'
+    pathoutput_icon = './image/16x16/'
+    pathoutput_bt = './image/48x48/'
+
+    p = Path(pathinput)
+    imgs = list(p.glob('*.png'))
+    for img in imgs:
+        print("Image :", img.name)
+        image = Image.open(pathinput + img.name)
+
+        icon = image.resize((16, 16))
+        icon.save(pathoutput_icon + img.name)
+
+        bt = image.resize((48, 48))
+        bt.save(pathoutput_bt + img.name)
+
+    print('Fin des conversions')
+    print()
+
 
 if __name__ == '__main__':
-    from __init__ import *
+    print('1. Démarrer le logiciel')
+    print('2. Convertir toutes les icones de 512x512 à 48x48 et 16x16')
+    if int(input('> ')) == 1:
+        from __init__ import *
+    else:
+        convert_size()
+        from __init__ import *

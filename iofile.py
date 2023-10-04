@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
@@ -76,6 +74,7 @@ class File(ExForm, ExText):
         self.meta = {}
         self.variables = {}
         self.begin_time = time.time()
+        self.photos = []
 
     def open_recent(self, name):
         self.open(evt = None, name = name)
@@ -99,13 +98,6 @@ class File(ExForm, ExText):
     def asksaveas(self, path = '', exts = None):
         if not exts:
             exts = self.ttext.copy()
-
-        #n = len(path) - 1
-        #while path[n] != '.':
-            #n -= 1
-
-        #if 7 > len(path) - 1 - n > 0:
-            #path = path[:n]
 
         n = asksaveasfilename(title=lg('Save_as'), initialdir='.', filetypes=exts, master = self.master)
         return n
@@ -290,12 +282,16 @@ class File(ExForm, ExText):
             if file:
                 if ask_info:
                     if askyesno(lg('import_pdf'), lg('warn_import_pdf')):
-                        lunch_ocr(self.master, self.text, file)
+                        pass#############################################################################################################################################################
+                        # Pour la compilation, il est impossible de mettre le module keras_ocr. Donc, pas de reconnaissance de caractères possible !
+                        #lunch_ocr(self.master, self.text, file, self.path_prog)
                     else:
                         self.open(name = file, forcing = True, ask_info = False)
                         return
                 else:
-                    lunch_ocr(self.master, self.text, file)
+                    pass#################################################################################################################################################################
+                    # Pour la compilation, il est impossible de mettre le module keras_ocr. Donc, pas de reconnaissance de caractères possible !
+                    #lunch_ocr(self.master, self.text, file, self.path_prog)
 
             self.dialoging = False
 
@@ -328,6 +324,11 @@ class File(ExForm, ExText):
 
             if name:
                 try:
+                    try:
+                        self.events[-1]['name'] = name
+                    except:
+                        pass
+
                     self.update_time()
                     self.stat_form_infos(False)
                     self.stat_text(True)
@@ -365,6 +366,7 @@ class File(ExForm, ExText):
                     showerror(self.title, lg('FNF'))
 
             self.dialoging = False
+            self.updateDiscordStatut()
 
     def save(self, evt=None, forcing = False):
         if not self.dialoging or forcing:
@@ -395,13 +397,19 @@ class File(ExForm, ExText):
             if name:
                 if '.' not in name:
                     name += '.form'
+
                 self.path = name
 
                 if self.ext(self.path) not in self.listexta:
                     ExText.save(self, self.path, self.get_text(save = True))
                 else:
-                    ExForm.save(self, self.path, self.get_text(save = True), self.meta, self.variables)
+                    ExForm.save(self, self.path, self.get_text(save = True), self.meta, self.variables, mode_saveas = True)
                     self.menufichier.entryconfig(lg('settings'), stat = 'normal')
+
+                try:
+                    self.events[-1]['name'] = name
+                except:
+                    pass
 
                 self.saved = True
                 self.savedd = True
@@ -415,19 +423,22 @@ class File(ExForm, ExText):
                 self.master.title('* ' + self.title + ' - ' + self.path + ' *')
 
             self.dialoging = False
+            self.updateDiscordStatut()
             
-    def savecopyas(self, evt=None, forcing = False):
+    def savecopyas(self, evt=None, forcing = False, name = None):
         if not self.dialoging or forcing:
             self.dialoging = True
             if self.mode_record:
                 self.events.append({'command': 'savecopyas', 'evt': evt, 'forcing': forcing})
 
-            name = asksaveasfilename(title=lg('Save_copy_as'), initialdir='.', filetypes=self.ttext)
+            if not name:
+                name = asksaveasfilename(title=lg('Save_copy_as'), initialdir='.', filetypes=self.ttext)
+
             if name:
-                if self.ext(self.path) not in self.listexta:
-                    ExText.save(self, self.path, self.get_text(), False)
+                if self.ext(name) not in self.listexta:
+                    ExText.save(self, name, self.get_text(save = True))
                 else:
-                    ExForm.save(self, self.path, self.get_text(), False, self.variables)
+                    ExForm.save(self, name, self.get_text(save = True), self.meta, self.variables, mode_saveas = True)
 
             self.dialoging = False
             
@@ -450,6 +461,7 @@ class File(ExForm, ExText):
             self.update_line_numbers()
             self.meta = {}
             self.variables = {}
+            self.updateDiscordStatut()
 
 
 if __name__ == '__main__':

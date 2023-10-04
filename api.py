@@ -1,26 +1,74 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 from tkinter.simpledialog import *
 from tkinter.messagebox import *
 from confr import *
+from pypresence import Presence
 import os
 import sys
 import platform
 import wmi
 import psutil
 import cpuinfo
+import time
 
-class API:
+class API: # Gère les interactions avec les autres interfaces
+    def updateDiscordStatut(self, first = False): # Actualise le profile sur l'application Discord
+        if not get_discord_mode():
+            return
+
+        try:
+            n = 1
+            name_file = '' # Nom du fichier en cours (sans son arborescence)
+            if self.path == '':
+                name_file = ''
+            elif self.path.count('/') + self.path.count('\\') == 0:
+                name_file = self.path
+            else:
+                while self.path[-n] not in ('/', '\\'):
+                    n += 1
+                n -= 1
+                name_file = self.path[-n:]
+
+            if first:
+                self.begin_time_RPC = time.time()
+                stat = 'Program just began...' # Si pas de fichiers ouverts, affiche ce message
+            else:
+                stat = 'In ' + name_file
+
+            self.RPC.update(
+                state = stat,
+                large_image = 'icon', # Grand icone Editor
+                buttons = [{'label': lg('foundus'), 'url': self.URL}], # Bouton d'accès au site internet
+                pid = os.getpid(), # PID Du process Python
+                start = self.begin_time_RPC, # Temps de démarrage depuis la connexion au RPC
+                large_text = 'Editor', # Texte de la grande image
+                small_image = 'tarino', # Petite image : logo de Tarino Inc.
+                small_text = lg('Builttar'), # Petit texte de la petite image
+                details = lg('editor_infos'), # Informations sur l'Editor
+                )
+
+        except:
+            pass # Si pas de connexion, ou pas de discord sur la machine, ne fait rien
+
     def __api__(self):
-        self.cmd_nav = get_nav()
-        self.url_nav = get_url()
+        self.cmd_nav = get_nav() # Trouve le navigateur à utiliser (confr.py)
+        self.url_nav = get_url() # Trouve l'URL de recherche type (confr.py)
+        if not get_discord_mode():
+            return
 
-    def internet_research(self):
-        data = self.bresearch()
+        client_id = '1150423743546523720' # Client d'application Discord
+        try:
+            self.RPC = Presence(client_id) # Démarre la présence sur Discord
+            self.RPC.connect()
+            self.updateDiscordStatut(True) # Met à jour le statut (voir au dessus)
+        except Exception:
+            pass
+
+    def internet_research(self): # Fait une recherche internet, depuis la commande type et le navigateur
+        data = self.bresearch() # Récupère le/les mots clefs
         if data:
-            os.system(self.cmd_nav + ' ' + self.url_nav.replace('$', data))
+            os.popen(self.cmd_nav + ' ' + self.url_nav.replace('$', data)) # Lance la commande
 
-    def bresearch(self):
+    def bresearch(self): # Demande un ou plusieurs mots clef à l'utilisateur
         if self.dialoging:
             return
 
@@ -30,12 +78,12 @@ class API:
         if data:
             return data.replace(' ', '+')
         else:
-            return None
+            return None # Si pas de données
 
-    def open_internet(self, url):
+    def open_internet(self, url): # Ouvre le navigateur
         os.system(self.cmd_nav + ' ' + url)
 
-    def info_sys(self):
+    def info_sys(self): # Renvoie les informations du système
         pc = wmi.WMI()
         sm = pc.Win32_ComputerSystem()[0]
         os_info = pc.Win32_operatingSystem()[0]
@@ -84,4 +132,4 @@ class API:
                  #'\n : ' + str() + ' ' + 
 
 if __name__ == '__main__':
-    API.info_sys(None)
+    from __init__ import *

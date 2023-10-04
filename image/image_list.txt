@@ -1,0 +1,464 @@
+new, open, import, save, saveas, savecopyas, proprietes, meta, printer, close, fermer, undo, redo, cut, copy, past, gotol, selectall, find, replace, ai, puces, style, cstyle, list, plus, cursor, comment, uncomment, python, solve, compile, check, run, word, pdf, password, zip, compare, send, clear, bip, minitel, load, rec, switch, stop, line, dark, task, windows, lg, help, doc, todo, line, lines, tree, prog, update, upgrade, unsaved, saved
+
+########################################################
+# QUAND JE MET MONO, CA VEUX DIRE COMME TU VEUX !!!!!! #
+########################################################
+
+Image "TYPE.png" : (Ethymologie du nom de l'image si besoin) (Exemple)
+--------------
+Etat = Non Fait (Pour toi, si tu veux "cocher" au fur à mesure...)
+Couleurs : multi/mono (Les couleurs, mono = comme tu veux, mais pas trop coloré et multi = avec couleur, pour une fonction plus importante)
+Forme : au choix (Forme que je t'impose, quand j'en impose, c'est à dire, pas souvent, mais bon...)
+Autre : / (Informations sur que fait la fonction où est l'image)
+
+
+Image "new.png" :
+--------------
+Etat = ? je trouve ça ambigü avec plus...
+Couleurs : multi
+Forme : au choix
+Autre : /
+
+Image "open.png" :
+--------------
+Etat = Fait
+Couleurs : multi
+Forme : dossier
+Autre : /
+
+Image "import.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : au choix
+Autre : Il faut quand même que ce soit différent de open.png
+
+Image "save.png" :
+--------------
+Etat = Non Fait (le modèle oui, mais pas avec les couleurs)
+Couleurs : multi
+Forme : disquette
+Autre : /
+
+Image "saveas.png" :
+--------------
+Etat = Fait
+Couleurs : mono
+Forme : disquette
+Autre : /
+
+Image "savecopyas.png" :
+--------------
+Etat = Non Fait (presque comme saveas.png, mais si tu pouvais changer quelques trucs...)
+Couleurs : mono
+Forme : disquette
+Autre : Si tu pouvais la faire d'une autre couleur que saveas.png...
+
+Image "proprietes.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Cet icone permet de voire les méta données sous Forme bien présentées, dans une petite fenêtre, en lecture seule
+
+Image "meta.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Cet icone là permet de modifier les méta données (ouvre une boite de dialogue)
+
+Image "printer.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : Imprimante... En toute logique... :)
+Autre : /
+
+Image "close.png" :
+--------------
+Etat = Fait
+Couleurs : mono
+Forme : Croix
+Autre : /
+
+Image "fermer.png" :
+--------------
+Etat = Ne va pas (traits trop fins)
+Couleurs : mono
+Forme : Symbole marche arrêt startard
+Autre : /
+
+Image "undo.png" :
+--------------
+Etat = Fait
+Couleurs : mono
+Forme : au choix
+Autre : /
+
+Image "redo.png" :
+--------------
+Etat = Fait
+Couleurs : mono
+Forme : au choix
+Autre : /
+
+Image "cut.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix (ciseaux ?)
+Autre : /
+
+Image "copy.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : /
+
+Image "past.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : /
+
+Image "gotol.png" : (Goto line)
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Cette fonction amène vers une ligne donnée de la zone de texte
+
+Image "selectall.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : /
+
+Image "find.png" :
+--------------
+Etat = Fait
+Couleurs : mono
+Forme : Loupe
+Autre : /
+
+Image "replace.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : /
+
+Image "ai.png" : (Artificial Intelligence)
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : au choix
+Autre : Cette image ira sur toutes les fonctions IA (tu peux donc en faire d'autre pour les boutons suivants : paramétrage, invention fin de texte)
+
+Image "puces.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : Forme de "check" ou bien de points, ou de truc genre puce pour itération
+Autre : Cette image ne sera pas toujours visible, en fonction de si la fonction est présente ou pas
+
+Image "style.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : au choix
+Autre : Ouvre une boite de dialogue demandant un nouveau style
+
+Image "cstyle.png" : (Config Style)
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : au choix
+Autre : Permet de modifier un style précis (demandé par une boite de dialogue)
+
+Image "list.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : au choix
+Autre : Liste les variables dans le fichier actuel (base : clef - valeur)
+
+Image "plus.png" :
+--------------
+Etat = Fait
+Couleurs : multi
+Forme : Plus, évidement... :)
+Autre : Permet de créer une variable et de la placer à l'endroit indiqué
+
+Image "cursor.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : curseur, type mac, linux, windows, je m'en fout (quitte à mettre un curseur par OS...)
+Autre : Servira à placer une variable déjà existante dans la zone de texte
+
+Image "comment.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Met en commentaire une ligne (quand cette ligne est celle d'un programme)
+
+Image "uncomment.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Enlève le commentaire de la ligne (idem)
+
+Image "python.png" : PAS BESOIN
+
+Image "solve.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : un Pi (3.14)...
+Autre : Spécial au langage matique, donc, en tant normal, fonction grisée
+
+Image "compile.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Lance la compilation d'un programme (non implementé encore, pour le matique toujours)
+
+Image "check.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : trait en V de validation
+Autre : Lance une vérification du programme (idem)
+
+Image "run.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Lance le programme (OK pour python mais c'est tout pour l'instant !)
+
+Image "word.png" : PAS BESOIN
+
+Image "pdf.png" : PAS BESOIN
+
+Image "password.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : cadenas avec étoiles, ou un truc du genre
+Autre : Sert comme icone quand on veut rentrer un mot de passe...
+
+Image "zip.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : Disquette ?
+Autre : Met le fichier en cours dans une archive pour voir l'avancé des versions
+
+Image "compare.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : balance ?
+Autre : Ouvre un fichier archive et compare les différentes versions (les comptes pour l'instant)
+
+Image "send.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : Petit avion en papier (comme SMS, WhatsApp, ...)
+Autre : Sert à envoyer des données à un minitel (je supprimerai cette fonction le jour où je distribue le logiciel, si cela arrive ;) )
+
+Image "clear.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Efface l'écran du minitel (idem)
+
+Image "bip.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Fait faire au minitel un BIP sonore (idem)
+
+Image "minitel.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : Un minitel bien sur, Ulla n'a pas de logo ;)
+Autre : Affiche la page d'accueil Ulla (idem)
+
+Image "load.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : au choix
+Autre : Charge un fichier de macro (et l'execute)
+
+Image "rec.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : Petit rond rouge, comme le logo standard
+Autre : Lance l'enregistrement d'une macro
+
+Image "switch.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : Un Play (|>) et un Pause (||) sur LE MÊME Icone !!!
+Autre : Pour mettre en pause l'enregistrement de la macro et/ou reprendre
+
+Image "stop.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : Un grand carré, logo standard du Stop
+Autre : Pour arrêter l'enregistrement de la macro
+
+Image "lines.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Ouvre une fenêtr d'indication du nombre de lignes de programme
+
+Image "line.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Active/Désactive les numéros de ligne à gauche de la zone de texte
+
+Image "dark.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : au choix
+Autre : Active/Désactive le mode sombre du logiciel
+
+Image "task.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : au choix
+Autre : Affiche le gestionnaire des taches interne du programme en lui même
+
+Image "windows.png" : PAS BESOIN
+
+Image "lg.png" : PAS BESOIN (traduction)
+
+Image "help.png" :
+--------------
+Etat = Fait
+Couleurs : mono
+Forme : au choix
+Autre : /
+
+Image "doc.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Affiche la documentation dans la zone de texte
+
+Image "todo.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Liste des choses à faire... tu t'en doutais :)
+
+Image "tree.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : Arbre
+Autre : Affiche la structure du programme (les fichiers -> Classes -> Fonctions)
+
+Image "prog.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : au choix
+Autre : Affiche une fenêtre taille éditeur standard, avec le contenu de chacun des fichiers de programme
+
+Image "update.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : au choix
+Autre : Charge une nouvelle version depuis un fichier ZIP choisit par l'utilisateur
+
+Image "upgrade.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : au choix
+Autre : Charge une nouvelle version depuis le site internet
+
+Image "uparrow.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : flèche vers le haut
+Autre : /
+
+Image "downarrow.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : flèche vers le bas
+Autre : /
+
+Image "leftarrow.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : flèche vers la gauche
+Autre : /
+
+Image "rightarrow.png" :
+--------------
+Etat = Non Fait
+Couleurs : mono
+Forme : flèche vers la droite
+Autre : /
+
+Image "on.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : Bouton joystic état 1 (On)
+Autre : Penser à ce que celui ci et le suivant tombent pile en face !!!!!!!!!!
+
+Image "off.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : Bouton joystic état 0 (Off)
+Autre : idem
+
+Image "unsaved.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : Une disquette rouge
+Autre : Apparaitra sur un version ultérieur où il y aura des onglets pour ouvrir plusieurs fichiers en même temps...
+
+Image "saved.png" :
+--------------
+Etat = Non Fait
+Couleurs : multi
+Forme : Une disquette verte
+Autre : Apparaitra sur un version ultérieur où il y aura des onglets pour ouvrir plusieurs fichiers en même temps...

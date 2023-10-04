@@ -7,7 +7,7 @@ from tkinter.messagebox import *
 from tkinter.simpledialog import *
 import sqlite3, hashlib, inspect, os
 
-PATH_PROG = os.path.abspath(os.getcwd())
+PATH_PROG = '.'#os.path.abspath(os.getcwd())
 
 from tooltip import *
 from confr import *

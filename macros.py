@@ -13,6 +13,7 @@ class Macro:
         self.inst = []
         self.events = []
         ## Les instructions possibles sont dans keyb.py -> self.actions
+        ## La définition des modes se trouve dans main.py -> __init__
 
     def load_macro(self):
         n = askopenfilename(title=lg('open'), initialdir='.', filetypes=[(lg('mf'), '*.macro'), (lg('alf'), '*.*')])
@@ -34,6 +35,7 @@ class Macro:
                         if not j:
                             continue
 
+                        print(j)
                         arg, value = j.split(':')
                         self.inst[-1][arg] = value
 
@@ -69,35 +71,24 @@ class Macro:
         self.reset_tableactions()
 
     def record_macro(self):
+        if self.recording:
+            return
+
         self.events = []
         self.mode_record = True
-
-        #self.menumacro.entryconfig(3, state = 'normal')
-        #self.menumacro.entryconfig(1, state = 'disabled')
-        #self.menumacro.entryconfig(2, state = 'normal')
+        self.recording = True
 
     def switch_record(self):
-        self.mode_record = not self.mode_record
-
-        #try:
-        #self.menumacro.entryconfig(2,
-        #                           image = self.images['play'] if not self.mode_record else self.images['pause'],
-        #                           label = 'Reprendre' if not self.mode_record else 'Pause')
-        #except:
-            #pass
-
-        #self.menumacro.entryconfig(3, state = 'disabled' if not self.mode_record else 'normal')
+        if self.recording:
+            self.mode_record = not self.mode_record
 
     def finish_record(self):
+        if not self.recording:
+            return
+
         self.mode_record = False
-        #try:
-        #self.menumacro.entryconfig(2, state = 'disabled')
-        #except:
-            #pass
+        self.recording = False
 
-        #self.menumacro.entryconfig(3, state = 'disabled')
-
-        
         # demande ici les infos (fichier à enregistrer par exemple)
         zak = Toplevel(self.master)
         zak.transient(self.master)
@@ -113,7 +104,27 @@ class Macro:
                 e.set(n)
 
         def ok():
+            print(self.events)
             zak.destroy()
+            f = open(e.get(), 'w')
+            for event in self.events:
+                for arg, value in event.items():
+                    if arg == 'command':
+                        f.write(value)
+                        continue
+
+                    if value == None:
+                        continue
+
+                    if isinstance(value, bool):
+                        value = '1' if value else '0'
+                    elif isinstance(value, int):
+                        value = str(value)
+
+                    f.write(' ' + str(arg) + ':' + str(value))
+                f.write('\n')
+
+            f.close()
 
         Button(zak, text = lg('...'), width = 3, command = ask).grid(row = 1, column = 1, padx = 5, sticky = 'w', pady = 5)
         Button(zak, text = lg('ok'), width = 20, command = ok).grid(row = 2, column = 0, padx = 5, pady = 10, columnspan = 2)

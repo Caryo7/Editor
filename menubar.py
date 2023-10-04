@@ -60,7 +60,7 @@ class MenuBar:
             menuedition.add_command(label=lg('Copy'), accelerator='Ctrl + C', stat='normal', command=self.copy, image = self.images['copy'], compound='left')
             menuedition.add_command(label=lg('Past'), accelerator='Ctrl + V', stat='normal', command=self.past, image = self.images['past'], compound='left')
             menuedition.add_separator()
-            menuedition.add_command(label=lg('Select_all'), accelerator='Ctrl + A', stat='disabled', command=notyet, image = self.images['select'], compound='left')
+            menuedition.add_command(label=lg('Select_all'), accelerator='Ctrl + A', stat='normal', command=self.selectall, image = self.images['select'], compound='left')
             menuedition.add_command(label=lg('Goto_line'), accelerator=self.get_accelerator('goto'), stat='normal', command=self.gotol, image = self.images['gotol'], compound='left')
             menuedition.add_separator()
             menuedition.add_command(label=lg('Search'), accelerator=self.get_accelerator('search'), stat='normal', command=self.search, image = self.images['search'], compound='left')
@@ -75,6 +75,12 @@ class MenuBar:
             menuview.add_command(label=lg('menu'), stat = 'disabled')
             menuview.add_checkbutton(label=lg('infobar'), onvalue=1, offvalue=0, variable=self.info_bar, image = self.images['infobar'], compound='left', command = self.changebars)
             menuview.add_checkbutton(label=lg('buttonbar'), onvalue=1, offvalue=0, variable=self.boutons, image = self.images['buttonbar'], compound='left', command = self.changebars)
+
+        if get_menuai():
+            menuai = Menu(menubar, tearoff = 0)
+            menubar.add_cascade(label = lg('AI'), menu = menuai)
+            menuai.add_command(label = lg('write_next'), command = self.invente_fin, accelerator = self.get_accelerator('write_next'), image = self.images['ai'], compound = 'left')
+            menuai.add_command(label = lg('set_ia'), command = self.askModel, accelerator = self.get_accelerator('set_ia'), image = self.images['ai'], compound = 'left')
             
         if get_menustyle():
             menustyle = Menu(menubar, tearoff=0)
@@ -165,9 +171,9 @@ class MenuBar:
             menubar.add_cascade(label=lg('Macro'), menu = self.menumacro)
             self.menumacro.add_command(label=lg('Load'), command=self.load_macro, accelerator=self.get_accelerator('macro'), image = self.images['load'], compound='left')
             self.menumacro.add_separator()
-            self.menumacro.add_command(label = 'Record Macro', stat = 'normal', command = self.record_macro, accelerator=self.get_accelerator('record_macro'), image = self.images['rec'], compound='left') ################
-            self.menumacro.add_command(label = 'Switch Record', stat = 'disabled', command = self.switch_record, accelerator=self.get_accelerator('switch_record'), image = self.images['pause'], compound='left') ################
-            self.menumacro.add_command(label = 'Finish Record', stat = 'disabled', command = self.finish_record, accelerator=self.get_accelerator('finish_record'), image = self.images['carre'], compound='left') ################
+            self.menumacro.add_command(label = lg('Record_Macro'), command = self.record_macro, accelerator=self.get_accelerator('record_macro'), image = self.images['rec'], compound='left')
+            self.menumacro.add_command(label = lg('Switch_Record'), command = self.switch_record, accelerator=self.get_accelerator('switch_record'), image = self.images['pause'], compound='left')
+            self.menumacro.add_command(label = lg('Finish_Record'), command = self.finish_record, accelerator=self.get_accelerator('finish_record'), image = self.images['carre'], compound='left')
 
         if get_menuopt():
             menuopt = Menu(menubar, tearoff=0)
@@ -189,8 +195,8 @@ class MenuBar:
             menuaide.add_command(label=lg('todo'), stat = 'normal', command = self.ToDo, accelerator=self.get_accelerator('todo'), image = self.images['todo'], compound='left')
             menuaide.add_separator()
             menuaide.add_command(label=lg('Lines'), stat='normal', command=lambda : act(self), accelerator=self.get_accelerator('lines'), image = self.images['lines'], compound='left')
-            menuaide.add_command(label=lg('struct'), stat = 'normal', command = Tkin, accelerator=self.get_accelerator('struct'), image = self.images['struct'], compound='left')
-            menuaide.add_command(label=lg('program'), stat = 'normal', command = Code, accelerator=self.get_accelerator('prog'), image = self.images['prog'], compound='left')
+            menuaide.add_command(label=lg('struct'), stat = 'normal', command = lambda : Tkin(self.master, self.path_prog), accelerator=self.get_accelerator('struct'), image = self.images['struct'], compound='left')
+            menuaide.add_command(label=lg('program'), stat = 'normal', command = lambda : Code(self.master, self.path_prog), accelerator=self.get_accelerator('prog'), image = self.images['prog'], compound='left')
             menuaide.add_separator()
             menusample = Menu(menuaide, tearoff=0)
             menusample.add_command(label = lg('infos'), command = self.infos)

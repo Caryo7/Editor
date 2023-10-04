@@ -9,8 +9,8 @@ from tkinter.messagebox import *
 from tkinter.filedialog import *
 from tkinter.simpledialog import *
 from tkinter.colorchooser import *
+from switchbt import *
 
-PATH_PROG = os.path.abspath(os.getcwd())
 bg_type = get_dark()
 if bg_type:
     BG = get_bgd()
@@ -18,54 +18,6 @@ if bg_type:
 else:
     BG = get_bgl()
     FG = get_fgl()
-
-IMGS = (PATH_PROG + '/image/48x48/on.png',
-        PATH_PROG + '/image/48x48/off.png')
-
-class Switch:
-    def __init__(self, parent, stat = 'normal'):
-        self.on = PhotoImage(master = parent, file = IMGS[0])
-        self.off = PhotoImage(master = parent, file = IMGS[1])
-        self.stat = stat
-
-        if stat in ('normal', True, '1'):
-            self.stat = True
-            img = self.on
-        else:
-            self.stat = False
-            img = self.off
-
-        self.w = Label(parent, image = img, bg = BG)
-        self.w.bind('<Button-1>', self.switch)
-
-    def place(self, *args, **kwarg):
-        self.w.place(*args, **kwarg)
-    
-    def grid(self, *args, **kwarg):
-        self.w.grid(*args, **kwarg)
-    
-    def pack(self, *args, **kwarg):
-        self.w.pack(*args, **kwarg)
-
-    def switch(self, evt = None):
-        self.stat = not self.stat
-        self.update()
-
-    def get(self):
-        return self.stat
-
-    def set(self, stat):
-        self.stat = stat
-        self.update()
-
-    def update(self):
-        if self.stat:
-            img = self.on
-        else:
-            img = self.off
-
-        self.w.config(image = img)
-
 
 class ScreenMenu:
     def rtnTrue(self):
@@ -78,6 +30,7 @@ class ScreenMenu:
         self.dic = {lg('file'): ['', ('menu', 'file')],
                     lg('edit'): ['', ('menu', 'edit')],
                     lg('view'): ['', ('menu', 'view')],
+                    lg('AI'): ['', ('menu', 'ai')],
                     lg('style'): ['', ('menu', 'style')],
                     lg('variables'): ['', ('menu', 'vars')],
                     lg('format'): ['', ('menu', 'format')],
@@ -143,6 +96,9 @@ class ScreenSecu:
                     lg('password'): ['*', ('security', 'password')],
                     '2': None,
                     lg('navig'): ['c', ('global', 'browser')],
+                    'Discord': ['s', ('global', 'discord')],
+                    '3': None,
+                    lg('tips'): ['s', ('global', 'tips')],
                     }
 
         row = -1
@@ -202,6 +158,7 @@ class ScreenView:
 
         self.dic = {lg('codage'): ['lc', ('crypt', 'code')],
                     lg('langage'): ['lp', ('global', 'lang')],
+                    lg('coloration'): ['sw', ('global', 'colors')],
                     lg('langue_pa') + ' ': ['ll', ('gen', 'lg')],
                     '1': None,
                     lg('errors'): ['sw', ('global', 'errors')],
@@ -487,8 +444,9 @@ class ScreenMinitel:
 
 
 class ScreenLinks:
-    def __init__(self, parent, master, cmds = None, ico = None):
+    def __init__(self, parent, master, cmds = None, ico = None, path_prog = None):
         self.main = Frame(parent)
+        self.path_prog = path_prog
         self.main['bg'] = BG
         self.tk = master
         self.ico = ico
@@ -590,7 +548,7 @@ class ScreenLinks:
         self.e.insert('end', ' + '.join(self.list_keys))
 
     def valide_linkkey(self, delete = False):
-        f = open(PATH_PROG + '/keys.k', 'r', encoding = get_encode())
+        f = open(self.path_prog + '/keys.k', 'r', encoding = get_encode())
         r = f.read()
         f.close()
 
@@ -609,7 +567,7 @@ class ScreenLinks:
                 line = name + ' = ' + event
             res += line + '\n'
 
-        f = open(PATH_PROG + '/keys.k', 'w', encoding = get_encode())
+        f = open(self.path_prog + '/keys.k', 'w', encoding = get_encode())
         f.write(res)
         f.close()
         self.root.destroy()
@@ -626,7 +584,7 @@ class ScreenLinks:
         except Exception:
             return
 
-        f = open(PATH_PROG + '/keys.k', 'r', encoding = get_encode())
+        f = open(self.path_prog + '/keys.k', 'r', encoding = get_encode())
         r = f.read()
         f.close()
         for line in r.split('\n'):
@@ -642,8 +600,9 @@ class ScreenLinks:
 
 
 class ScreenCustomize:
-    def __init__(self, parent, master, nom_bts, mode, ico = None):
+    def __init__(self, parent, master, nom_bts, mode, ico = None, path_prog = None):
         self.main = Frame(parent)
+        self.path_prog = path_prog
         self.main['bg'] = BG
         if mode == 'clk':
             self.mode = '#clk'
@@ -660,7 +619,7 @@ class ScreenCustomize:
         self.lst_bt.place(x = 0, y = 0)
         self.lst_bt.config(yscrollcommand = scroll2.set)
         scroll2.place(x = self.lst_bt.winfo_reqwidth(), y = 0, height = self.lst_bt.winfo_reqheight(), width = 20)
-        f = open(PATH_PROG + '/menus.m', 'r')
+        f = open(self.path_prog + '/menus.m', 'r')
         r = f.read()
         f.close()
         mod = False
@@ -810,13 +769,13 @@ class Configurator2(Data):
         self.mini = ScreenMinitel(self.onglets, self.ports, master = self.tk)
         self.onglets.add(text = lg('Minitel'), child = self.mini.get())
 
-        self.racc = ScreenLinks(self.onglets, self.tk, (self.__keyb__, self.get_accelerator), self.ico['config'])
+        self.racc = ScreenLinks(self.onglets, self.tk, (self.__keyb__, self.get_accelerator), self.ico['config'], path_prog = self.path_prog)
         self.onglets.add(text = lg('racc'), child = self.racc.get())
 
-        self.clk = ScreenCustomize(self.onglets, self.master, self.nom_bts, mode = 'clk')#, ico = self.ico['config'])
+        self.clk = ScreenCustomize(self.onglets, self.master, self.nom_bts, mode = 'clk', ico = self.ico['config'], path_prog = self.path_prog)
         self.onglets.add(text = lg('menuclkr'), child = self.clk.get())
 
-        self.bbt = ScreenCustomize(self.onglets, self.master, self.nom_bts, mode = 'bbt')#, ico = self.ico['config'])
+        self.bbt = ScreenCustomize(self.onglets, self.master, self.nom_bts, mode = 'bbt', ico = self.ico['config'], path_prog = self.path_prog)
         self.onglets.add(text = lg('menubts'), child = self.bbt.get())
 
         larg = 20
@@ -839,7 +798,7 @@ class Configurator2(Data):
         #clk = self.clk.results()
         #bbt = self.bbt.result()
 
-        log = open(PATH_PROG + '/log.txt', 'a')
+        log = open(self.path_prog + '/log.txt', 'a')
 
         def optim(section, option, value):
             if value == True:
@@ -892,6 +851,8 @@ class Configurator2(Data):
 
         log.close()
 
+        self.act_colorc = pr[lg('coloration')]['result']
+
         p.stop()
         print('Restarting...')
         self.cancel()
@@ -900,7 +861,9 @@ class Configurator2(Data):
 
     def apply(self):
         self.configurating = True
+        self.savecopyas(forcing = True, name = 'backup.form')
         self.validate_choice()
+        self.open(name = 'backup.form', forcing = True)
 
 
 def htest():

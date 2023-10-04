@@ -1,14 +1,13 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 from configparser import ConfigParser
 from lg import *
 import os, inspect
 from tkinter.messagebox import *
 
-PATH_PROG = os.path.abspath(os.getcwd())
+PATH_PROG = '.'#os.path.abspath(os.getcwd())
 
 p = ConfigParser()
 p.read(PATH_PROG + '/config.ini', encoding = 'UTF-8')
+#print(PATH_PROG + '/config.ini', str(Path(PATH_PROG + '/config.ini')))
 
 def get_ln():
     if p.get('global', 'line_number') == '1':return True
@@ -16,6 +15,10 @@ def get_ln():
 
 def get_askclose():
     if p.get('global', 'askclose') == '1':return True
+    else:return False
+
+def get_discord_mode():
+    if p.get('global', 'discord') == '1':return True
     else:return False
 
 def get_url():
@@ -26,6 +29,14 @@ def get_nav():
 
 def get_sur():
     if p.get('global', 'surcharge') == '1':return True
+    else:return False
+
+def get_modecolor():
+    if p.get('global', 'colors') == '1':return True
+    else:return False
+
+def get_startTips():
+    if p.get('global', 'tips') == '1':return True
     else:return False
 
 def get_notifs():
@@ -94,6 +105,10 @@ def get_menumacro():
 
 def get_menuexport():
     if p.get('menu', 'export') == '1':return True
+    else:return False
+
+def get_menuai():
+    if p.get('menu', 'ai') == '1':return True
     else:return False
 
 def get_menumin():

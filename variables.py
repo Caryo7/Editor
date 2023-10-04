@@ -17,10 +17,10 @@ class TableGUI:
 
         self.tvars = Toplevel(self.master)
         self.tvars.transient(self.master)
-        self.tvars.title('Table des variables') ###############################
+        self.tvars.title(lg('vars_tables'))
         self.tvars.resizable(False, False)
         try:
-            self.tvars.iconbitmap(self.ico['settings'])
+            self.tvars.iconbitmap(self.ico['config'])
         except:
             pass
 
@@ -29,8 +29,8 @@ class TableGUI:
         scroll.config(command = self.tree.yview)
         scroll.place(x = 10 + self.tree.winfo_reqwidth(), y = 40, height = self.tree.winfo_reqheight())
         self.tree.place(x = 10, y = 40)
-        self.tree.heading('name', text = 'Name') ##############
-        self.tree.heading('data', text = 'Data') ##############
+        self.tree.heading('name', text = lg('Name'))
+        self.tree.heading('data', text = lg('Data'))
         self.tree.column('name', width = 100)
         self.tree.column('data', width = 300)
         self.tree.bind('<<TreeviewSelect>>', self.itemSelected)
@@ -38,12 +38,12 @@ class TableGUI:
             self.tree.bind('<Double-Button-1>', self.choix)
 
         self.tvars.geometry(str(self.tree.winfo_reqwidth() + scroll.winfo_reqwidth() + 10) + 'x' + str(50 + self.tree.winfo_reqheight()))
-        Button(self.tvars, text = 'Ajouter', command = self.append).place(x = 10, y = 10) ################
-        self.bpop = Button(self.tvars, text = 'Enlever', command = self.remove, stat = 'disabled') #################
+        Button(self.tvars, text = lg('append'), command = self.append).place(x = 10, y = 10)
+        self.bpop = Button(self.tvars, text = lg('remove'), command = self.remove, stat = 'disabled')
         self.bpop.place(x = 120, y = 10)
-        self.bconf = Button(self.tvars, text = 'Configurer', command = self.config, stat = 'disabled') #################
+        self.bconf = Button(self.tvars, text = lg('Config'), command = self.config, stat = 'disabled')
         self.bconf.place(x = 200, y = 10)
-        self.buns = Button(self.tvars, text = 'Déséléctionner', command = self.unselect, stat = 'disabled') ##################
+        self.buns = Button(self.tvars, text = lg('unselect'), command = self.unselect, stat = 'disabled')
         self.buns.place(x = 320, y = 10)
 
         self.update()
@@ -60,11 +60,15 @@ class TableGUI:
     def append(self):
         zak = Toplevel(self.tvars)
         zak.transient(self.tvars)
-        zak.title('Ajouter') #################
+        zak.title(lg('append'))
         zak.resizable(False, False)
+        try:
+            zak.iconbitmap(self.ico['config'])
+        except:
+            pass
 
-        Label(zak, text = 'Nom', font = ('Consolas', 14)).grid(row = 0, column = 0, sticky = 'e', padx = 5, pady = 5) #################
-        Label(zak, text = 'Valeur', font = ('Consolas', 14)).grid(row = 1, column = 0, sticky = 'e', padx = 5, pady = 5) ############
+        Label(zak, text = lg('name'), font = ('Consolas', 14)).grid(row = 0, column = 0, sticky = 'e', padx = 5, pady = 5)
+        Label(zak, text = lg('data'), font = ('Consolas', 14)).grid(row = 1, column = 0, sticky = 'e', padx = 5, pady = 5)
         name = StringVar(master = zak)
         value = StringVar(master = zak)
         Entry(zak, textvariable = name, width = 15, font = ('Courier', 13)).grid(row = 0, column = 1, sticky = 'w', padx = 5, pady = 5)
@@ -81,10 +85,10 @@ class TableGUI:
                 self.unsave(forcing = True, evt = None)
 
             else:
-                showerror('', 'Merci de mettre un nom pour la variable !') #############################
+                showerror('', lg('name_to_var'))
 
         e.bind('<Return>', add)
-        Button(zak, text = 'OK', command = add, width = 30).grid(row = 2, column = 0, columnspan = 2, padx = 10, pady = 7) #######################
+        Button(zak, text = lg('OK'), command = add, width = 30).grid(row = 2, column = 0, columnspan = 2, padx = 10, pady = 7)
 
     def getTextValueVars(self, text):
         data = text.split(self.spliter)
@@ -95,7 +99,7 @@ class TableGUI:
             except IndexError:
                 break
             except KeyError:
-                showerror('', 'Pas de variable au nom de ' + str(data[i])) #######################
+                showerror('', lg('no_var_named') + str(data[i]))
 
             i += 2
 
@@ -135,7 +139,7 @@ class TableGUI:
 
             self.start_vars(mode = 'choix')
         else:
-            showinfo('', 'No variables created !') ###################
+            showinfo('', lg('no_vars'))
 
     def remove(self):
         index = self.tree.selection()
@@ -148,7 +152,7 @@ class TableGUI:
     def config(self):
         index = self.tree.selection()
         selected = self.tree.item(index)['values']
-        new_data = askstring('Définition', 'Quelle valeur voulez vous donner à la variable ' + str(selected[0]) + ' ?') #####################
+        new_data = askstring(lg('Definition'), lg('which_data') + str(selected[0]))
         self.variables[selected[0]] = new_data
 
         self.update()
@@ -164,12 +168,12 @@ class TableGUI:
             self.bconf.config(stat = 'disabled')
             self.buns.config(stat = 'disabled')
 
-    def clear(self):
+    def clear_vars(self):
         for x in self.tree.get_children():
             self.tree.delete(x)
 
     def update(self):
-        self.clear()
+        self.clear_vars()
         for name, value in self.variables.items():
             self.tree.insert('', 'end', values = [name, value])
 

@@ -7,7 +7,7 @@ import compress as cp
 import os
 import hashlib
 
-PATH_PROG = os.path.abspath(os.getcwd())
+PATH_PROG = '.'#os.path.abspath(os.getcwd())
 
 class NoExForm:
     @classmethod
@@ -339,7 +339,116 @@ class ExForm4: #################################################################
             log.close()
 
 
-def found_vers(file, rcl = True):
+class ExForm5: ####################################################################################################### EXTENSION FORM V° 5 ##############################################
+    spliter = b'\x01'.decode(get_encode())
+
+    @classmethod
+    def open(self, path_prog, name):
+        try:
+            f = zp.ZipFile(name, 'r')
+            result = f.read('data.txt').decode(get_encode())
+            lst_tag = str(f.read('tags.csv').decode(get_encode())).split('\n')
+            lst_tags = []
+            for i in lst_tag:
+                i = i.replace('\r', '')
+                if i != '':
+                    lst_tags.append(i.split(','))
+        
+            meta = {}
+            meta_data = f.read('meta.ini').decode(get_encode())
+            meta_data = meta_data.replace('\r', '\n')
+            for i in meta_data.split('\n'):
+                if i != '':
+                    key, value = i.split('-')
+                    key = key.replace('"', '')
+                    value = value.replace('"', '')
+                    meta[key] = value
+
+            var = {}
+            variables = f.read('variables.csv').decode(get_encode())
+            variables = variables.replace('\r', '\n')
+            for i in variables.split('\n'):
+                if i == '':
+                    continue
+
+                key, value = i.split(self.spliter)
+                var[key] = value
+        
+            f.close()
+            return (result, lst_tags, meta, var)
+
+        except Exception as e:
+            log = open(path_prog + '/log.txt', 'a')
+            log.write(str(e) + '\n')
+            log.close()
+            return ('', [], {}, {})
+
+    @classmethod
+    def save(self, path_prog, file, data, lst_tags, meta, variables, force = False):
+        try:
+            z = zp.ZipFile(file, 'w')
+            f = z.open('data.txt', 'w') 
+            f.write(data)
+            f.close()
+            f = z.open('tags.csv', 'w')
+            for i in lst_tags:
+                f.write(str(','.join(i) + '\n').encode())
+            f.close()
+            f = z.open('meta.ini', 'w')
+            if 'version' not in meta.keys():
+                meta['version'] = 'Form_5.0'
+            if 'time' not in meta.keys():
+                meta['time'] = '0'
+            if 'version' in meta.keys() and force:
+                meta['version'] = 'Form_5.0'
+
+            for key, value in meta.items():
+                f.write(str('"' + key + '"-"' + value + '"\n').encode(get_encode()))
+            f.close()
+            f = z.open('variables.csv', 'w')
+            for k, v in variables.items():
+                f.write(k.encode(get_encode()) + b'\x01' + v.encode(get_encode()))
+
+            f.close()
+            z.close()
+
+        except Exception as e:
+            log = open(path_prog + '/log.txt', 'a')
+            log.write(str(e) + '\n')
+            log.close()
+
+    @classmethod
+    def write_meta(self, file, meta, path_prog):
+        try:
+            z = zp.ZipFile(file, 'r')
+            files = {}
+            for fle in z.namelist():
+                if fle == 'meta.ini':
+                    continue
+                files[fle] = z.read(fle)
+
+            z.close()
+
+            z = zp.ZipFile(file, 'w')
+            for file, value in files.items():
+                f = z.open(file, 'w')
+                f.write(value)
+                f.close()
+
+            f = z.open('meta.ini', 'w')
+            for key, value in meta.items():
+                f.write(str('"' + key + '"-"' + value + '"\n').encode(get_encode()))
+
+            f.close()
+            z.close()
+
+        except Exception as e:
+            log = open(path_prog + '/log.txt', 'a')
+            log.write(str(e) + '\n')
+            log.close()
+
+
+def found_vers(file, rcl = True): #######################################################################################################################################################
     try:
         z = zp.ZipFile(file, 'r')
         lst = z.namelist()
@@ -371,6 +480,12 @@ def found_vers(file, rcl = True):
                                 return ExForm4
                             else:
                                 return '4'
+
+                        elif value == 'Form_5.0':
+                            if rcl:
+                                return ExForm5
+                            else:
+                                return '5'
 
     except zp.BadZipFile:
         f = cp.CmpdFile(file, 'r')
@@ -451,9 +566,9 @@ class ExForm:
         self.insert_text(data)
 
         try:
-            set_deck(meta['lang'])
+            self.act_color = meta['lang']
         except:
-            pass
+            self.act_color = None
 
         for tag in lst_tags:
             self.lst_tags.append(tag)
@@ -474,7 +589,7 @@ class ExForm:
         self.update_line_numbers(fforbid = True)
         self.text.focus()
 
-    def save(self, file, data, meta, variables):
+    def save(self, file, data, meta, variables, mode_saveas = False):
         data = data.encode(get_encode())
 
         def write_form(path_prog, file, data, lst_tags, meta, variables):
@@ -486,6 +601,8 @@ class ExForm:
                 ExForm3.save(path_prog, file, data, lst_tags, meta, force = True)
             elif v_form == 4:
                 ExForm4.save(path_prog, file, data, lst_tags, meta, variables, force = True)
+            elif v_form == 5:
+                ExForm5.save(path_prog, file, data, lst_tags, meta, variables, force = True)
 
         def write_file(path_prog, file, data, lst_tags, meta, variables):
             if v_file == 1:
@@ -496,9 +613,15 @@ class ExForm:
                 ExForm3.save(path_prog, file, data, lst_tags, meta)
             elif v_file == 4:
                 ExForm4.save(path_prog, file, data, lst_tags, meta, variables)
+            elif v_file == 5:
+                ExForm5.save(path_prog, file, data, lst_tags, meta, variables)
 
         v_form = int(self.FORM_VERSION[0])
-        v_file = int(found_vers(file, False))
+        if mode_saveas:
+            v_file = v_form
+        else:
+            v_file = int(found_vers(file, False))
+
         if v_form == v_file:
             write_form(self.path_prog, file, data, self.lst_tags, meta, variables)
 
@@ -525,6 +648,8 @@ class ExForm:
             ExForm3.write_meta(self.path, self.meta, self.path_prog)
         elif v_file == 4:
             ExForm4.write_meta(self.path, self.meta, self.path_prog)
+        elif v_file == 5:
+            ExForm5.write_meta(self.path, self.meta, self.path_prog)
         else:
             showerror(lg('formf'), lg('cant_meta'))
 

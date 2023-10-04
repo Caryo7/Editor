@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 ################## Fichiers à changer : compilation.iss ####################
-__version__ = VERSION = '37.1' ###
+__version__ = VERSION = '38.2' ###
 GUI_VERSION = '38' ###
 FILE_VERSION = '2.3' ##
-FORM_VERSION = '4.2' ##
+FORM_VERSION = '5.0' ##
 LANGS_VERSION = '1.6' ##
 
 # Partie 1 - Importation de tous les fichiers
@@ -28,7 +28,6 @@ class StartUp_Console:
     ## for proc in psutil.process_iter():
     ##     print(proc.name())
     ##     print(proc.pid())
-
 
 print('Démarrage...')
 from startup import *
@@ -53,98 +52,99 @@ import time, inspect, os
 
 NAME = 'Editor'
 DESC = NAME
-URL = 'https://bgtarino.wixsite.com/Editor'
+URL = 'https://tarino-editor.000webhostapp.com/index.php'
 PYTHON_VERSION = '3.10'
 ARDUINO_VERSION = '1.16'
 COMPILATOR_VERSION = '0.1 - PYTHON BETA'
-AUTHOR = 'Benoit CHARREYRON'
 
-PATH_PROG = os.path.abspath(os.getcwd())
+PATH_PROG = '.'#os.path.abspath(os.getcwd())
 '''
 Liste des fichiers demandant PATH_PROG :
- - main.py (path)
- - confr.py (path)
- - lgviewer.py (path)
- - pswd.py (path)
- - update.py (path)
- - tree.py (path)
- - counter.py (path)
- - ext_form.py (path)
- - runner.py (path)
- - startup.py (icon)
- - progress.py (icon)
- - pdfviewer.py (icon + path)
- - counter.py (icon)
- - variables.py (icon)
- - config_v2.py (path)
+ - main.py        (path)
+ - confr.py       (path)
+ - ext_form.py    (path)
+ - formviewer.py  (path)
+ - lgviewer.py    (path)
+ - switchbt.py    (path)
+ - tree.py        (path)
+ - pswd.py        (path)
+ - progress.py    (path + icon)
+ - pdfviewer.py   (path + icon)
+ - startup.py     (path + icon)
+ - counter.py     (path + icon)
+ - ai.py          (icon)
 '''
 
 wprint('Importing files : ')
-wprint('content')
-from content import *
-wprint('help')
-from help import *
-wprint('iofile, this can take several minutes...')
-from iofile import *
-wprint('menubar')
-from menubar import *
-wprint('search')
-from search import *
-wprint('win')
-from win import *
-wprint('security')
-from security import *
-wprint('archives')
-from archives import *
-wprint('confr')
+wprint('Information de configuration')
 from confr import *
-wprint('crypt')
+wprint('Gestionnaire du contenu')
+from content import *
+wprint('Pages d\'aides')
+from help import *
+wprint('I/O Manager, This can take several minutes...')
+from iofile import *
+wprint('Barre de Menu')
+from menubar import *
+wprint('Outils de recherche')
+from search import *
+wprint('Fenêtre principale')
+from win import *
+wprint('Sécurité')
+from security import *
+wprint('Archivage')
+from archives import *
+wprint('Cryptage')
 from crypt import *
-wprint('minitel')
+wprint('Minitel')
 from minitel import *
-wprint('config')
+wprint('Page de configuration')
 from config import *
-wprint('export')
+wprint('Compatibilité d\'export')
 from export import *
-wprint('update')
+wprint('Mise à jour')
 from update import *
-wprint('extensions')
+wprint('Extensions')
 from extensions import *
-wprint('tasksviewer')
+wprint('Gestionnaire des taches')
 from tasksviewer import *
-wprint('printer')
+wprint('Réseau imprimante')
 from printer import *
-wprint('errors')
+wprint('Gestionnaire des erreurs')
 from errors import *
-wprint('clkright')
+wprint('Menu Clique Droit')
 from clkright import *
-wprint('style')
+wprint('Styles')
 from style import *
-wprint('autocolor')
+wprint('Coloration syntaxique')
 from autocolor import *
-wprint('recentfile')
+wprint('Fichiers récents')
 from recentfile import *
-wprint('pi')
+wprint('PI')
 from pi import *
-wprint('api')
+wprint('API externe')
 from api import *
-wprint('bgtask')
+wprint('Taches de fond')
 from bgtask import *
-wprint('macros')
+wprint('Macros')
 from macros import *
-wprint('keyboard')
+wprint('Gestion du clavier')
 from keyb import *
-wprint('images')
+wprint('Images')
 from images import *
 wprint('Menus')
 from iomenu import *
-wprint('Python interpreter')
+wprint('Interpreter Python')
 from runner import *
-wprint('Importation of PyTaskBar')
-import PyTaskbar
-wprint('Importation of Variables system')
+wprint('Artificial Intelligence')
+from ai import *
+wprint('Advices and Tips')
+from tips import *
+wprint('Système de Variables')
 from variables import *
-wprint('End of importation')
+wprint('Importation de PyTaskBar')
+import PyTaskbar
+wprint('Fin des Importations')
 
 # 2 - Création de la class et importation de toute la hiérarchie
 
@@ -179,6 +179,8 @@ class Main(Win,
            RunPython,
            PDFTraitement,
            TableGUI,
+           AiFinisher,
+           Tips,
            ):
     
 # Partie 3 - Informations de base du logiciel
@@ -195,9 +197,10 @@ class Main(Win,
         self.LANGS_VERSION = LANGS_VERSION
         self.FILE_VERSION = FILE_VERSION
         self.FORM_VERSION = FORM_VERSION
-        self.AUTHOR = AUTHOR
         self.programme_termine = False
         self.mode_record = False
+        self.mainlooped = False
+        self.recording = False
         self.sys_args = sys_args
         wprint('Définition du répertoire de travail...')
         self.path_prog = PATH_PROG
@@ -223,6 +226,9 @@ class Main(Win,
                     'file': self.path_prog + '/image/icons/file.ico',
                     'pdf': self.path_prog + '/image/icons/pdf.ico',
                     'python': self.path_prog + '/image/icons/python.ico',
+                    'ai': self.path_prog + '/image/icons/ai.ico',
+                    'tips': self.path_prog + '/image/icons/question.ico',
+                    'todo': self.path_prog + '/image/icons/todo.ico',
                     }
 
         wprint('Loading application name')
@@ -298,15 +304,8 @@ class Main(Win,
         self.__macro__()
         wprint('Loading python runner')
         self.__runner__()
-
-        if self.configurating:
-            wprint('Restart configurate window')
-            self.IHM()
-            self.configurating = False
-
-        if get_sur():
-            wprint('Start "surcharge"')
-            self.start_sur()
+        wprint('Setting Artificial Intelligence')
+        self.__aifinisher__()
 
         wprint('End of generating')
         self.generating = False
@@ -342,7 +341,19 @@ class Main(Win,
         self.tb.setState("normal")
         wprint('Begin the main process of the window')
         startup.finish()
+
         print('Démarrage fini avec succès !')
+        self.start_tips()
+
+        if self.configurating:
+            print('Restarting configurator\'s window')
+            self.IHM()
+            self.configurating = False
+
+        if get_sur():
+            wprint('Start "surcharge"')
+            self.start_sur()
+
         self.Generate()
 
 # Partie 5 - Execution de la class avec la connexion si demandée
@@ -369,4 +380,3 @@ def KillStartup():
 if __name__ == '__main__':
     wprint('Run main program')
     RunProg(False)
-

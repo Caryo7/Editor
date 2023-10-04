@@ -1,7 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 # Fichier destiné à la compilation pour la distribution du logiciel
-from main import *
-import sys
-RunProg(sys_args = sys.argv.copy())
+from main import * # Importation du module principal
+import sys         # Importation du module système
+RunProg(sys_args = sys.argv.copy()) # Démarrage du logiciel (avec la liste des arguments)
