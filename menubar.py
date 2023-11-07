@@ -21,15 +21,17 @@ class MenuBar:
         menubar = Menu(self.master)
         self.menubar = menubar
         self.master['menu'] = menubar
+
+        tearoff = get_tearoff()
         
         if get_menufile():
-            self.menufichier = Menu(menubar, tearoff=0)
+            self.menufichier = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('File'), menu=self.menufichier)
             self.menufichier.add_command(label=lg('New'), accelerator=self.get_accelerator('new'), stat='normal', command=self.new, image = self.images['new'], compound='left')
             self.menufichier.add_separator()
             self.menufichier.add_command(label=lg('Open'), accelerator=self.get_accelerator('open'), stat='normal', command=self.open, image = self.images['open'], compound='left')
-            self.menufichier.add_command(label=lg('importer'), accelerator=self.get_accelerator('import'), stat='normal', command=self.importer, image = self.images['open'], compound='left')
-            self.menurfl = Menu(self.menufichier, tearoff=0)
+            self.menufichier.add_command(label=lg('importer'), accelerator=self.get_accelerator('import'), stat='normal', command=self.importer, image = self.images['import'], compound='left')
+            self.menurfl = Menu(self.menufichier, tearoff=tearoff)
             self.menufichier.add_cascade(label=lg('RecentFile'), menu=self.menurfl)
             for k, n in self.get_rfl():
                 cmd = lambda : self.open_recent(n)
@@ -51,7 +53,7 @@ class MenuBar:
             self.menufichier.add_command(label=lg('Exit'), accelerator=self.get_accelerator('quit'), stat='normal', command=self.Quitter, image = self.images['exit'], compound='left')
             
         if get_menuedit():
-            menuedition = Menu(menubar, tearoff=0)
+            menuedition = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Edit'), menu=menuedition)
             menuedition.add_command(label=lg('Undo'), accelerator=self.get_accelerator('undo'), stat='normal', command=self.undo, image = self.images['undo'], compound='left')
             menuedition.add_command(label=lg('Redo'), accelerator=self.get_accelerator('redo'), stat='normal', command=self.redo, image = self.images['redo'], compound='left')
@@ -83,7 +85,7 @@ class MenuBar:
             menuai.add_command(label = lg('set_ia'), command = self.askModel, accelerator = self.get_accelerator('set_ia'), image = self.images['ai'], compound = 'left')
             
         if get_menustyle():
-            menustyle = Menu(menubar, tearoff=0)
+            menustyle = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Style'), menu=menustyle)
             self.puces_ = menustyle.add_checkbutton(label=lg('Puces'), onvalue=1, offvalue=0, variable=self.puces)
             menustyle.add_command(label=lg('NewS'), command=self.ask_new_tag, accelerator=self.get_accelerator('news'), image = self.images['news'], compound='left')
@@ -91,7 +93,7 @@ class MenuBar:
             menustyle.add_command(label=lg('configs'), command=self.config_tags, accelerator=self.get_accelerator('configs'), image = self.images['ihm'], compound = 'left')
             menustyle.add_separator()
             self.menu_styles = []
-            self.mls = Menu(menustyle, tearoff=0)
+            self.mls = Menu(menustyle, tearoff=tearoff)
             menustyle.add_cascade(label=lg('Styles'), menu=self.mls)
 
         if get_menuvars():
@@ -102,13 +104,13 @@ class MenuBar:
             menuvars.add_command(label = lg('place_var'), command = self.place_variable, accelerator = self.get_accelerator('place_var'), image = self.images['place_var'], compound = 'left')
 
         if get_menuformat():
-            menufor = Menu(menubar, tearoff=0)
+            menufor = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Format'), menu=menufor)
             menufor.add_command(label=lg('Comment'), stat='normal', command=self.comment, accelerator=self.get_accelerator('comment'), image = self.images['comment'], compound='left')
             menufor.add_command(label=lg('Uncomment'), stat='disabled', accelerator=self.get_accelerator('uncomment'), image = self.images['uncomment'], compound='left')
 
         if get_menurun():
-            menurun = Menu(menubar, tearoff=0)
+            menurun = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Run'), menu=menurun)
             menurun.add_command(label=lg('Run_python'), stat = 'normal', accelerator = self.get_accelerator('run_python'), image = self.images['run_python'], compound = 'left', command = self.run_python)
             menurun.add_command(label=lg('python'), stat = 'normal', accelerator = self.get_accelerator('python'), image = self.images['run_python'], compound = 'left', command = self.python_exe)
@@ -118,13 +120,13 @@ class MenuBar:
             menurun.add_command(label=lg('Solve'), stat='disabled', accelerator=self.get_accelerator('solve'), image = self.images['solve'], compound='left')
 
         if get_menuexport():
-            menuexp = Menu(menubar, tearoff=0)
+            menuexp = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Export'), menu=menuexp)
             menuexp.add_command(label=lg('Export_Word'), command=self.export_word, accelerator=self.get_accelerator('expw'), image = self.images['word'], compound='left')
             menuexp.add_command(label=lg('Export_PDF'), command=self.export_pdf, accelerator=self.get_accelerator('expp'), image = self.images['pdf'], compound='left')
 
         if get_menucrypt():
-            menucrypt = Menu(menubar, tearoff=0)
+            menucrypt = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Crypt'), menu=menucrypt)
             menucrypt.add_command(label=lg('Generate_key'), command=self.generate_key, accelerator=self.get_accelerator('key'), image = self.images['key'], compound='left')
             menucrypt.add_separator()
@@ -137,7 +139,7 @@ class MenuBar:
             menucrypt.add_checkbutton(label=lg('ExOr'), onvalue = 1, offvalue = 0, variable = self.iscrypt_exor)
 
         if get_menuarch():
-            menuarch = Menu(menubar, tearoff=0)
+            menuarch = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Archive'), menu=menuarch)
             menuarch.add_command(label=lg('Create_archive'), command=self.create_a, accelerator=self.get_accelerator('archive'), image = self.images['archive'], compound='left')
             menuarch.add_command(label=lg('Add_archive'), command=self.add_new_version, accelerator=self.get_accelerator('append'), image = self.images['append'], compound='left')
@@ -145,7 +147,7 @@ class MenuBar:
             menuarch.add_command(label=lg('Compare'), command=self.compare, accelerator=self.get_accelerator('compare'), image = self.images['compare'], compound='left')
 
         if get_menumin():
-            menumin = Menu(menubar, tearoff=0)
+            menumin = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Minitel'), menu=menumin)
             menumin.add_command(label=lg('Send_minitel'), command=self.send_file, accelerator=self.get_accelerator('send'), image = self.images['send'], compound='left')
             menumin.add_command(label=lg('Clear_minitel'), command=self.home, accelerator=self.get_accelerator('clear'), image = self.images['clear'], compound='left')
@@ -154,7 +156,7 @@ class MenuBar:
             menumin.add_command(label=lg('Ulla'), command=self.ulla, accelerator=self.get_accelerator('ulla'), image = self.images['ulla'], compound='left')
 
         if get_menuupd():
-            menuupd = Menu(menubar, tearoff=0)
+            menuupd = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Update'), menu=menuupd)
             menuupd.add_command(label=lg('INV'), command=self.get_update, accelerator=self.get_accelerator('update'), image = self.images['update'], compound='left')
             menuupd.add_checkbutton(label=lg('INVI'), accelerator=self.get_accelerator('upgrade'), onvalue = 1, offvalue = 0, variable = self.checkupdate)
@@ -162,12 +164,12 @@ class MenuBar:
             menuupd.add_command(label=lg('AV') + str(self.version), stat='disabled')
 
         if get_menuext():
-            self.menuext = Menu(menubar, tearoff=0)
+            self.menuext = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Extension'), menu=self.menuext)
             self.load_ext(True)
 
         if get_menumacro():
-            self.menumacro = Menu(menubar, tearoff=0)
+            self.menumacro = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Macro'), menu = self.menumacro)
             self.menumacro.add_command(label=lg('Load'), command=self.load_macro, accelerator=self.get_accelerator('macro'), image = self.images['load'], compound='left')
             self.menumacro.add_separator()
@@ -176,7 +178,7 @@ class MenuBar:
             self.menumacro.add_command(label = lg('Finish_Record'), command = self.finish_record, accelerator=self.get_accelerator('finish_record'), image = self.images['carre'], compound='left')
 
         if get_menuopt():
-            menuopt = Menu(menubar, tearoff=0)
+            menuopt = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Options'), menu=menuopt)
             menuopt.add_command(label=lg('Options'), command=self.IHM, accelerator=self.get_accelerator('cnf'), image = self.images['ihm'], compound='left')
             menuopt.add_separator()
@@ -188,7 +190,7 @@ class MenuBar:
             menuopt.add_command(label=lg('Lgv'), stat = 'normal', command=lambda : LgViewer(self.master), accelerator=self.get_accelerator('lgv'), image = self.images['lgv'], compound='left')
 
         if get_menuhelp():
-            menuaide = Menu(menubar, tearoff=0)
+            menuaide = Menu(menubar, tearoff=tearoff)
             menubar.add_cascade(label=lg('Help'), menu=menuaide)
             menuaide.add_command(label=lg('About'), stat='normal', command=self.About, accelerator=self.get_accelerator('about'), image = self.images['about'], compound='left')
             menuaide.add_command(label=lg('Documentation'), stat='normal', command=self.documentation, accelerator=self.get_accelerator('doc'), image = self.images['doc'], compound='left')
@@ -198,7 +200,7 @@ class MenuBar:
             menuaide.add_command(label=lg('struct'), stat = 'normal', command = lambda : Tkin(self.master, self.path_prog), accelerator=self.get_accelerator('struct'), image = self.images['struct'], compound='left')
             menuaide.add_command(label=lg('program'), stat = 'normal', command = lambda : Code(self.master, self.path_prog), accelerator=self.get_accelerator('prog'), image = self.images['prog'], compound='left')
             menuaide.add_separator()
-            menusample = Menu(menuaide, tearoff=0)
+            menusample = Menu(menuaide, tearoff=tearoff)
             menusample.add_command(label = lg('infos'), command = self.infos)
             menuaide.add_cascade(label=lg('Sample'), menu=menusample)
 
@@ -214,4 +216,5 @@ class MenuBar:
 
 if __name__ == '__main__':
     from __init__ import *
+
 

@@ -66,12 +66,12 @@ Liste des fichiers demandant PATH_PROG :
  - formviewer.py  (path)
  - lgviewer.py    (path)
  - switchbt.py    (path)
- - tree.py        (path)
  - pswd.py        (path)
+ - counter.py     (path)
  - progress.py    (path + icon)
  - pdfviewer.py   (path + icon)
  - startup.py     (path + icon)
- - counter.py     (path + icon)
+ - tree.py        (path + icon)
  - ai.py          (icon)
 '''
 
@@ -210,25 +210,25 @@ class Main(Win,
         self.version = self.__ver__ = VERSION
         wprint('Loading application ico')
         self.ico = {'win': self.path_prog + '/image/icons/ico.ico',
-                    'search': self.path_prog + '/image/icons/search.ico',
-                    'replace': self.path_prog + '/image/icons/replace.ico',
-                    'printer': self.path_prog + '/image/icons/printer.ico',
-                    'tree': self.path_prog + '/image/icons/tree.ico',
-                    'security': self.path_prog + '/image/icons/security.ico',
-                    'password': self.path_prog + '/image/icons/password.ico',
-                    'error': self.path_prog + '/image/icons/error.ico',
-                    'help': self.path_prog + '/image/icons/help.ico',
-                    'config': self.path_prog + '/image/icons/config.ico',
+                    'search': self.path_prog + '/image/icons/SearchIcon.ico',
+                    'replace': self.path_prog + '/image/icons/Replace.ico',
+                    'printer': self.path_prog + '/image/icons/PrinterIcon.ico',
+                    'tree': self.path_prog + '/image/icons/TreeIcon.ico',
+                    'security': self.path_prog + '/image/icons/SecurityIcon.ico',
+                    'password': self.path_prog + '/image/icons/Password.ico',
+                    'error': self.path_prog + '/image/icons/ErrorIcon.ico',
+                    'help': self.path_prog + '/image/icons/HelpIcon.ico',
+                    'config': self.path_prog + '/image/icons/ConfigIcon.ico',
                     'archive': self.path_prog + '/image/icons/archive.ico',
                     'style': self.path_prog + '/image/icons/style.ico',
-                    'task': self.path_prog + '/image/icons/task.ico',
-                    'progress': self.path_prog + '/image/icons/progress.ico',
+                    'task': self.path_prog + '/image/icons/Task.ico',
+                    'progress': self.path_prog + '/image/icons/ProgressIcon.ico',
                     'file': self.path_prog + '/image/icons/file.ico',
                     'pdf': self.path_prog + '/image/icons/pdf.ico',
                     'python': self.path_prog + '/image/icons/python.ico',
-                    'ai': self.path_prog + '/image/icons/ai.ico',
+                    'ai': self.path_prog + '/image/icons/AiIcon.ico',
                     'tips': self.path_prog + '/image/icons/question.ico',
-                    'todo': self.path_prog + '/image/icons/todo.ico',
+                    'todo': self.path_prog + '/image/icons/ToDoIcon.ico',
                     }
 
         wprint('Loading application name')

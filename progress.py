@@ -99,7 +99,7 @@ class Waiter(Thread):
         self.decimals = decimals
         self.title = title
         self.zak.resizable(False, False)
-        self.zak.iconbitmap(PATH_PROG + '/image/icons/progress.ico')
+        self.zak.iconbitmap(PATH_PROG + '/image/icons/ProgressIcon.ico')
         self.zak.protocol('WM_DELETE_WINDOW', lambda : None)
         if double:
             self.zak.geometry('340x110')
@@ -210,7 +210,7 @@ class Progress:
         self.decimals = decimals
         self.title = title
         self.zak.resizable(False, False)
-        self.zak.iconbitmap(PATH_PROG + '/image/icons/progress.ico')
+        self.zak.iconbitmap(PATH_PROG + '/image/icons/ProgressIcon.ico')
         self.zak.protocol('WM_DELETE_WINDOW', lambda : None)
         Label(self.zak, text = text).place(x = 10, y = 10)
         self.add1 = 100 / 100

@@ -99,6 +99,7 @@ class ScreenSecu:
                     'Discord': ['s', ('global', 'discord')],
                     '3': None,
                     lg('tips'): ['s', ('global', 'tips')],
+                    lg('tearoff'): ['s', ('menu', 'tearoff')],
                     }
 
         row = -1

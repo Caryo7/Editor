@@ -55,7 +55,7 @@ class AskMargins:
         def style_piedtete(type_, self):
             assert type_ in ('pieds', 'tete')
             z = Toplevel(self.pt)
-            z.transient()
+            z.transient(self.pt)
             z.title(lg('style'))
             z.iconbitmap(self.ico['config'])
             Label(z, text = lg('background')).place(x = 10, y = 10)

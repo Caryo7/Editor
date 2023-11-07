@@ -8,7 +8,11 @@
         "content": "Il est possible d'importer différents types de fichiers. En ce qui conscerne les PDF, il est possible d'utiliser un programme intégré de reconnaissance de caractère (OCR). Pour cela, utiliser la fonction dans la barre des menus : Fichier -> Importer Dactyolgraphie. La fonction porte se nom car elle a été conçu à la base pour scanner du texte tapé à la machine à écrire."
         },
 	"2": {
-		"title": "Mon troisième conseil",
-		"content": "Selon les septiques, il faut douter de tout, en tout point, tout le temps, pour bien comprendre la philosophie. Ces derniers ne sont pas des philosophes pour deux sous :)"
+		"title": "Environnement",
+		"content": "En cas d'utilisation du logiciel dans un environnement sans affichage graphique (DOS), le logiciel ne pourra pas démarré son interface graphique. Dans les versions à venir, il pourra afficher un éditeur sous DOS."
+	},
+	"3": {
+		"title": "Barre des menus",
+		"content": "Dans la barre de boutons juste sous les menus Fichier, Edition, ... se trouve une série de boutons programmable depuis le configurateur (Options -> Options -> Menu boutons) qui vous permettent de faire certaines action plus rapidement. En restant un court instant sur un bouton, une petite fenêtre popup s'affiche pour vous donner quelques informations relatives à la fonction, et son raccourci."
 	}
 }

@@ -20,9 +20,9 @@ class TipsWin:
 
         wrap = 300
 
-        self.next_img = ImageTk.PhotoImage(master = master, file = self.path_prog + '/image/16x16/rightarrow.png')
-        self.close_img = ImageTk.PhotoImage(master = master, file = self.path_prog + '/image/16x16/close.png')
-        self.prev_img = ImageTk.PhotoImage(master = master, file = self.path_prog + '/image/16x16/leftarrow.png')
+        self.next_img = ImageTk.PhotoImage(master = master, file = self.path_prog + '/image/16x16/RightArrowIcon.png')
+        self.close_img = ImageTk.PhotoImage(master = master, file = self.path_prog + '/image/16x16/CloseIcon.png')
+        self.prev_img = ImageTk.PhotoImage(master = master, file = self.path_prog + '/image/16x16/LeftArrowIcon.png')
 
         self.label = Label(self.root, text = text, font = ('Consolas', 10), wraplength = wrap)
         self.label.grid(row = 0, column = 1, padx = 5, pady = 5, rowspan = 3)
@@ -76,8 +76,10 @@ class JSon:
 def OpenTips(path_prog):
     js = JSon(path_prog + '/tips.json')
     advices = []
+    n = 0
     for tip in js.tips_list():
-        advices.append((js.infos(tip)['title'], js.infos(tip)['content']))
+        n += 1
+        advices.append((str(n) + '. ' + js.infos(tip)['title'], js.infos(tip)['content']))
 
     js.close()
 

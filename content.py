@@ -252,7 +252,7 @@ class Content:
                 try:
                     self.infobar_changement()
                 except Exception:
-                    self.label_infobar = Label(self.master, text = '', bg = '#f0f0f0', fg = 'black', anchor = 'e', font = ('Courier', 10))
+                    self.label_infobar = Label(self.master, text = '', bg = '#f0f0f0', fg = 'black', anchor = 'e', font = ('Consolas', 8))
                     self.infobar_changement()
 
                 self.label_infobar.place(x = 0, y = y, height = self.height_infobar, width = w)
@@ -307,8 +307,11 @@ class Content:
                 self.line_numbers_canvas.place(x=0, y = 0 if not self.boutons.get() else self.height_boutons)
             else:
                 self.text.place(x=0, width = self.master.winfo_width() - self.width_scroll)
-                try:self.line_numbers_canvas.destroy()
-                except:""
+                try:
+                    self.line_numbers_canvas.destroy()
+                except:
+                    ""
+
             self.update_line_numbers()
 
     def act_color_theme(self):

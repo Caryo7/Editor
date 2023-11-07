@@ -123,7 +123,7 @@ class Code:
         self.path_prog = path_prog
         self.master = Toplevel(master)
         self.master.transient(master)
-        self.master.iconbitmap(self.path_prog + '/image/icons/tree.ico')
+        self.master.iconbitmap(self.path_prog + '/image/icons/Prog.ico')
         self.master.title(lg('program'))
         self.master.resizable(False, False)
         
@@ -153,7 +153,7 @@ class Tkin:
         self.path_prog = path_prog
         self.master = Toplevel(master)
         self.master.transient(master)
-        self.master.iconbitmap(self.path_prog + '/image/icons/tree.ico')
+        self.master.iconbitmap(self.path_prog + '/image/icons/TreeIcon.ico')
         self.master.title(lg('Struct'))
         self.master.resizable(False, False)
         

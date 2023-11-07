@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from tkinter import *
+import tkinter.font as tkFont
 
 class ToolTip(object):
     id = None
@@ -15,6 +16,21 @@ class ToolTip(object):
         self.text = text
         self.waittime = waittime
         self.wraplength = wraplength
+        self.ln = self.text.split('\n')
+        self.mode_dbl = True if len(self.ln) >= 2 else False
+
+        #w_f = tkFont.Font(font=self.widget['font'])
+        #font = w_f.actual()
+        font = {'family': 'Segoe UI', 'size': 9}
+
+        self.font_text = (font['family'], font['size'])
+        self.font_title = (font['family'], font['size'], 'bold')
+
+        if self.mode_dbl:
+            self.title = self.ln[0]
+            self.ln.pop(0)
+            self.text = '\n'.join(self.ln)
+
         self.widget.bind("<Enter>", self.enter)
         self.widget.bind("<Leave>", self.leave)
         self.widget.bind("<ButtonPress>", self.leave)
@@ -44,8 +60,29 @@ class ToolTip(object):
         self.tw = Toplevel(self.widget)
         self.tw.wm_overrideredirect(True)
         self.tw.wm_geometry("+%d+%d" % (x, y))
-        label = Label(self.tw, text=self.text, justify=self.justify, background=self.color, relief=self.relief, borderwidth=self.borderwidth, wraplength = self.wraplength)
-        label.pack(ipadx=1)
+        f = Frame(self.tw, relief = self.relief, background = self.color, borderwidth = self.borderwidth)
+        f.pack(ipadx=1)
+
+        if self.mode_dbl:
+            ttl = Label(f,
+                        text = self.title,
+                        justify = self.justify,
+                        background = self.color,
+                        relief = None,
+                        font = self.font_title,
+                        wraplength = self.wraplength)
+
+            ttl.grid(padx = 1)
+
+        label = Label(f,
+                      text = self.text,
+                      justify = self.justify,
+                      background = self.color,
+                      relief = None,
+                      font = self.font_text,
+                      wraplength = self.wraplength)
+
+        label.grid(padx = 1)
 
     def hidetip(self):
         tw = self.tw
@@ -159,9 +196,9 @@ if __name__ == '__main__':
     btn1 = Button(root, text="button 1", width = 20)
     btn1.pack(padx=10, pady=5)
     button1_ttp = ToolTip(btn1, \
-    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, '
+    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,\n'
     'consectetur, adipisci velit. Neque porro quisquam est qui dolorem ipsum '
-    'quia dolor sit amet, consectetur, adipisci velit. Neque porro quisquam '
+    'quia dolor sit amet, consectetur, adipisci velit. Neque porro quisquam'
     'est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.', color = '#FFFFEA')
 
     tt = Text(root, width = 20, height = 3)

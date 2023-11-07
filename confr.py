@@ -17,6 +17,10 @@ def get_askclose():
     if p.get('global', 'askclose') == '1':return True
     else:return False
 
+def get_tearoff():
+    if p.get('menu', 'tearoff') == '1':return True
+    else:return False
+
 def get_discord_mode():
     if p.get('global', 'discord') == '1':return True
     else:return False
