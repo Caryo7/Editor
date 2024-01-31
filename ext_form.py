@@ -562,6 +562,10 @@ class ExForm:
     def begin_openning(self, data, lst_tags, meta, name, variables):
         self.meta = meta
         self.variables = variables
+        try:
+            self.frappes = int(meta['frappes'])
+        except:
+            pass
 
         self.insert_text(data)
 

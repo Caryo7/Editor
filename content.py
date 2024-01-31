@@ -379,6 +379,7 @@ class Content:
                 self.saved = False
                 self.nofileopened = False
                 self.master.title('* ' + self.title + ' - ' + self.path + ' *')
+                self.frappes += 1
 
 if __name__ == '__main__':
     from __init__ import *

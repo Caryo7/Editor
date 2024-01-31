@@ -8,14 +8,14 @@ from zipfile import *
 from PyPDF2 import PdfReader
 import os
 
-#try:
-#    print('Importing Keras OCR')
-#    import keras_ocr
-#    print('End importing')
-#except:
-#    print('no module keras_ocr !')
+try:
+    print('Importing Keras OCR')
+    import keras_ocr
+    print('End importing')
+except:
+    print('no module keras_ocr !')
 
-#PATH_PROG = os.path.abspath(os.getcwd())
+PATH_PROG = os.path.abspath(os.getcwd())
 
 class Fichier:
     def __init__(self, name):

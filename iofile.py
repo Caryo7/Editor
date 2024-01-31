@@ -75,6 +75,7 @@ class File(ExForm, ExText):
         self.variables = {}
         self.begin_time = time.time()
         self.photos = []
+        self.frappes = 0
 
     def open_recent(self, name):
         self.open(evt = None, name = name)
@@ -232,7 +233,8 @@ class File(ExForm, ExText):
         dic =  {'Type de fichier :': '',
                 'Créateur :': self.title,
                 'Mots clé :': '',
-                'Variables :': len(self.variables)}
+                'Variables :': len(self.variables),
+                'Frappes :': self.frappes}
 
         def tryer(dic, k, v):
             try:
@@ -284,14 +286,14 @@ class File(ExForm, ExText):
                     if askyesno(lg('import_pdf'), lg('warn_import_pdf')):
                         pass#############################################################################################################################################################
                         # Pour la compilation, il est impossible de mettre le module keras_ocr. Donc, pas de reconnaissance de caractères possible !
-                        #lunch_ocr(self.master, self.text, file, self.path_prog)
+                        lunch_ocr(self.master, self.text, file, self.path_prog)
                     else:
                         self.open(name = file, forcing = True, ask_info = False)
                         return
                 else:
                     pass#################################################################################################################################################################
                     # Pour la compilation, il est impossible de mettre le module keras_ocr. Donc, pas de reconnaissance de caractères possible !
-                    #lunch_ocr(self.master, self.text, file, self.path_prog)
+                    lunch_ocr(self.master, self.text, file, self.path_prog)
 
             self.dialoging = False
 
@@ -304,6 +306,7 @@ class File(ExForm, ExText):
         try:
             self.meta['time'] = str(int(self.meta['time']) + temps)
             self.meta['cursor'] = str(self.get_index())
+            self.meta['frappes'] = str(self.frappes)
             if self.ext(name) in self.listexta:
                 ExForm.write_meta(self)
 
@@ -335,6 +338,7 @@ class File(ExForm, ExText):
                     self.clear_text()
                     self.meta = {}
                     self.variables = {}
+                    self.frappes = 0
                     self.master.focus()
                     if self.ext(name) in self.listext:
                         ExText.open(self, name)
@@ -460,6 +464,7 @@ class File(ExForm, ExText):
             self.master.title(self.title + ' - ' + self.path)
             self.update_line_numbers()
             self.meta = {}
+            self.frappes = 0
             self.variables = {}
             self.updateDiscordStatut()
 
